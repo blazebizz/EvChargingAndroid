@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -67,4 +69,8 @@ dependencies {
     debugImplementation libs.ui.test.manifest
 
     implementation libs.navigation.compose
+
+    // Dagger Hilt
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
 }
