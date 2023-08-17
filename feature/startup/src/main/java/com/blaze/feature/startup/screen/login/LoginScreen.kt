@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -82,9 +83,12 @@ fun LoginScreen(navController: NavController) {
             Text(text = "Password")
             OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(8.dp))
-
             Text(
-                text = "Forgot ?", modifier = Modifier.fillMaxWidth(),
+                text = "Forgot ?", modifier = Modifier
+                    .clickable {
+                        navController.navigate(StartUpRoute.ForgotPasswordScreen.route)
+                    }
+                    .fillMaxWidth(),
                 textAlign = TextAlign.End
             )
             Spacer(Modifier.height(8.dp))
@@ -94,9 +98,8 @@ fun LoginScreen(navController: NavController) {
             }
         }
 
-
         Spacer(Modifier.height(16.dp))
-        Row {
+        Row(Modifier.align(Alignment.End)) {
             Text(text = "Don't have an account ?")
             Text(text = "Sign Up", modifier = Modifier.clickable {
                 navController.navigate(StartUpRoute.SignUpScreen.route)
