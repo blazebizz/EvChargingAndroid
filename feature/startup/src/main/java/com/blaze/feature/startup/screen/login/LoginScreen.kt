@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,7 +45,7 @@ fun LoginScreen(navController: NavController) {
     ) {
         Spacer(Modifier.weight(1f))
 
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { navController.navigate(DashboardRoute.DashboardScreen.route)  }, modifier = Modifier.fillMaxWidth()) {
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -93,7 +94,7 @@ fun LoginScreen(navController: NavController) {
             )
             Spacer(Modifier.height(8.dp))
 
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+            Button(onClick = { navController.navigate(DashboardRoute.DashboardScreen.route) }, modifier = Modifier.fillMaxWidth()) {
                 Text(text = "Sign In")
             }
         }

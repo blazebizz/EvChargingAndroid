@@ -1,24 +1,17 @@
 plugins {
-//    id 'com.android.application'
-//    id 'org.jetbrains.kotlin.android'
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    id 'kotlin-kapt'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
-    namespace 'com.blaze.classicbeat'
+    namespace 'com.blaze.feature.dashboard'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.blaze.classicbeat"
         minSdk 24
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
         vectorDrawables {
             useSupportLibrary true
         }
@@ -31,11 +24,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '17'
+        jvmTarget = '1.8'
     }
     buildFeatures {
         compose true
@@ -53,9 +46,6 @@ android {
 dependencies {
     implementation project(":core:ui")
     implementation project(":core:utils")
-    implementation project(":feature:startup")
-    implementation project(":feature:dashboard")
-    implementation project(":feature:onboarding")
 
     implementation libs.core.ktx
     implementation libs.appcompat
@@ -77,12 +67,4 @@ dependencies {
     debugImplementation libs.ui.test.manifest
 
     implementation libs.navigation.compose
-
-    // Dagger Hilt
-    implementation libs.hilt.android
-    kapt libs.hilt.compiler
-    implementation libs.hilt.navigation.compose
-
-
-
 }
