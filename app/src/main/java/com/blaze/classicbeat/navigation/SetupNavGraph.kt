@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.blaze.feature.dashboard.navigation.dashboardNavGraph
+import com.blaze.feature.onboarding.navigation.onBoardingNavGraph
 import com.blaze.feature.startup.navigation.startUpNavGraph
 
 @Composable
@@ -15,5 +16,6 @@ fun SetupNavGraph(
     ) {
         startUpNavGraph(navController)
         dashboardNavGraph(navController)
+        onBoardingNavGraph(navController)
     }
 }

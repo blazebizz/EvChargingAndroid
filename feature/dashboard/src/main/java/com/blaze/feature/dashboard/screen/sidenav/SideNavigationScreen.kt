@@ -11,13 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.navigation.OnBoardingRoute
 
 
 @Composable
 fun SideNavigationScreen(navController: NavController) {
     BackHandler {
-        navController.popBackStack()
-        navController.clearBackStack(DashboardRoute.SideNavigationScreen.route)
+        navController.navigate(DashboardRoute.DashboardScreen.route){
+            popUpTo(DashboardRoute.SideNavigationScreen.route){
+                inclusive = true
+            }
+        }
     }
     Column(
         Modifier
@@ -25,7 +29,11 @@ fun SideNavigationScreen(navController: NavController) {
             .padding(16.dp)
     ) {
         Text(text = "On Board as Partner", modifier = Modifier.clickable {
-
+            navController.navigate(OnBoardingRoute.OnBoardingScreen.route){
+                popUpTo(DashboardRoute.SideNavigationScreen.route){
+                    inclusive = true
+                }
+            }
         })
     }
 }
