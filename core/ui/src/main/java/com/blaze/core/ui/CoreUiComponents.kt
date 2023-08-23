@@ -26,7 +26,6 @@ fun InitSubUiComponents(model: CoreUiViewModel) {
             Text(text = model.snackbarValue.value.second)
         }
     }
-
     //endregion
 
 }

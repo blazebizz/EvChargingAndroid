@@ -65,4 +65,10 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
                 }
             }
     }
+
+    fun verifyPhoneNumberWithCode(
+        code: String
+    ){
+        repo.verifyPhoneNumberWithCode(storedVerificationId.value, code)
+    }
 }

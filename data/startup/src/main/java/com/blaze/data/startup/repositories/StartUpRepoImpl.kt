@@ -15,22 +15,28 @@ import javax.inject.Inject
 
 class StartUpRepoImpl @Inject constructor(
     private val auth: FirebaseAuth,
-): StartUpRepo {
+) : StartUpRepo {
 
-    override fun getAuth()=auth
-    override fun sendOtp(activity: Activity, phoneNumber: String,callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks) {
+    override fun getAuth() = auth
+    override fun sendOtp(
+        activity: Activity,
+        phoneNumber: String,
+        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+    ) {
 
-                val options = PhoneAuthOptions.newBuilder(auth)
-                    .setPhoneNumber(phoneNumber) // Phone number to verify
-                    .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                    .setActivity(activity) // Activity (for callback binding)
-                    .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
-                    .build()
-                PhoneAuthProvider.verifyPhoneNumber(options)
+        val options = PhoneAuthOptions.newBuilder(auth)
+            .setPhoneNumber(phoneNumber) // Phone number to verify
+            .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+            .setActivity(activity) // Activity (for callback binding)
+            .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
+            .build()
+        PhoneAuthProvider.verifyPhoneNumber(options)
+    }
 
-            }
-
-    override fun verifyPhoneNumberWithCode(verificationId: String?, code: String): PhoneAuthCredential {
+    override fun verifyPhoneNumberWithCode(
+        verificationId: String?,
+        code: String
+    ): PhoneAuthCredential {
         // [START verify_with_code]
         return PhoneAuthProvider.getCredential(verificationId!!, code)
         // [END verify_with_code]
@@ -55,4 +61,4 @@ class StartUpRepoImpl @Inject constructor(
         PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
     }
     // [END resend_verification]
-    }
+}

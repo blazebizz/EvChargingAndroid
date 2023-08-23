@@ -111,8 +111,16 @@ fun OtpScreen(
     OtpContent(
         otpState = otpState,
         sentTo = toSentText,
-        onSubmitClick = { },
-        onResendClick = { navController.navigate(DashboardRoute.DashboardScreen.route) }
+        onSubmitClick = {
+            otpViewModel.verifyPhoneNumberWithCode(
+                otpState.value
+            )
+        },
+        onResendClick = {
+            otpViewModel.reSendVerificationCode(
+                activity, toSentText, callbacks
+            )
+        }
     )
 }
 
