@@ -23,11 +23,48 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
+
+@Composable
+fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
+    val mobileNumber = remember { mutableStateOf("") }
+    Column(Modifier.fillMaxSize()) {
+        Spacer(modifier = Modifier.weight(1f))
+        Row(Modifier.fillMaxWidth()) {
+            OutlinedTextField(
+                value = "+91",
+                onValueChange = {},
+                label = {
+                    Text(text = "STD Code")
+                },
+                textStyle = TextStyle(textAlign = TextAlign.Center),
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextField(value = "", onValueChange = {
+                mobileNumber.value = it
+            }, label = {
+                Text(text = "Mobile Number")
+            }, modifier = Modifier.weight(5f))
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = {
+            if (mobileNumber.value.length == 10){
+                navController.navigate("${StartUpRoute.MobileOtpScreen.route}/${mobileNumber.value}")
+            }else{
+                coreUi.snackbar("Invalid Mobile Number")
+            }
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Continue")
+        }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -110,35 +147,5 @@ fun OldLoginScreen(navController: NavController) {
         }
         Spacer(Modifier.height(16.dp))
 
-    }
-}
-
-
-@Composable
-fun LoginScreen(navController: NavController) {
-    Column(Modifier.fillMaxSize()) {
-
-        Spacer(modifier = Modifier.weight(1f))
-        Row(Modifier.fillMaxWidth()) {
-            OutlinedTextField(value = "+91",
-                onValueChange = {},
-                label = {
-                    Text(text = "STD Code")
-                },
-                textStyle = TextStyle(textAlign = TextAlign.Center),
-                modifier = Modifier.weight(1f)
-            )
-            OutlinedTextField(value = "", onValueChange = {}, label = {
-                Text(text = "Mobile Number")
-            }, modifier = Modifier.weight(5f))
-        }
-
-        Spacer(Modifier.height(16.dp))
-        Button(onClick = {
-            val route = "/XXXXXXXX945"
-            navController.navigate(StartUpRoute.MobileOtpScreen.route + route)
-        }, modifier = Modifier.fillMaxWidth()) {
-            Text(text = "Continue")
-        }
     }
 }

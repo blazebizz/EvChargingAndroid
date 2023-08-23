@@ -1,5 +1,7 @@
 package com.blaze.feature.startup.screen.otp
 
+import android.app.Activity
+import android.util.Log
 import androidx.compose.runtime.Composable
 
 
@@ -23,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -30,13 +33,76 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.utils.navigation.DashboardRoute
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.delay
 
 @Composable
-fun OtpScreen(navController: NavController,
+fun OtpScreen(
+    navController: NavController,
     toSentText: String,
+    otpViewModel: OtpScreenViewModel,
+    coreUi: CoreUiViewModel,
 ) {
+    val TAG = "OtpScreen"
+    val activity = LocalContext.current as Activity
+    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            // This callback will be invoked in two situations:
+            // 1 - Instant verification. In some cases the phone number can be instantly
+            //     verified without needing to send or enter a verification code.
+            // 2 - Auto-retrieval. On some devices Google Play services can automatically
+            //     detect the incoming verification SMS and perform verification without
+            //     user action.
+            Log.d(TAG, "onVerificationCompleted:$credential")
+            otpViewModel.signInWithPhoneAuthCredential(credential, activity)
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            // This callback is invoked in an invalid request for verification is made,
+            // for instance if the the phone number format is not valid.
+            Log.w(TAG, "onVerificationFailed", e)
+
+            if (e is FirebaseAuthInvalidCredentialsException) {
+                // Invalid request
+            } else if (e is FirebaseTooManyRequestsException) {
+                // The SMS quota for the project has been exceeded
+            } else if (e is FirebaseAuthMissingActivityForRecaptchaException) {
+                // reCAPTCHA verification attempted with null Activity
+            }
+
+            // Show a message and update the UI
+        }
+
+        override fun onCodeSent(
+            verificationId: String,
+            token: PhoneAuthProvider.ForceResendingToken,
+        ) {
+            // The SMS verification code has been sent to the provided phone number, we
+            // now need to ask the user to enter the code and then construct a credential
+            // by combining the code with a verification ID.
+            Log.d(TAG, "onCodeSent:$verificationId")
+
+            // Save verification ID and resending token so we can use them later
+            otpViewModel.storedVerificationId.value = verificationId
+            otpViewModel.resendToken.value = token
+        }
+    }
+
+
+
+    LaunchedEffect(key1 = Unit) {
+        otpViewModel.sendVerificationCode(
+            activity, toSentText, callbacks
+        )
+    }
 
     val otpState = remember {
         mutableStateOf("")
@@ -79,9 +145,12 @@ internal fun OtpContent(
         verticalArrangement = Arrangement.Top
     ) {
         Row {
-            Icon(Icons.Default.ArrowBack, contentDescription = "back",modifier= Modifier.clickable {
+            Icon(
+                Icons.Default.ArrowBack,
+                contentDescription = "back",
+                modifier = Modifier.clickable {
 
-            })
+                })
             Spacer(Modifier.width(12.dp))
             Text(text = "", fontWeight = FontWeight.Black, fontSize = 22.sp)
             Spacer(Modifier.weight(3f))
@@ -128,12 +197,16 @@ internal fun OtpContent(
             }
         }
         Spacer(Modifier.height(12.dp))
-        Text(text = "Change Number.", modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+        Text(
+            text = "Change Number.",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
 
         Spacer(Modifier.weight(3f))
         Spacer(Modifier.height(20.dp))
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick){
-            Text(text  = "Submit", )
+        Button(modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick) {
+            Text(text = "Submit")
         }
         Spacer(Modifier.weight(4f))
     }
