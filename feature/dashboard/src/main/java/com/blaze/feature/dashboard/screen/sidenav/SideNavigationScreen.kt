@@ -23,6 +23,7 @@ fun SideNavigationScreen(navController: NavController) {
             }
         }
     }
+
     Column(
         Modifier
             .fillMaxSize()

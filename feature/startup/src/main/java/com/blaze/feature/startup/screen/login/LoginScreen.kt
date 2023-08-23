@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -30,10 +31,9 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(navController: NavController) {
+fun OldLoginScreen(navController: NavController) {
     LaunchedEffect(key1 = Unit) {
-        CoroutineScope(Dispatchers.Main).launch {
-        }
+        CoroutineScope(Dispatchers.Main).launch {}
     }
 
     val showLogin = remember { mutableStateOf(false) }
@@ -45,10 +45,12 @@ fun LoginScreen(navController: NavController) {
     ) {
         Spacer(Modifier.weight(1f))
 
-        Button(onClick = { navController.navigate(DashboardRoute.DashboardScreen.route)  }, modifier = Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { navController.navigate(DashboardRoute.DashboardScreen.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center
             ) {
 //                Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription ="google" )
                 Text(text = "Sign in with Google")
@@ -84,17 +86,17 @@ fun LoginScreen(navController: NavController) {
             Text(text = "Password")
             OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
             Spacer(Modifier.height(8.dp))
-            Text(
-                text = "Forgot ?", modifier = Modifier
-                    .clickable {
-                        navController.navigate(StartUpRoute.ForgotPasswordScreen.route)
-                    }
-                    .fillMaxWidth(),
-                textAlign = TextAlign.End
-            )
+            Text(text = "Forgot ?", modifier = Modifier
+                .clickable {
+                    navController.navigate(StartUpRoute.ForgotPasswordScreen.route)
+                }
+                .fillMaxWidth(), textAlign = TextAlign.End)
             Spacer(Modifier.height(8.dp))
 
-            Button(onClick = { navController.navigate(DashboardRoute.DashboardScreen.route) }, modifier = Modifier.fillMaxWidth()) {
+            Button(
+                onClick = { navController.navigate(DashboardRoute.DashboardScreen.route) },
+                modifier = Modifier.fillMaxWidth()
+            ) {
                 Text(text = "Sign In")
             }
         }
@@ -108,5 +110,35 @@ fun LoginScreen(navController: NavController) {
         }
         Spacer(Modifier.height(16.dp))
 
+    }
+}
+
+
+@Composable
+fun LoginScreen(navController: NavController) {
+    Column(Modifier.fillMaxSize()) {
+
+        Spacer(modifier = Modifier.weight(1f))
+        Row(Modifier.fillMaxWidth()) {
+            OutlinedTextField(value = "+91",
+                onValueChange = {},
+                label = {
+                    Text(text = "STD Code")
+                },
+                textStyle = TextStyle(textAlign = TextAlign.Center),
+                modifier = Modifier.weight(1f)
+            )
+            OutlinedTextField(value = "", onValueChange = {}, label = {
+                Text(text = "Mobile Number")
+            }, modifier = Modifier.weight(5f))
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Button(onClick = {
+            val route = "/XXXXXXXX945"
+            navController.navigate(StartUpRoute.MobileOtpScreen.route + route)
+        }, modifier = Modifier.fillMaxWidth()) {
+            Text(text = "Continue")
+        }
     }
 }
