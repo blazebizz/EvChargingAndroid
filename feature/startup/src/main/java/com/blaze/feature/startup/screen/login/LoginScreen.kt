@@ -66,7 +66,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+/*@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OldLoginScreen(navController: NavController) {
     LaunchedEffect(key1 = Unit) {
@@ -148,4 +148,4 @@ fun OldLoginScreen(navController: NavController) {
         Spacer(Modifier.height(16.dp))
 
     }
-}
+}*/
