@@ -20,7 +20,8 @@ class StartUpRepoImpl @Inject constructor(
     ) {
 
         val options =
-            PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phoneNumber) // Phone number to verify
+            PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(phoneNumber) // Phone number to verify
                 .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
                 .setActivity(activity) // Activity (for callback binding)
                 .setCallbacks(callbacks) // OnVerificationStateChangedCallbacks
@@ -29,10 +30,10 @@ class StartUpRepoImpl @Inject constructor(
     }
 
     override fun verifyPhoneNumberWithCode(
-        verificationId: String?, code: String
+        verificationId: String, code: String
     ): PhoneAuthCredential {
         // [START verify_with_code]
-        return PhoneAuthProvider.getCredential(verificationId!!, code)
+        return PhoneAuthProvider.getCredential(verificationId, code)
         // [END verify_with_code]
     }
 

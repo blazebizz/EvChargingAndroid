@@ -13,7 +13,7 @@ interface StartUpRepo {
         callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     )
 
-    fun verifyPhoneNumberWithCode(verificationId: String?, code: String): PhoneAuthCredential
+    fun verifyPhoneNumberWithCode(verificationId: String, code: String): PhoneAuthCredential
 
     fun resendVerificationCode(
         activity: Activity,

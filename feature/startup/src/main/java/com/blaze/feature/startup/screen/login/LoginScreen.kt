@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -20,6 +22,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -34,31 +38,52 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
     val mobileNumber = remember { mutableStateOf("") }
+    val stdCode = remember { mutableStateOf("+91") }
     Column(Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.weight(1f))
         Row(Modifier.fillMaxWidth()) {
             OutlinedTextField(
-                value = "+91",
-                onValueChange = {},
+                value = stdCode.value,
+                onValueChange = {
+                    stdCode.value = it
+                },
                 label = {
                     Text(text = "STD Code")
                 },
                 textStyle = TextStyle(textAlign = TextAlign.Center),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                )
             )
-            OutlinedTextField(value = "", onValueChange = {
+            OutlinedTextField(value = mobileNumber.value, onValueChange = {
                 mobileNumber.value = it
             }, label = {
                 Text(text = "Mobile Number")
-            }, modifier = Modifier.weight(5f))
+            }, modifier = Modifier.weight(5f),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Phone,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        if (mobileNumber.value.length == 10 && stdCode.value.isNotEmpty()) {
+                            navController.navigate("${StartUpRoute.MobileOtpScreen.route}/${stdCode.value}${mobileNumber.value}")
+                        } else {
+                            coreUi.snackbar("Invalid Mobile Number and Country Code")
+                        }
+                    }
+                )
+            )
         }
 
         Spacer(Modifier.height(16.dp))
         Button(onClick = {
-            if (mobileNumber.value.length == 10){
-                navController.navigate("${StartUpRoute.MobileOtpScreen.route}/${mobileNumber.value}")
-            }else{
-                coreUi.snackbar("Invalid Mobile Number")
+            if (mobileNumber.value.length == 10 && stdCode.value.isNotEmpty()) {
+                navController.navigate("${StartUpRoute.MobileOtpScreen.route}/${stdCode.value}${mobileNumber.value}")
+            } else {
+                coreUi.snackbar("Invalid Mobile Number and Country Code")
             }
         }, modifier = Modifier.fillMaxWidth()) {
             Text(text = "Continue")

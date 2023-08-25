@@ -2,6 +2,7 @@ package com.blaze.feature.startup.screen.otp
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 
 
@@ -50,6 +51,7 @@ fun OtpScreen(
     otpViewModel: OtpScreenViewModel,
     coreUi: CoreUiViewModel,
 ) {
+    val context = LocalContext.current
     val TAG = "OtpScreen"
     val activity = LocalContext.current as Activity
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -62,7 +64,7 @@ fun OtpScreen(
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d(TAG, "onVerificationCompleted:$credential")
-            otpViewModel.signInWithPhoneAuthCredential(credential, activity)
+//            otpViewModel.signInWithPhoneAuthCredential(credential, activity)
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
@@ -89,10 +91,10 @@ fun OtpScreen(
             // now need to ask the user to enter the code and then construct a credential
             // by combining the code with a verification ID.
             Log.d(TAG, "onCodeSent:$verificationId")
-
             // Save verification ID and resending token so we can use them later
             otpViewModel.storedVerificationId.value = verificationId
             otpViewModel.resendToken.value = token
+            Toast.makeText(context, "code sent ${otpViewModel.storedVerificationId.value}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -102,6 +104,7 @@ fun OtpScreen(
         otpViewModel.sendVerificationCode(
             activity, toSentText, callbacks
         )
+        Toast.makeText(context, "initiating", Toast.LENGTH_SHORT).show()
     }
 
     val otpState = remember {
@@ -115,6 +118,7 @@ fun OtpScreen(
             otpViewModel.verifyPhoneNumberWithCode(
                 otpState.value
             )
+            Toast.makeText(context, "verifying please wait.", Toast.LENGTH_SHORT).show()
         },
         onResendClick = {
             otpViewModel.reSendVerificationCode(
@@ -132,7 +136,7 @@ internal fun OtpContent(
     onResendClick: () -> Unit,
 ) {
     var seconds by rememberSaveable {
-        mutableStateOf(30)
+        mutableIntStateOf(0)
     }
     var trigger by rememberSaveable {
         mutableStateOf(false)
@@ -204,12 +208,12 @@ internal fun OtpContent(
                 }
             }
         }
-        Spacer(Modifier.height(12.dp))
-        Text(
-            text = "Change Number.",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
+//        Spacer(Modifier.height(12.dp))
+//        Text(
+//            text = "Change Number.",
+//            modifier = Modifier.fillMaxWidth(),
+//            textAlign = TextAlign.Center
+//        )
 
         Spacer(Modifier.weight(3f))
         Spacer(Modifier.height(20.dp))
@@ -238,7 +242,7 @@ fun OtpView(length: Int, code: MutableState<String>) {
             onValueChange = { otpNo ->
                 if (otpNo.length <= length)
                     code.value = otpNo.filter { it.isDigit() }
-                if (otpNo.length == 6) {
+                if (otpNo.length == length) {
                     keyboardController?.hide()
                 }
             },
