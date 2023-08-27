@@ -21,6 +21,7 @@ import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -42,7 +43,7 @@ fun OnBoardingScreen(navController: NavController) {
     val context = LocalContext.current
 
     val viewModel = hiltViewModel<OnBoardingViewModel>()
-    val progress by remember { mutableStateOf(.51f) }
+    val progress by remember { mutableFloatStateOf(.51f) }
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
@@ -65,14 +66,40 @@ fun OnBoardingScreen(navController: NavController) {
         Row(Modifier.fillMaxWidth()) {
             LinearProgressIndicator(
                 modifier = Modifier
+                    .weight(4f)
                     .semantics(mergeDescendants = true) {}
                     .padding(10.dp),
                 progress = animatedProgress,
             )
+            Spacer(modifier = Modifier.weight(1f))
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .weight(4f)
+                    .semantics(mergeDescendants = true) {}
+                    .padding(10.dp),
+                progress = animatedProgress,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .weight(4f)
+                    .semantics(mergeDescendants = true) {}
+                    .padding(10.dp),
+                progress = animatedProgress,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .weight(4f)
+                    .semantics(mergeDescendants = true) {}
+                    .padding(10.dp),
+                progress = animatedProgress,
+            )
+            Spacer(modifier = Modifier.weight(1f))
         }
         Column(
             Modifier
-                .padding(20.dp)
+                .padding(10.dp)
                 .weight(1f)
                 .fillMaxWidth()
                 .background(Color.LightGray, RoundedCornerShape(10.dp))
@@ -105,25 +132,31 @@ fun OnBoardingScreen(navController: NavController) {
 
 fun nextFunction(navController: NavHostController, viewModel: OnBoardingViewModel) {
     when (navController.currentDestination?.route) {
-        OnBoardingSubScreen.BasicInfoScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.DocumentInfoScreen.name) {
-                popUpTo(OnBoardingSubScreen.BasicInfoScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingInfoScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.DocumentInfoScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.StepThreeScreen.name) {
-                popUpTo(OnBoardingSubScreen.DocumentInfoScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardingInfoScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingInfoScreen.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.StepThreeScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.StepFourScreen.name) {
-                popUpTo(OnBoardingSubScreen.StepThreeScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardingUploadDocScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.StepFourScreen.name -> {
+        OnBoardingSubScreen.OnBoardingParkingAreaScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingTermsScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) { inclusive = true }
+            }
+        }
+
+        OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
 
         }
     }
@@ -131,25 +164,31 @@ fun nextFunction(navController: NavHostController, viewModel: OnBoardingViewMode
 
 fun previousFunction(navController: NavHostController, viewModel: OnBoardingViewModel) {
     when (navController.currentDestination?.route) {
-        OnBoardingSubScreen.BasicInfoScreen.name -> {
+        OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name -> {
 
         }
 
-        OnBoardingSubScreen.DocumentInfoScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.BasicInfoScreen.name) {
-                popUpTo(OnBoardingSubScreen.DocumentInfoScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardingInfoScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingInfoScreen.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.StepThreeScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.DocumentInfoScreen.name) {
-                popUpTo(OnBoardingSubScreen.StepThreeScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardingUploadDocScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingInfoScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.StepFourScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.StepThreeScreen.name) {
-                popUpTo(OnBoardingSubScreen.StepFourScreen.name) { inclusive = true }
+        OnBoardingSubScreen.OnBoardingParkingAreaScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) { inclusive = true }
+            }
+        }
+
+        OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
+            navController.navigate(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) {
+                popUpTo(OnBoardingSubScreen.OnBoardingTermsScreen.name) { inclusive = true }
             }
         }
     }

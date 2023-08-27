@@ -7,10 +7,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.blaze.core.utils.util.ioScope
 import com.blaze.data.startup.repositories.StartUpRepo
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-import com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +21,7 @@ import javax.inject.Inject
 class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : ViewModel() {
 
     val resendToken = mutableStateOf<PhoneAuthProvider.ForceResendingToken?>(null)
-    val storedVerificationId: MutableState<String?> = mutableStateOf(null)
+    val storedVerificationId: MutableState<String> = mutableStateOf("")
     private val TAG = "OtpScreenViewModel"
 
     fun sendVerificationCode(
@@ -32,15 +31,14 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
     ) {
         ioScope.launch {
             repo.sendOtp(
-                activity = activity,
-                phoneNumber = phoneNumber,
-                callbacks = callbacks
+                activity = activity, phoneNumber = phoneNumber, callbacks = callbacks
             )
         }
     }
 
     fun reSendVerificationCode(
-        activity: Activity, phoneNumber: String,
+        activity: Activity,
+        phoneNumber: String,
         callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
     ) {
         ioScope.launch {
@@ -55,8 +53,7 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
 
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential, context: Activity) {
         ioScope.launch {
-            repo.getAuth().signInWithCredential(credential)
-                .addOnCompleteListener(context) { task ->
+            repo.getAuth().signInWithCredential(credential).addOnCompleteListener(context) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success")
@@ -76,9 +73,20 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
 
     fun verifyPhoneNumberWithCode(
         code: String
-    ){
+    ) {
         ioScope.launch {
-            storedVerificationId.value?.let { repo.verifyPhoneNumberWithCode(it, code) }
+            storedVerificationId.value.let { repo.verifyPhoneNumberWithCode(it, code) }
+        }
+    }
+
+    fun signInWithPhoneAuthCredential(
+        activity: Activity, otp: String, onComplete: (Task<AuthResult>) -> Unit
+    ) {
+        repo.signInWithPhoneAuthCredential(
+            activity = activity,
+            credential = PhoneAuthProvider.getCredential(storedVerificationId.value, otp)
+        ) {
+            onComplete(it)
         }
     }
 }

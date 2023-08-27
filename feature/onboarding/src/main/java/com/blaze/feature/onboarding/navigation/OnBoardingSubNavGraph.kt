@@ -4,33 +4,37 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.blaze.feature.onboarding.screen.onboard.basicinfo.BasicInfoScreen
-import com.blaze.feature.onboarding.screen.onboard.documentInfo.DocumentInfoScreen
-import com.blaze.feature.onboarding.screen.onboard.electricdetail.ElectricDetailScreen
-import com.blaze.feature.onboarding.screen.onboard.uploaddoc.UploadDocumentScreen
+import com.blaze.feature.onboarding.screen.onboard.InfoScreen
+import com.blaze.feature.onboarding.screen.onboard.ParkingAreaScreen
+import com.blaze.feature.onboarding.screen.onboard.TermScreen
+import com.blaze.feature.onboarding.screen.onboard.UploadDocumentScreen
+import com.blaze.feature.onboarding.screen.onboard.VehicleSelectionScreen
 
 @Composable
 fun OnBoardingSubNavGraph(subNavController: NavHostController) {
     NavHost(
         navController = subNavController,
-        startDestination = OnBoardingSubScreen.BasicInfoScreen.name
+        startDestination = OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name
     ) {
-        composable(OnBoardingSubScreen.BasicInfoScreen.name) {
-            BasicInfoScreen(subNavController)
+        composable(OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name) {
+            VehicleSelectionScreen(subNavController)
         }
-        composable(OnBoardingSubScreen.DocumentInfoScreen.name) {
-            DocumentInfoScreen(subNavController)
+        composable(OnBoardingSubScreen.OnBoardingInfoScreen.name) {
+            InfoScreen(subNavController)
         }
-        composable(OnBoardingSubScreen.StepThreeScreen.name) {
-            ElectricDetailScreen(subNavController)
-        }
-        composable(OnBoardingSubScreen.StepFourScreen.name) {
+        composable(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) {
             UploadDocumentScreen(subNavController)
+        }
+        composable(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) {
+            ParkingAreaScreen(subNavController)
+        }
+        composable(OnBoardingSubScreen.OnBoardingTermsScreen.name) {
+            TermScreen(subNavController)
         }
     }
 }
 
 
 enum class OnBoardingSubScreen {
-    BasicInfoScreen, DocumentInfoScreen, StepThreeScreen, StepFourScreen;
+    OnBoardVehicleSelectionScreen, OnBoardingInfoScreen, OnBoardingUploadDocScreen, OnBoardingParkingAreaScreen,OnBoardingTermsScreen;
 }

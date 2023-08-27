@@ -1,6 +1,8 @@
 package com.blaze.data.startup.repositories
 
 import android.app.Activity
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
@@ -23,4 +25,6 @@ interface StartUpRepo {
     )
 
     fun getAuth(): FirebaseAuth
+
+    fun signInWithPhoneAuthCredential(activity: Activity, credential: PhoneAuthCredential, onComplete:(Task<AuthResult>)->Unit)
 }

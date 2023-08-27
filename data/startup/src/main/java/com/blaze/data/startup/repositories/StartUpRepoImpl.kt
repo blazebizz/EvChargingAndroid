@@ -1,7 +1,10 @@
 package com.blaze.data.startup.repositories
 
 import android.app.Activity
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
@@ -54,6 +57,14 @@ class StartUpRepoImpl @Inject constructor(
             optionsBuilder.setForceResendingToken(token) // callback's ForceResendingToken
         }
         PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build())
+    }
+
+
+     override fun signInWithPhoneAuthCredential(activity: Activity, credential: PhoneAuthCredential, onComplete:(Task<AuthResult>)->Unit) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(activity) { task ->
+                onComplete(task)
+            }
     }
     // [END resend_verification]
 }
