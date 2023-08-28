@@ -19,8 +19,8 @@ object StartUpModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseStartUpRepository():StartUpRepo{
-        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    fun provideFirebaseStartUpRepository(auth: FirebaseAuth):StartUpRepo{
+//        val auth: FirebaseAuth = FirebaseAuth.getInstance()
         return StartUpRepoImpl(auth = auth)
     }
 }

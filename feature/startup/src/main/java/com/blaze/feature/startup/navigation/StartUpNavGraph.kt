@@ -12,11 +12,13 @@ import com.blaze.feature.startup.screen.login.LoginScreen
 import com.blaze.feature.startup.screen.otp.OtpScreen
 import com.blaze.feature.startup.screen.otp.OtpScreenViewModel
 import com.blaze.feature.startup.screen.splash.SplashScreen
+import com.blaze.feature.startup.screen.splash.SplashScreenViewModel
 
 
 fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreUiViewModel) {
     composable(route = StartUpRoute.SplashScreen.route) {
-        SplashScreen(navController)
+        val viewModel = hiltViewModel<SplashScreenViewModel>()
+        SplashScreen(navController,viewModel)
     }
 
     composable(route = StartUpRoute.LoginScreen.route) {
