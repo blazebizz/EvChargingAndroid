@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -39,7 +40,10 @@ import kotlinx.coroutines.launch
 fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
     val mobileNumber = remember { mutableStateOf("") }
     val stdCode = remember { mutableStateOf("+91") }
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)) {
         Spacer(modifier = Modifier.weight(1f))
         Row(Modifier.fillMaxWidth()) {
             OutlinedTextField(
@@ -48,7 +52,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     stdCode.value = it
                 },
                 label = {
-                    Text(text = "STD Code")
+                    Text(text = "Code")
                 },
                 textStyle = TextStyle(textAlign = TextAlign.Center),
                 modifier = Modifier.weight(1f),
@@ -57,6 +61,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     keyboardType = KeyboardType.Number
                 )
             )
+            Spacer(modifier = Modifier.width(8.dp))
             OutlinedTextField(value = mobileNumber.value, onValueChange = {
                 mobileNumber.value = it
             }, label = {
@@ -77,7 +82,6 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                 )
             )
         }
-
         Spacer(Modifier.height(16.dp))
         Button(onClick = {
             if (mobileNumber.value.length == 10 && stdCode.value.isNotEmpty()) {
