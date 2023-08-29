@@ -50,6 +50,8 @@ hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dag
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose"}
 androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version = "2.7.0" }
 
+
+
 [plugins]
 com-android-application = {id  = "com.android.application", version.ref = "com-android-application"}
 com-android-library = { id = "com.android.library", version.ref = "agp" }

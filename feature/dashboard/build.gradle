@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
@@ -67,4 +70,13 @@ dependencies {
     debugImplementation libs.ui.test.manifest
 
     implementation libs.navigation.compose
+
+    // Dagger Hilt
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+    implementation libs.hilt.navigation.compose
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    implementation("com.google.firebase:firebase-auth-ktx")
 }

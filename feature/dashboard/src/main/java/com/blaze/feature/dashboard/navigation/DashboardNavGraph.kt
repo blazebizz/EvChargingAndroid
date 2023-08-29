@@ -1,5 +1,6 @@
 package com.blaze.feature.dashboard.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -7,6 +8,7 @@ import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.feature.dashboard.screen.dashboard.DashboardScreen
 import com.blaze.feature.dashboard.screen.sidenav.SideNavigationScreen
+import com.blaze.feature.dashboard.screen.sidenav.SideNavigationScreenViewModel
 
 
 fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreUi: CoreUiViewModel) {
@@ -14,6 +16,7 @@ fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreUi: Core
         DashboardScreen(navController)
     }
     composable(route = DashboardRoute.SideNavigationScreen.route) {
-        SideNavigationScreen(navController)
+        val viewModel = hiltViewModel<SideNavigationScreenViewModel>()
+        SideNavigationScreen(navController,viewModel)
     }
 }
