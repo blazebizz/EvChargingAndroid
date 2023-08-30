@@ -31,7 +31,6 @@ import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.ui.R
 import com.blaze.core.ui.ui.theme.BoardBlack
-import com.blaze.core.ui.ui.theme.RomanticGreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

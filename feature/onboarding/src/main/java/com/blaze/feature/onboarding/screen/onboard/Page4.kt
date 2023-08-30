@@ -19,13 +19,16 @@ fun ParkingAreaScreen(subNavController: NavHostController) {
         UploadImageLayout(title = "Aadhar Front") {
 
         }
-        UploadImageLayout(title = "Aadhar Front") {
+        UploadImageLayout(title = "Aadhar Back") {
 
         }
-        UploadImageLayout(title = "Aadhar Front") {
+        UploadImageLayout(title = "Pan") {
 
         }
-        UploadImageLayout(title = "Aadhar Front") {
+        UploadImageLayout(title = "Electric Bill") {
+
+        }
+        UploadImageLayout(title = "Any Other Document(optional)") {
 
         }
     }

@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
 import com.blaze.core.utils.util.mainScope
 import com.google.firebase.FirebaseException
@@ -69,23 +70,40 @@ fun OtpScreen(
             //     detect the incoming verification SMS and perform verification without
             //     user action.
             Log.d(TAG, "onVerificationCompleted:$credential")
-            otpViewModel.signInWithPhoneAuthCredential(activity,otpState.value){task->
+            otpViewModel.signInWithPhoneAuthCredential(activity, otpState.value) { task ->
                 mainScope.launch {
-                    if (task.isSuccessful){
-                        Toast.makeText(context, "Logged In with ${task.result.user?.phoneNumber}", Toast.LENGTH_SHORT).show()
-                    }else{
+                    if (task.isSuccessful) {
+
+                        Toast.makeText(
+                            context,
+                            "Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        navController.navigate(DashboardRoute.DashboardScreen.route) {
+                            popUpTo(StartUpRoute.MobileOtpScreen.route) {
+                                inclusive = true
+                            }
+                        }
+                    } else {
                         when (task.exception) {
                             is FirebaseAuthInvalidCredentialsException -> {
                                 // Invalid request
                                 Toast.makeText(context, "Invalid Otp", Toast.LENGTH_SHORT).show()
                             }
+
                             is FirebaseTooManyRequestsException -> {
                                 // The SMS quota for the project has been exceeded
-                                Toast.makeText(context, "SMS quota exceeded", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "SMS quota exceeded", Toast.LENGTH_SHORT)
+                                    .show()
                             }
+
                             is FirebaseAuthMissingActivityForRecaptchaException -> {
                                 // reCAPTCHA verification attempted with null Activity
-                                Toast.makeText(context, "reCAPTCHA verification failed ! You are not a human", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    context,
+                                    "reCAPTCHA verification failed ! You are not a human",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -103,13 +121,19 @@ fun OtpScreen(
                     // Invalid request
                     Toast.makeText(context, "Invalid Otp", Toast.LENGTH_SHORT).show()
                 }
+
                 is FirebaseTooManyRequestsException -> {
                     // The SMS quota for the project has been exceeded
                     Toast.makeText(context, "SMS quota exceeded", Toast.LENGTH_SHORT).show()
                 }
+
                 is FirebaseAuthMissingActivityForRecaptchaException -> {
                     // reCAPTCHA verification attempted with null Activity
-                    Toast.makeText(context, "reCAPTCHA verification failed ! You are not a human", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        context,
+                        "reCAPTCHA verification failed ! You are not a human",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             // Show a message and update the UI
@@ -152,12 +176,21 @@ fun OtpScreen(
         onSubmitClick = {
             Toast.makeText(context, "verifying please wait.", Toast.LENGTH_SHORT).show()
             ioScope.launch {
-                otpViewModel.signInWithPhoneAuthCredential(activity,otpState.value){task->
+                otpViewModel.signInWithPhoneAuthCredential(activity, otpState.value) { task ->
                     mainScope.launch {
-                        if (task.isSuccessful){
-                            Toast.makeText(context, "Logged In with ${task.result.user?.phoneNumber}", Toast.LENGTH_SHORT).show()
-                        }else{
-                            if (task.exception is FirebaseAuthInvalidCredentialsException){
+                        if (task.isSuccessful) {
+                            Toast.makeText(
+                                context,
+                                "Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navController.navigate(DashboardRoute.DashboardScreen.route) {
+                                popUpTo(StartUpRoute.MobileOtpScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+                        } else {
+                            if (task.exception is FirebaseAuthInvalidCredentialsException) {
                                 Toast.makeText(context, "Invalid Otp", Toast.LENGTH_SHORT).show()
                             }
                         }
