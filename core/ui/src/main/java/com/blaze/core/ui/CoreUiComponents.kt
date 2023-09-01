@@ -27,5 +27,6 @@ fun InitSubUiComponents(model: CoreUiViewModel) {
         }
     }
     //endregion
-
 }
+
+

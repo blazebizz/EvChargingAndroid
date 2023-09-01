@@ -7,7 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -116,7 +115,7 @@ fun OnBoardingScreen(navController: NavController) {
                 .background(BabyPowderWhite)
                 .padding(10.dp)
         ) {
-            OnBoardingSubNavGraph(onBoardingNavController)
+            OnBoardingSubNavGraph(onBoardingNavController,viewModel)
         }
 
         Row(Modifier.fillMaxWidth()) {

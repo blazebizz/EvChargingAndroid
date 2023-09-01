@@ -2,20 +2,17 @@ package com.blaze.feature.onboarding.screen.onboard
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.components.UploadImageLayout
+import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun ParkingAreaScreen(subNavController: NavHostController) {
+fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
     Column(
         Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+            .fillMaxSize()) {
         UploadImageLayout(title = "Aadhar Front") {
 
         }

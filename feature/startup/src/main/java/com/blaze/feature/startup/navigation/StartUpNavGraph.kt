@@ -18,7 +18,7 @@ import com.blaze.feature.startup.screen.splash.SplashScreenViewModel
 fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreUiViewModel) {
     composable(route = StartUpRoute.SplashScreen.route) {
         val viewModel = hiltViewModel<SplashScreenViewModel>()
-        SplashScreen(navController,viewModel)
+        SplashScreen(navController,viewModel,coreUi)
     }
 
     composable(route = StartUpRoute.LoginScreen.route) {

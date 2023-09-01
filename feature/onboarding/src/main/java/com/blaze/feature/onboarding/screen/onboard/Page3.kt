@@ -8,17 +8,22 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.blaze.core.ui.components.OutlinedTextField
 import com.blaze.core.ui.components.UploadImageLayout
+import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun UploadDocumentScreen(subNavController: NavHostController) {
-
+fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+    val text = rememberSaveable {
+        mutableStateOf("")
+    }
     val scrollState = rememberScrollState()
     Column(
         Modifier
@@ -29,33 +34,21 @@ fun UploadDocumentScreen(subNavController: NavHostController) {
         Spacer(modifier = Modifier.height(5.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Aadhar Number")
-            })
+            value = text,
+            label = "Aadhar Number")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Pan Number")
-            })
+            value = text,
+            label ="Pan Number")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Electric Service Provider")
-            })
+            value = text,
+            label = "Electric Service Provider")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Bill Account Number")
-            })
-
+            value = text,
+            label = "Bill Account Number")
+        Spacer(Modifier.height(10.dp))
         Row {
             UploadImageLayout(title = "Aadhar Front") {
 

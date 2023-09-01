@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.bounceClick
+import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun VehicleSelectionScreen(subNavController: NavHostController) {
+fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
     val selected2Wheeler = rememberSaveable { mutableStateOf(false) }
     val selected4Wheeler = rememberSaveable { mutableStateOf(false) }
     Column(Modifier.fillMaxSize()) {
