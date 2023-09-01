@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -37,4 +40,18 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
+
+    // Dagger Hilt
+    implementation libs.hilt.android
+    kapt libs.hilt.compiler
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    implementation "com.google.firebase:firebase-auth-ktx"
+
+    implementation libs.okkhttp
+    implementation libs.retrofit2.kotlin.coroutines.adapter
+    implementation libs.retrofit
+    implementation libs.gson
+    implementation libs.converter.moshi
 }

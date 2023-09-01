@@ -76,35 +76,6 @@ fun InfoScreen(subNavController: NavHostController) {
 
         Spacer(modifier = Modifier.height(5.dp))
 
-        Text(text = "Bank Information")
-        Spacer(modifier = Modifier.height(5.dp))
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Account Holder Name")
-            })
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Account Number")
-            })
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "Confirm Account Number")
-            })
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(),
-            value = "",
-            onValueChange = {},
-            label = {
-                Text(text = "IFSC code")
-            })
+     
     }
 }

@@ -12,7 +12,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.components.Button
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
@@ -169,8 +169,7 @@ fun OtpScreen(
         )
     }
 
-    OtpContent(
-        otpState = otpState,
+    OtpContent(otpState = otpState,
         sentTo = toSentText,
         navController = navController,
         onSubmitClick = {
@@ -205,8 +204,7 @@ fun OtpScreen(
             otpViewModel.reSendVerificationCode(
                 activity, toSentText, callbacks
             )
-        }
-    )
+        })
 }
 
 @Composable
@@ -239,8 +237,7 @@ internal fun OtpContent(
         verticalArrangement = Arrangement.Top
     ) {
         Row {
-            Icon(
-                Icons.Default.ArrowBack,
+            Icon(Icons.Default.ArrowBack,
                 contentDescription = "back",
                 modifier = Modifier.clickable {
                     navController.navigate(DashboardRoute.DashboardScreen.route)
@@ -277,8 +274,7 @@ internal fun OtpContent(
 
                     Text(text = "$seconds seconds")
                     Spacer(Modifier.weight(1f))
-                    Text(
-                        text = "Resend",
+                    Text(text = "Resend",
                         color = if (seconds == 0) Color.LightGray else Color.LightGray,
                         modifier = Modifier.clickable {
                             if (seconds == 0) {
@@ -299,9 +295,9 @@ internal fun OtpContent(
 
         Spacer(Modifier.weight(3f))
         Spacer(Modifier.height(20.dp))
-        Button(modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick) {
-            Text(text = "Submit")
-        }
+
+        Button(text = "Submit", modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick)
+
         Spacer(Modifier.weight(4f))
     }
 }
@@ -319,11 +315,9 @@ fun OtpView(length: Int, code: MutableState<String>) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        BasicTextField(
-            value = code.value,
+        BasicTextField(value = code.value,
             onValueChange = { otpNo ->
-                if (otpNo.length <= length)
-                    code.value = otpNo.filter { it.isDigit() }
+                if (otpNo.length <= length) code.value = otpNo.filter { it.isDigit() }
                 if (otpNo.length == length) {
                     keyboardController?.hide()
                 }

@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.blaze.feature.onboarding.screen.onboard.BankDetailsScreen
 import com.blaze.feature.onboarding.screen.onboard.InfoScreen
 import com.blaze.feature.onboarding.screen.onboard.ParkingAreaScreen
 import com.blaze.feature.onboarding.screen.onboard.TermScreen
@@ -14,19 +15,22 @@ import com.blaze.feature.onboarding.screen.onboard.VehicleSelectionScreen
 fun OnBoardingSubNavGraph(subNavController: NavHostController) {
     NavHost(
         navController = subNavController,
-        startDestination = OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name
+        startDestination = OnBoardingSubScreen.Page1.name
     ) {
-        composable(OnBoardingSubScreen.OnBoardVehicleSelectionScreen.name) {
+        composable(OnBoardingSubScreen.Page1.name) {
             VehicleSelectionScreen(subNavController)
         }
-        composable(OnBoardingSubScreen.OnBoardingInfoScreen.name) {
+        composable(OnBoardingSubScreen.Page2.name) {
             InfoScreen(subNavController)
         }
-        composable(OnBoardingSubScreen.OnBoardingUploadDocScreen.name) {
+        composable(OnBoardingSubScreen.Page3.name) {
             UploadDocumentScreen(subNavController)
         }
-        composable(OnBoardingSubScreen.OnBoardingParkingAreaScreen.name) {
+        composable(OnBoardingSubScreen.Page4.name) {
             ParkingAreaScreen(subNavController)
+        }
+        composable(OnBoardingSubScreen.Page5.name) {
+            BankDetailsScreen(subNavController)
         }
         composable(OnBoardingSubScreen.OnBoardingTermsScreen.name) {
             TermScreen(subNavController)
@@ -36,5 +40,5 @@ fun OnBoardingSubNavGraph(subNavController: NavHostController) {
 
 
 enum class OnBoardingSubScreen {
-    OnBoardVehicleSelectionScreen, OnBoardingInfoScreen, OnBoardingUploadDocScreen, OnBoardingParkingAreaScreen,OnBoardingTermsScreen;
+    Page1, Page2, Page3, Page4,Page5,OnBoardingTermsScreen;
 }
