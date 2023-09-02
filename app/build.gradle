@@ -83,6 +83,8 @@ dependencies {
     kapt libs.hilt.compiler
     implementation libs.hilt.navigation.compose
 
+    //permission
+    implementation libs.accompanist.permissions
 
 
 }

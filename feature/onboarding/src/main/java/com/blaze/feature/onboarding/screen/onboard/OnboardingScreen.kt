@@ -1,5 +1,6 @@
 package com.blaze.feature.onboarding.screen.onboard
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -53,10 +54,14 @@ fun OnBoardingScreen(navController: NavController) {
     )
     val onBoardingNavController = rememberNavController()
 
+    BackHandler {
+        previousFunction(onBoardingNavController,viewModel,navController)
+    }
+
     Column(Modifier.fillMaxSize()) {
         Row(
             Modifier
-                .padding(start = 16.dp,top = 10.dp, bottom = 16.dp)
+                .padding(start = 16.dp, top = 10.dp, bottom = 16.dp)
                 .fillMaxWidth()
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "back", Modifier.clickable {
@@ -121,7 +126,7 @@ fun OnBoardingScreen(navController: NavController) {
         Row(Modifier.fillMaxWidth()) {
             Spacer(modifier = Modifier.weight(1f))
             OutlinedButton("Previous") {
-                previousFunction(onBoardingNavController, viewModel)
+                previousFunction(onBoardingNavController, viewModel, navController)
             }
             Spacer(modifier = Modifier.weight(3f))
 
@@ -172,41 +177,46 @@ fun nextFunction(navController: NavHostController, viewModel: OnBoardingViewMode
     }
 }
 
-fun previousFunction(navController: NavHostController, viewModel: OnBoardingViewModel) {
-    when (navController.currentDestination?.route) {
+fun previousFunction(
+    subNavController: NavHostController,
+    viewModel: OnBoardingViewModel,
+    mainNavController: NavController
+) {
+    when (subNavController.currentDestination?.route) {
         OnBoardingSubScreen.Page1.name -> {
-
+            mainNavController.popBackStack()
         }
 
         OnBoardingSubScreen.Page2.name -> {
-            navController.navigate(OnBoardingSubScreen.Page1.name) {
+            subNavController.navigate(OnBoardingSubScreen.Page1.name) {
                 popUpTo(OnBoardingSubScreen.Page2.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page3.name -> {
-            navController.navigate(OnBoardingSubScreen.Page2.name) {
+            subNavController.navigate(OnBoardingSubScreen.Page2.name) {
                 popUpTo(OnBoardingSubScreen.Page3.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page4.name -> {
-            navController.navigate(OnBoardingSubScreen.Page3.name) {
+            subNavController.navigate(OnBoardingSubScreen.Page3.name) {
                 popUpTo(OnBoardingSubScreen.Page4.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page5.name -> {
-            navController.navigate(OnBoardingSubScreen.Page4.name) {
+            subNavController.navigate(OnBoardingSubScreen.Page4.name) {
                 popUpTo(OnBoardingSubScreen.Page5.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
-            navController.navigate(OnBoardingSubScreen.Page5.name) {
+            subNavController.navigate(OnBoardingSubScreen.Page5.name) {
                 popUpTo(OnBoardingSubScreen.OnBoardingTermsScreen.name) { inclusive = true }
             }
         }
+
     }
 }
 
@@ -219,8 +229,8 @@ fun RoundedTextIndicator(text: String) {
             .background(MaterialTheme.colorScheme.background, shape = CircleShape)
             .border(
                 2.dp, MaterialTheme.colorScheme.onBackground, CircleShape
-            ).padding(3.dp)
-        ,
+            )
+            .padding(3.dp),
         textAlign = TextAlign.Center,
         fontWeight = FontWeight.Bold
     )
