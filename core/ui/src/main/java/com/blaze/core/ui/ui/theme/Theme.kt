@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple40,
@@ -21,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = Purple40,
     background = BoardBlack,
 
-)
+    )
 
 private val LightColorScheme = lightColorScheme(
     primary = Purple40,
@@ -46,14 +47,31 @@ fun ClassicBeatTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+    //region status color
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        color = PrimaryColor
+    )
+    systemUiController.setStatusBarColor(color = PrimaryColor)
+    //endregion
+
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) {
+                dynamicDarkColorScheme(context)
+            } else {
+                dynamicLightColorScheme(context)
+            }
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> {
+            DarkColorScheme
+        }
+
+        else -> {
+            LightColorScheme
+        }
     }
     val view = LocalView.current
     if (!view.isInEditMode) {

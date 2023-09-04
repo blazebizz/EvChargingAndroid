@@ -22,16 +22,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -44,19 +45,28 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 
 @Composable
-fun OnBoardingScreen(navController: NavController) {
-    val viewModel = hiltViewModel<OnBoardingViewModel>()
+fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewModel) {
+
+    val context = LocalContext.current
+
     val progress by remember { mutableFloatStateOf(.51f) }
+
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
+
     val onBoardingNavController = rememberNavController()
 
-    BackHandler {
-        previousFunction(onBoardingNavController,viewModel,navController)
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchOnBoardUserData()
     }
+
+    BackHandler {
+        previousFunction(onBoardingNavController, viewModel, navController)
+    }
+
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -75,30 +85,33 @@ fun OnBoardingScreen(navController: NavController) {
             LinearProgressIndicator(
                 modifier = Modifier
                     .weight(4f)
-                    .semantics(mergeDescendants = true) {}
-                ,
-                progress = animatedProgress,color = MaterialTheme.colorScheme.onBackground
+                    .semantics(mergeDescendants = true) {},
+                progress = animatedProgress,
+                color = MaterialTheme.colorScheme.onBackground
             )
             RoundedTextIndicator("2")
             LinearProgressIndicator(
                 modifier = Modifier
                     .weight(4f)
                     .semantics(mergeDescendants = true) {},
-                progress = animatedProgress,color = MaterialTheme.colorScheme.onBackground
+                progress = animatedProgress,
+                color = MaterialTheme.colorScheme.onBackground
             )
             RoundedTextIndicator("3")
             LinearProgressIndicator(
                 modifier = Modifier
                     .weight(4f)
                     .semantics(mergeDescendants = true) {},
-                progress = animatedProgress,color = MaterialTheme.colorScheme.onBackground
+                progress = animatedProgress,
+                color = MaterialTheme.colorScheme.onBackground
             )
             RoundedTextIndicator("4")
             LinearProgressIndicator(
                 modifier = Modifier
                     .weight(4f)
                     .semantics(mergeDescendants = true) {},
-                progress = animatedProgress,color = MaterialTheme.colorScheme.onBackground
+                progress = animatedProgress,
+                color = MaterialTheme.colorScheme.onBackground
             )
             RoundedTextIndicator("5")
             LinearProgressIndicator(
@@ -120,7 +133,7 @@ fun OnBoardingScreen(navController: NavController) {
                 .background(BabyPowderWhite)
                 .padding(10.dp)
         ) {
-            OnBoardingSubNavGraph(onBoardingNavController,viewModel)
+            OnBoardingSubNavGraph(onBoardingNavController, viewModel)
         }
 
         Row(Modifier.fillMaxWidth()) {
@@ -172,7 +185,7 @@ fun nextFunction(navController: NavHostController, viewModel: OnBoardingViewMode
         }
 
         OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
-
+            viewModel.onBoardUser()
         }
     }
 }

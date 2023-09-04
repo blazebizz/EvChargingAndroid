@@ -1,3 +1,3 @@
 package com.blaze.core.utils.util
 
-val BASE_URL = "https://ev-charginh-point-backend.onrender.com/api/v1/"
+const val BASE_URL = "https://ev-charginh-point-backend.onrender.com/api/v1/"

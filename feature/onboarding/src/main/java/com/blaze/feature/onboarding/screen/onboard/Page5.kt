@@ -21,22 +21,34 @@ fun BankDetailsScreen(subNavController: NavHostController, viewModel: OnBoarding
         mutableStateOf("")
     }
     Column(
-        Modifier
-            .fillMaxSize()
+        Modifier.fillMaxSize()
     ) {
         Text(text = "Bank Information")
         Spacer(modifier = Modifier.height(5.dp))
-        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label = "Account Holder Name")
-        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label =  "Account Number")
-        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label ="Confirm Account Number")
-        OutlinedTextField(modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label ="IFSC code")
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = viewModel.accNameHolder,
+            label = "Account Holder Name"
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(), value = viewModel.bankName, label = "Bank Name"
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = viewModel.accNumber,
+            label = "Account Number"
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(),
+            value = viewModel.accConfirmNumber,
+            label = "Confirm Account Number"
+        )
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth(), value = viewModel.ifscCode, label = "IFSC code"
+        )
     }
 }

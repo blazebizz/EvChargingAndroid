@@ -33,8 +33,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
-    val selected2Wheeler = rememberSaveable { mutableStateOf(false) }
-    val selected4Wheeler = rememberSaveable { mutableStateOf(false) }
+
     Column(Modifier.fillMaxSize()) {
         Row(
             Modifier
@@ -43,7 +42,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
         ) {
             Box(
                 Modifier
-                    .bounceClick { selected2Wheeler.value = !selected2Wheeler.value }
+                    .bounceClick { viewModel.selected2Wheeler.value = !viewModel.selected2Wheeler.value }
                     .padding(5.dp)
 
                     .fillMaxWidth()
@@ -58,7 +57,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                         RoundedCornerShape(8.dp)
                     )
                 )
-                RadioButton(selected = selected2Wheeler.value, onClick = { /*TODO*/ } ,
+                RadioButton(selected = viewModel.selected2Wheeler.value, onClick = { /*TODO*/ } ,
                     modifier = Modifier
                         .padding(5.dp)
                     .background(
@@ -71,7 +70,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
 
             Box(
                 Modifier
-                    .bounceClick { selected4Wheeler.value = !selected4Wheeler.value }
+                    .bounceClick { viewModel.selected4Wheeler.value = !viewModel.selected4Wheeler.value }
                     .padding(5.dp)
                     .fillMaxWidth()
                     .aspectRatio(1f)
@@ -85,7 +84,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                         )
                 )
                 RadioButton(
-                    selected = selected4Wheeler.value,
+                    selected = viewModel.selected4Wheeler.value,
                     onClick = { /*TODO*/ },
                     modifier = Modifier
                         .padding(5.dp)

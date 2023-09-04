@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
             )
 
             // Keeps track of the rationale dialog state, needed when the user requires further rationale
-            var rationaleState = remember {
+            val rationaleState = remember {
                 mutableStateOf<RationaleState?>(null)
             }
 
@@ -83,8 +83,6 @@ fun MainActivityScreen() {
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-
-
             val navGraphController = rememberNavController()
             SetupNavGraph(
                 startDestination = StartUpRoute.SplashScreen.route,

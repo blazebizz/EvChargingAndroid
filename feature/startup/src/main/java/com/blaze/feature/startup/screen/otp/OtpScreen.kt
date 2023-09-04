@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
+import com.blaze.core.ui.components.OtpView
+import com.blaze.core.ui.ui.theme.PrimaryColor
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
@@ -212,7 +214,7 @@ internal fun OtpContent(
     onResendClick: () -> Unit,
 ) {
     var seconds by rememberSaveable {
-        mutableIntStateOf(0)
+        mutableIntStateOf(30)
     }
     var trigger by rememberSaveable {
         mutableStateOf(false)
@@ -271,7 +273,7 @@ internal fun OtpContent(
                     Text(text = "$seconds seconds")
                     Spacer(Modifier.weight(1f))
                     Text(text = "Resend",
-                        color = if (seconds == 0) Color.LightGray else Color.LightGray,
+                        color = if (seconds == 0) PrimaryColor else Color.LightGray,
                         modifier = Modifier.clickable {
                             if (seconds == 0) {
                                 onResendClick.invoke()
@@ -299,79 +301,6 @@ internal fun OtpContent(
 }
 
 
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
 
-fun OtpView(length: Int, code: MutableState<String>) {
-    val focusRequester = FocusRequester()
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-    }
-
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-        BasicTextField(value = code.value,
-            onValueChange = { otpNo ->
-                if (otpNo.length <= length) code.value = otpNo.filter { it.isDigit() }
-                if (otpNo.length == length) {
-                    keyboardController?.hide()
-                }
-            },
-            Modifier
-                .fillMaxWidth()
-                .focusRequester(focusRequester = focusRequester),
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            decorationBox = {
-                CodeInputDecoration(code.value, length)
-            })
-    }
-}
-
-@Composable
-private fun CodeInputDecoration(code: String, length: Int) {
-    Box(
-        modifier = Modifier
-            .wrapContentWidth()
-            .border(
-                border = BorderStroke(2.dp, color = Color.Transparent),
-                shape = RoundedCornerShape(5.dp)
-            )
-    ) {
-        Row {
-            for (i in 0 until length) {
-                val text = if (i < code.length) code[i].toString() else ""
-                CodeEntry(text)
-                Spacer(modifier = Modifier.width(10.dp))
-            }
-        }
-    }
-}
-
-@Composable
-private fun CodeEntry(text: String) {
-    Box(
-        modifier = Modifier
-//            .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(8.dp))
-            .width(40.dp)
-            .height(40.dp)
-//            .clip(shape = RoundedCornerShape(8.dp))
-//            .background(Color.White)
-        ,
-
-        contentAlignment = Alignment.Center
-    ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text(text = text, fontSize = 20.sp)
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp)
-                    .background(Color.Black)
-            )
-        }
-
-    }
-}
 
 // filo

@@ -32,12 +32,12 @@ fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewMod
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.fullName,
             label =  "Full Name")
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.mobile,
             label = "Mobile Number")
         Spacer(modifier = Modifier.height(5.dp))
 
@@ -45,19 +45,19 @@ fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewMod
         Spacer(modifier = Modifier.height(5.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.addressL1,
             label = "Address Line 1")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.addressL2,
             label = "Address Line 2")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.state,
             label = "state")
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
+            value = viewModel.pincode,
             label = "Pincode")
 
         Spacer(modifier = Modifier.height(5.dp))

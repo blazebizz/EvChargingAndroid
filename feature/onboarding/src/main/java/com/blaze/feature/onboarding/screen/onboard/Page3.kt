@@ -1,11 +1,9 @@
 package com.blaze.feature.onboarding.screen.onboard
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -16,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.components.OutlinedTextField
-import com.blaze.core.ui.components.UploadImageLayout
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
@@ -34,37 +31,25 @@ fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoard
         Spacer(modifier = Modifier.height(5.dp))
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label = "Aadhar Number")
+            value = viewModel.aadharNumber,
+            label = "Aadhar Number"
+        )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label ="Pan Number")
+            value = viewModel.panNumber,
+            label = "Pan Number"
+        )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label = "Electric Service Provider")
+            value = viewModel.electricProvide,
+            label = "Electric Service Provider"
+        )
+
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
-            value = text,
-            label = "Bill Account Number")
-        Spacer(Modifier.height(10.dp))
-        Row {
-            UploadImageLayout(title = "Aadhar Front") {
+            value = viewModel.electricBillNumber,
+            label = "Bill Account Number"
+        )
 
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-            UploadImageLayout(title = "Aadhar Back") {
-
-            }
-        }
-
-        UploadImageLayout(title = "Pan Card") {
-
-        }
-
-        UploadImageLayout(title = "Electric Bill") {
-
-        }
     }
 }
