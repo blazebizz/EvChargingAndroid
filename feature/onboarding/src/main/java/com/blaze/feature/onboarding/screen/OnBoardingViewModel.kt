@@ -1,25 +1,33 @@
 package com.blaze.feature.onboarding.screen
 
 import android.net.Uri
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.blaze.core.utils.navigation.StartUpRoute
+import com.blaze.core.utils.util.ioScope
+import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
 import com.blaze.data.onboarding.repositories.OnBoardingRepo
-import com.blaze.data.onboarding.repositories.OnBoardingRepoImpl
+import com.velox.lazeir.utils.outlet.handleFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo):ViewModel() {
+class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) : ViewModel() {
 
+
+    val progress1 = mutableFloatStateOf(0f)
+    val progress2 = mutableFloatStateOf(0f)
+    val progress3 = mutableFloatStateOf(0f)
+    val progress4 = mutableFloatStateOf(0f)
+    val progress5 = mutableFloatStateOf(0f)
 
     //page1
     val selected2Wheeler = mutableStateOf(false)
     val selected4Wheeler = mutableStateOf(false)
 
     //page2
-    val fullName= mutableStateOf("")
+    val fullName = mutableStateOf("")
     val mobile = mutableStateOf("")
     val addressL1 = mutableStateOf("")
     val addressL2 = mutableStateOf("")
@@ -33,7 +41,8 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo):
     val electricBillNumber = mutableStateOf("")
 
     //page4
-    val aadharUri = mutableStateOf<Uri?>(null)
+    val aadharFrontUri = mutableStateOf<Uri?>(null)
+    val aadharBackUri = mutableStateOf<Uri?>(null)
     val panUri = mutableStateOf<Uri?>(null)
     val electricBillUri = mutableStateOf<Uri?>(null)
     val otherUri = mutableStateOf<Uri?>(null)
@@ -45,10 +54,50 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo):
     val accConfirmNumber = mutableStateOf("")
     val ifscCode = mutableStateOf("")
 
+    //terms and conditions
+    val tcChecked = mutableStateOf(false)
 
 
-    fun fetchOnBoardUserData(){
+    fun fetchOnBoardUserData(userId: String) {
+        val body = FetchPartnerOnBoardDataRequest(userId = userId)
+        ioScope.launch {
+            repo.fetchUserOnBoardData(body).handleFlow(
+                onLoading = {},
+                onFailure = { _, _, _ -> }
+            ) {
 
+                selected2Wheeler.value =
+                    it.data?.get(0)?.onboardData?.basicDetails?.twoWheeler ?: false
+                selected4Wheeler.value =
+                    it.data?.get(0)?.onboardData?.basicDetails?.fourWheeler ?: false
+                fullName.value = it.data?.get(0)?.onboardData?.basicDetails?.name ?: ""
+                mobile.value = it.data?.get(0)?.onboardData?.basicDetails?.mobile ?: ""
+
+                addressL1.value = it.data?.get(0)?.onboardData?.basicDetails?.address1 ?: ""
+                addressL2.value = it.data?.get(0)?.onboardData?.basicDetails?.address2 ?: ""
+                state.value = it.data?.get(0)?.onboardData?.basicDetails?.state ?: ""
+                pincode.value = it.data?.get(0)?.onboardData?.basicDetails?.pincode ?: ""
+
+                aadharNumber.value = it.data?.get(0)?.onboardData?.identityDetails?.aadhaarNo ?: ""
+                panNumber.value = it.data?.get(0)?.onboardData?.identityDetails?.panNo ?: ""
+                electricProvide.value =
+                    it.data?.get(0)?.onboardData?.identityDetails?.eleProvider ?: ""
+                electricBillNumber.value =
+                    it.data?.get(0)?.onboardData?.identityDetails?.eleBillNo ?: ""
+
+                accNameHolder.value = it.data?.get(0)?.onboardData?.bankDetails?.accHolderName ?: ""
+
+
+            }
+        }
+    }
+
+    fun uploadImage(userId: String, image: String, imageUri: Uri) {
+        repo.uploadImage(userId, image, imageUri, onFailure = {
+
+        }, onSuccess = {
+
+        })
     }
 
     fun onBoardUser() {

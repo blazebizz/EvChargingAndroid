@@ -56,4 +56,11 @@ dependencies {
     implementation libs.converter.moshi
     implementation libs.converter.gson
     implementation libs.converter.scalars
+
+    implementation libs.lazier
+    implementation libs.work.runtime.ktx
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+    implementation "com.google.firebase:firebase-auth-ktx"
+    implementation "com.google.firebase:firebase-storage-ktx"
 }

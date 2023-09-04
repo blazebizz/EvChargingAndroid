@@ -19,8 +19,6 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -34,6 +32,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 @Composable
 fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
 
+
     Column(Modifier.fillMaxSize()) {
         Row(
             Modifier
@@ -42,7 +41,9 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
         ) {
             Box(
                 Modifier
-                    .bounceClick { viewModel.selected2Wheeler.value = !viewModel.selected2Wheeler.value }
+                    .bounceClick {
+                        viewModel.selected2Wheeler.value = !viewModel.selected2Wheeler.value
+                    }
                     .padding(5.dp)
 
                     .fillMaxWidth()
@@ -53,34 +54,40 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                     contentDescription = null,
                     modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .border(2.dp,MaterialTheme.colorScheme.onBackground,
-                        RoundedCornerShape(8.dp)
-                    )
+                        .border(
+                            2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp)
+                        )
                 )
-                RadioButton(selected = viewModel.selected2Wheeler.value, onClick = { /*TODO*/ } ,
+                RadioButton(
+                    selected = viewModel.selected2Wheeler.value,
+                    onClick = { /*TODO*/ },
                     modifier = Modifier
                         .padding(5.dp)
-                    .background(
-                        color = MaterialTheme.colorScheme.background, CircleShape
-                    ),
+                        .background(
+                            color = MaterialTheme.colorScheme.background, CircleShape
+                        ),
                     colors = RadioButtonDefaults.colors(
                         selectedColor = MaterialTheme.colorScheme.onBackground
-                    ))
+                    )
+                )
             }
 
             Box(
                 Modifier
-                    .bounceClick { viewModel.selected4Wheeler.value = !viewModel.selected4Wheeler.value }
+                    .bounceClick {
+                        viewModel.selected4Wheeler.value = !viewModel.selected4Wheeler.value
+                    }
                     .padding(5.dp)
                     .fillMaxWidth()
                     .aspectRatio(1f)
                     .weight(1f)) {
                 Image(
                     painter = painterResource(id = R.drawable.charging_4_wheeler),
-                    contentDescription = null,modifier = Modifier
+                    contentDescription = null,
+                    modifier = Modifier
                         .clip(RoundedCornerShape(8.dp))
-                        .border(2.dp,MaterialTheme.colorScheme.onBackground,
-                            RoundedCornerShape(8.dp)
+                        .border(
+                            2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(8.dp)
                         )
                 )
                 RadioButton(

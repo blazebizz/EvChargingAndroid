@@ -26,4 +26,3 @@ object OnBoardingRetrofitBuilder {
     }
 }
 
-//sierra cobot

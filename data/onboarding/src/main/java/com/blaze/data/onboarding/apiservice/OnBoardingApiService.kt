@@ -10,8 +10,8 @@ import retrofit2.http.POST
 
 interface OnBoardingApiService {
 
-    @POST("/partner/fetch-data/")
-    fun fetchUserOnBoardData(
+    @POST("api/v1/partner/fetch-data/")
+    suspend fun fetchUserOnBoardData(
         @Body body: FetchPartnerOnBoardDataRequest
     ): Response<FetchPartnerOnBoardDataResponse>
 
