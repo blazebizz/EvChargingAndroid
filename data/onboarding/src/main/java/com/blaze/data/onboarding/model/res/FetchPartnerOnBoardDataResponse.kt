@@ -23,13 +23,13 @@ data class DataItem(
 	val updatedAt: String? = null,
 
 	@field:SerializedName("reject_list")
-	val rejectList: Any? = null,
+	val rejectList: List<String?>? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,
 
 	@field:SerializedName("remark")
-	val remark: Any? = null,
+	val remark: String? = null,
 
 	@field:SerializedName("userId")
 	val userId: String? = null,
@@ -56,34 +56,19 @@ data class BankDetails(
 	val ifscCode: String? = null
 )
 
-data class DocumentImage(
+data class IdentityDetails(
 
-	@field:SerializedName("aadhaarFront")
-	val aadhaarFront: String? = null,
+	@field:SerializedName("aadhaarNo")
+	val aadhaarNo: String? = null,
 
-	@field:SerializedName("electricBill")
-	val electricBill: String? = null,
+	@field:SerializedName("panNo")
+	val panNo: String? = null,
 
-	@field:SerializedName("pan")
-	val pan: String? = null,
+	@field:SerializedName("eleBillNo")
+	val eleBillNo: String? = null,
 
-	@field:SerializedName("aadhaarBack")
-	val aadhaarBack: String? = null
-)
-
-data class OnboardData(
-
-	@field:SerializedName("bankDetails")
-	val bankDetails: BankDetails? = null,
-
-	@field:SerializedName("basicDetails")
-	val basicDetails: BasicDetails? = null,
-
-	@field:SerializedName("parkingDetails")
-	val parkingDetails: List<String?>? = null,
-
-	@field:SerializedName("identityDetails")
-	val identityDetails: IdentityDetails? = null
+	@field:SerializedName("eleProvider")
+	val eleProvider: String? = null
 )
 
 data class BasicDetails(
@@ -116,20 +101,35 @@ data class BasicDetails(
 	val state: String? = null
 )
 
-data class IdentityDetails(
+data class DocumentImage(
 
-	@field:SerializedName("aadhaarNo")
-	val aadhaarNo: String? = null,
+	@field:SerializedName("aadhaarFront")
+	val aadhaarFront: String? = null,
 
-	@field:SerializedName("panNo")
-	val panNo: String? = null,
+	@field:SerializedName("electricBill")
+	val electricBill: String? = null,
 
-	@field:SerializedName("eleBillNo")
-	val eleBillNo: String? = null,
+	@field:SerializedName("pan")
+	val pan: String? = null,
+
+	@field:SerializedName("aadhaarBack")
+	val aadhaarBack: String? = null
+)
+
+data class OnboardData(
+
+	@field:SerializedName("bankDetails")
+	val bankDetails: BankDetails? = null,
 
 	@field:SerializedName("documentImage")
 	val documentImage: DocumentImage? = null,
 
-	@field:SerializedName("eleProvider")
-	val eleProvider: String? = null
+	@field:SerializedName("basicDetails")
+	val basicDetails: BasicDetails? = null,
+
+	@field:SerializedName("parkingDetails")
+	val parkingDetails: List<String?>? = null,
+
+	@field:SerializedName("identityDetails")
+	val identityDetails: IdentityDetails? = null
 )

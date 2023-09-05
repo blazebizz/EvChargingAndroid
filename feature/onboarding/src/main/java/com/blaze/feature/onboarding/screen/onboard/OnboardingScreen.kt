@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -48,27 +50,27 @@ fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewMode
 
 
     val ap1 by animateFloatAsState(
-        targetValue = viewModel.progress1.value,
+        targetValue = viewModel.progress1.floatValue,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
     val ap2 by animateFloatAsState(
-        targetValue = viewModel.progress2.value,
+        targetValue = viewModel.progress2.floatValue,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
     val ap3 by animateFloatAsState(
-        targetValue = viewModel.progress3.value,
+        targetValue = viewModel.progress3.floatValue,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
     val ap4 by animateFloatAsState(
-        targetValue = viewModel.progress4.value,
+        targetValue = viewModel.progress4.floatValue,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
     val ap5 by animateFloatAsState(
-        targetValue = viewModel.progress5.value,
+        targetValue = viewModel.progress5.floatValue,
         animationSpec = ProgressIndicatorDefaults.ProgressAnimationSpec,
         label = ""
     )
@@ -77,7 +79,7 @@ fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewMode
     val onBoardingNavController = rememberNavController()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData("123499")
+        viewModel.fetchOnBoardUserData("789808")
     }
 
     BackHandler {
@@ -85,16 +87,23 @@ fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewMode
     }
 
 
-    Column(Modifier.fillMaxSize()) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .statusBarsPadding()) {
         Row(
             Modifier
-                .padding(start = 16.dp, top = 10.dp, bottom = 16.dp)
-                .fillMaxWidth()
+                .padding(start = 16.dp, top = 10.dp, bottom = 30.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = "back", Modifier.clickable {
                 previousFunction(onBoardingNavController, viewModel, navController)
             })
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = "Partner On Boarding", fontWeight = FontWeight.SemiBold)
         }
+
 
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Spacer(modifier = Modifier.weight(1f))
@@ -138,7 +147,7 @@ fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewMode
                 progress = ap5,
                 color = MaterialTheme.colorScheme.onBackground
             )
-            RoundedTextIndicator("")
+            RoundedTextIndicator("6")
             Spacer(modifier = Modifier.weight(1f))
         }
 
@@ -172,42 +181,42 @@ fun OnBoardingScreen(navController: NavController, viewModel: OnBoardingViewMode
 fun nextFunction(navController: NavHostController, viewModel: OnBoardingViewModel) {
     when (navController.currentDestination?.route) {
         OnBoardingSubScreen.Page1.name -> {
-            viewModel.progress1.value = 1f
+            viewModel.progress1.floatValue = 1f
             navController.navigate(OnBoardingSubScreen.Page2.name) {
                 popUpTo(OnBoardingSubScreen.Page1.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page2.name -> {
-            viewModel.progress2.value = 1f
+            viewModel.progress2.floatValue = 1f
             navController.navigate(OnBoardingSubScreen.Page3.name) {
                 popUpTo(OnBoardingSubScreen.Page2.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page3.name -> {
-            viewModel.progress3.value = 1f
+            viewModel.progress3.floatValue = 1f
             navController.navigate(OnBoardingSubScreen.Page4.name) {
                 popUpTo(OnBoardingSubScreen.Page3.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page4.name -> {
-            viewModel.progress4.value = 1f
+            viewModel.progress4.floatValue = 1f
             navController.navigate(OnBoardingSubScreen.Page5.name) {
                 popUpTo(OnBoardingSubScreen.Page4.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page5.name -> {
-            viewModel.progress5.value = 1f
-            navController.navigate(OnBoardingSubScreen.OnBoardingTermsScreen.name) {
+            viewModel.progress5.floatValue = 1f
+            navController.navigate(OnBoardingSubScreen.Page6.name) {
                 popUpTo(OnBoardingSubScreen.Page5.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
-            viewModel.onBoardUser()
+        OnBoardingSubScreen.Page6.name -> {
+//            viewModel.onBoardUser(body)
         }
     }
 }
@@ -223,37 +232,37 @@ fun previousFunction(
         }
 
         OnBoardingSubScreen.Page2.name -> {
-            viewModel.progress1.value = 0f
+            viewModel.progress1.floatValue = 0f
             subNavController.navigate(OnBoardingSubScreen.Page1.name) {
                 popUpTo(OnBoardingSubScreen.Page2.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page3.name -> {
-            viewModel.progress2.value = 0f
+            viewModel.progress2.floatValue = 0f
             subNavController.navigate(OnBoardingSubScreen.Page2.name) {
                 popUpTo(OnBoardingSubScreen.Page3.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page4.name -> {
-            viewModel.progress3.value = 0f
+            viewModel.progress3.floatValue = 0f
             subNavController.navigate(OnBoardingSubScreen.Page3.name) {
                 popUpTo(OnBoardingSubScreen.Page4.name) { inclusive = true }
             }
         }
 
         OnBoardingSubScreen.Page5.name -> {
-            viewModel.progress4.value = 0f
+            viewModel.progress4.floatValue = 0f
             subNavController.navigate(OnBoardingSubScreen.Page4.name) {
                 popUpTo(OnBoardingSubScreen.Page5.name) { inclusive = true }
             }
         }
 
-        OnBoardingSubScreen.OnBoardingTermsScreen.name -> {
-            viewModel.progress5.value = 0f
+        OnBoardingSubScreen.Page6.name -> {
+            viewModel.progress5.floatValue = 0f
             subNavController.navigate(OnBoardingSubScreen.Page5.name) {
-                popUpTo(OnBoardingSubScreen.OnBoardingTermsScreen.name) { inclusive = true }
+                popUpTo(OnBoardingSubScreen.Page6.name) { inclusive = true }
             }
         }
 

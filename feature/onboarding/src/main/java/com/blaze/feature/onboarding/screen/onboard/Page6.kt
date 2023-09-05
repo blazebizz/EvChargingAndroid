@@ -13,15 +13,10 @@ import androidx.navigation.NavHostController
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun TermScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
 
     Column(Modifier.fillMaxSize()) {
         Spacer(modifier = Modifier.weight(1f))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Checkbox(checked = viewModel.tcChecked.value, onCheckedChange = {
-                viewModel.tcChecked.value = !viewModel.tcChecked.value
-            })
-            Text("I accept the Terms & Conditions !")
-        }
+
     }
 }

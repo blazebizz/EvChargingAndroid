@@ -1,8 +1,10 @@
 package com.blaze.core.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,12 +26,30 @@ fun Button(
 ) {
     Box(modifier = modifier
         .bounceClick { onClick() }
-        .background(colors.bodyColor)
+        .background(colors.bodyColor, RoundedCornerShape(5.dp))
         .padding(14.dp),
         contentAlignment = Alignment.Center) {
         Text(
             text = text.uppercase(),
             color = colors.textColor,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            fontSize = 18.sp
+        )
+    }
+}
+
+
+@Composable
+
+fun OutlinedButton(text: String, modifier: Modifier = Modifier, color: Color = MaterialTheme.colorScheme.onBackground, onClick: () -> Unit) {
+    Box(modifier = modifier
+        .bounceClick { onClick() }
+        .border(2.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(5.dp))
+        .padding(14.dp), contentAlignment = Alignment.Center) {
+        Text(
+            text = text.uppercase(),
+            color = color,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
             fontSize = 18.sp

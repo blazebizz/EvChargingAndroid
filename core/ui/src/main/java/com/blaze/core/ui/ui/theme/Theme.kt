@@ -20,7 +20,7 @@ private val DarkColorScheme = darkColorScheme(
     primary = Purple40,
     secondary = PurpleGrey40,
     tertiary = Purple40,
-    background = BoardBlack,
+    background = Night,
 
     )
 

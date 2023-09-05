@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
@@ -41,7 +42,7 @@ import com.blaze.core.utils.navigation.StartUpRoute
 fun SideNavigationScreen(navController: NavController, viewModel: SideNavigationScreenViewModel) {
   val context = LocalContext.current
   val activity = LocalContext.current as Activity
-    BackHandler {
+  BackHandler {
         navController.navigate(DashboardRoute.DashboardScreen.route){
             popUpTo(DashboardRoute.SideNavigationScreen.route){
                 inclusive = true
@@ -52,6 +53,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
     Column(
         Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .padding(16.dp),
     ) {
         SideNavigationItem(

@@ -1,6 +1,7 @@
 package com.blaze.core.ui
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,7 +23,7 @@ fun InitSubUiComponents(model: CoreUiViewModel) {
         }
     }
     if (showSnackBar.value) {
-        Snackbar(Modifier.padding(16.dp)) {
+        Snackbar(Modifier.statusBarsPadding().padding(16.dp)) {
             Text(text = model.snackbarValue.value.second)
         }
     }

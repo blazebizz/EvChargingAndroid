@@ -230,7 +230,8 @@ internal fun OtpContent(
         Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(top = 16.dp)
+            .padding(16.dp ),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {

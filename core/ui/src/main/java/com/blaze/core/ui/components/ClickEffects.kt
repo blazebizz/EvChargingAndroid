@@ -9,6 +9,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,8 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
 
 enum class ButtonState { Pressed, Idle }
+//
+//fun Modifier.statusBarsPadding() = composed {
+//    this.padding(top = 26.dp)
+//}
 
 fun Modifier.bounceClick(onClick:()->Unit) = composed {
     var buttonState by remember { mutableStateOf(ButtonState.Idle) }

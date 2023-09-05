@@ -5,7 +5,10 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.blaze.core.utils.util.ioScope
+import com.blaze.data.onboarding.model.req.DocImage
 import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
+import com.blaze.data.onboarding.model.req.OnboardData
+import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.data.onboarding.repositories.OnBoardingRepo
 import com.velox.lazeir.utils.outlet.handleFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,10 +64,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     fun fetchOnBoardUserData(userId: String) {
         val body = FetchPartnerOnBoardDataRequest(userId = userId)
         ioScope.launch {
-            repo.fetchUserOnBoardData(body).handleFlow(
-                onLoading = {},
-                onFailure = { _, _, _ -> }
-            ) {
+            repo.fetchUserOnBoardData(body).handleFlow(onLoading = {}, onFailure = { _, _, _ -> }) {
 
                 selected2Wheeler.value =
                     it.data?.get(0)?.onboardData?.basicDetails?.twoWheeler ?: false
@@ -92,15 +92,40 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         }
     }
 
-    fun uploadImage(userId: String, image: String, imageUri: Uri) {
-        repo.uploadImage(userId, image, imageUri, onFailure = {
+    private val uploadDocList =
+        listOf("aadhaarFront", "aadhaarBack", "pan", "electricBill", "other")
 
-        }, onSuccess = {
+    fun uploadImage(userId: String) {
+        val mutableList = mutableListOf<DocImage>()
+        for (doc in uploadDocList) {
+            val imageUri = when (doc) {
+                "aadhaarFront" -> aadharFrontUri.value
+                "aadhaarBack" -> aadharBackUri.value
+                "pan" -> panUri.value
+                "electricBill" -> electricBillUri.value
+                "other" -> otherUri.value
+                else -> {
+                    null
+                }
+            }
+            if (imageUri != null) {
+                repo.uploadImage(userId, doc, imageUri, onFailure = {
 
-        })
+                }, onSuccess = {
+                    mutableList.add(DocImage(doc, it))
+                })
+            }
+        }
+
+        val body = PartnerOnBoardRequest(
+            userId = userId, onboardData = OnboardData(
+                documentImage = mutableList
+            )
+        )
+        onBoardUser(body)
     }
 
-    fun onBoardUser() {
+    fun onBoardUser(body: PartnerOnBoardRequest) {
 
     }
 }

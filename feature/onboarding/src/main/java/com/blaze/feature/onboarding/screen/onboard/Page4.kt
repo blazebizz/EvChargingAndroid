@@ -16,7 +16,7 @@ import com.blaze.core.ui.components.UploadImageLayout
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun DocumentImageScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
     val currentSelected = remember { mutableStateOf(viewModel.aadharFrontUri) }

@@ -7,8 +7,8 @@ val PurpleGrey40 = Color(0xFFFFFFFF)
 val Pink40 = Color(0xFF7D5260)
 
 val PrimaryColor = Color(0xFF9988F0)
-
-val BoardBlack = Color(0xFF1C1C1C)
+val SeaSalt = Color(0xFFF6F6F6)
+val Night = Color(0xFF101110)
 
 val MarbleWhite = Color(0xFFE7E9EA)
 val LightGray = Color(0xFFD2D4D5)

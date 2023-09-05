@@ -6,9 +6,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.blaze.feature.onboarding.screen.onboard.BankDetailsScreen
+import com.blaze.feature.onboarding.screen.onboard.DocumentImageScreen
 import com.blaze.feature.onboarding.screen.onboard.InfoScreen
 import com.blaze.feature.onboarding.screen.onboard.ParkingAreaScreen
-import com.blaze.feature.onboarding.screen.onboard.TermScreen
 import com.blaze.feature.onboarding.screen.onboard.UploadDocumentScreen
 import com.blaze.feature.onboarding.screen.onboard.VehicleSelectionScreen
 
@@ -28,18 +28,18 @@ fun OnBoardingSubNavGraph(subNavController: NavHostController, viewModel: OnBoar
             UploadDocumentScreen(subNavController,viewModel)
         }
         composable(OnBoardingSubScreen.Page4.name) {
-            ParkingAreaScreen(subNavController,viewModel)
+            DocumentImageScreen(subNavController,viewModel)
         }
         composable(OnBoardingSubScreen.Page5.name) {
             BankDetailsScreen(subNavController,viewModel)
         }
-        composable(OnBoardingSubScreen.OnBoardingTermsScreen.name) {
-            TermScreen(subNavController,viewModel)
+        composable(OnBoardingSubScreen.Page6.name) {
+            ParkingAreaScreen(subNavController,viewModel)
         }
     }
 }
 
 
 enum class OnBoardingSubScreen {
-    Page1, Page2, Page3, Page4,Page5,OnBoardingTermsScreen;
+    Page1, Page2, Page3, Page4,Page5,Page6;
 }

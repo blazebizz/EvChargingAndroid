@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -27,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.bounceClick
+import com.blaze.core.ui.components.pressClick
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
@@ -108,5 +111,13 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
         Text(text = "Requirements and Instructions", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(5.dp))
         Text(text = "This part is for instructions and requirements.")
+
+        Spacer(modifier = Modifier.weight(1f))
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.pressClick {
+            viewModel.tcChecked.value = !viewModel.tcChecked.value
+        }.fillMaxWidth()) {
+            Checkbox(checked = viewModel.tcChecked.value, onCheckedChange = {})
+            Text("I accept the Terms & Conditions !")
+        }
     }
 }
