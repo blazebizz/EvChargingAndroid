@@ -5,10 +5,12 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.blaze.core.utils.util.ioScope
+import com.blaze.core.utils.util.mainScope
 import com.blaze.data.onboarding.model.req.DocImage
 import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
 import com.blaze.data.onboarding.model.req.OnboardData
 import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
+import com.blaze.data.onboarding.model.res.FetchPartnerOnBoardDataResponse
 import com.blaze.data.onboarding.repositories.OnBoardingRepo
 import com.velox.lazeir.utils.outlet.handleFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +30,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     //page1
     val selected2Wheeler = mutableStateOf(false)
     val selected4Wheeler = mutableStateOf(false)
+    val tcChecked = mutableStateOf(false)
 
     //page2
     val fullName = mutableStateOf("")
@@ -57,36 +60,50 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     val accConfirmNumber = mutableStateOf("")
     val ifscCode = mutableStateOf("")
 
-    //terms and conditions
-    val tcChecked = mutableStateOf(false)
+    //page6
+    val pkImage1 = mutableStateOf<Uri?>(null)
+    val pkImage2 = mutableStateOf<Uri?>(null)
+    val pkImage3 = mutableStateOf<Uri?>(null)
+    val pkImage4 = mutableStateOf<Uri?>(null)
+
+    val fetchedOnBoardUserData = mutableStateOf<FetchPartnerOnBoardDataResponse?>(null)
 
 
     fun fetchOnBoardUserData(userId: String) {
         val body = FetchPartnerOnBoardDataRequest(userId = userId)
         ioScope.launch {
             repo.fetchUserOnBoardData(body).handleFlow(onLoading = {}, onFailure = { _, _, _ -> }) {
+                fetchedOnBoardUserData.value = it
 
-                selected2Wheeler.value =
-                    it.data?.get(0)?.onboardData?.basicDetails?.twoWheeler ?: false
-                selected4Wheeler.value =
-                    it.data?.get(0)?.onboardData?.basicDetails?.fourWheeler ?: false
-                fullName.value = it.data?.get(0)?.onboardData?.basicDetails?.name ?: ""
-                mobile.value = it.data?.get(0)?.onboardData?.basicDetails?.mobile ?: ""
+                if (it.data?.isEmpty() == false) {
+                    if (it.data?.get(0)?.onboardData?.basicDetails != null) {
+                        selected2Wheeler.value =
+                            it.data?.get(0)?.onboardData?.basicDetails?.twoWheeler ?: false
+                        selected4Wheeler.value =
+                            it.data?.get(0)?.onboardData?.basicDetails?.fourWheeler ?: false
+                        fullName.value = it.data?.get(0)?.onboardData?.basicDetails?.name ?: ""
+                        mobile.value = it.data?.get(0)?.onboardData?.basicDetails?.mobile ?: ""
+                        addressL1.value = it.data?.get(0)?.onboardData?.basicDetails?.address1 ?: ""
+                        addressL2.value = it.data?.get(0)?.onboardData?.basicDetails?.address2 ?: ""
+                        state.value = it.data?.get(0)?.onboardData?.basicDetails?.state ?: ""
+                        pincode.value = it.data?.get(0)?.onboardData?.basicDetails?.pincode ?: ""
+                    }
 
-                addressL1.value = it.data?.get(0)?.onboardData?.basicDetails?.address1 ?: ""
-                addressL2.value = it.data?.get(0)?.onboardData?.basicDetails?.address2 ?: ""
-                state.value = it.data?.get(0)?.onboardData?.basicDetails?.state ?: ""
-                pincode.value = it.data?.get(0)?.onboardData?.basicDetails?.pincode ?: ""
+                    if (it.data?.get(0)?.onboardData?.identityDetails != null) {
+                        aadharNumber.value =
+                            it.data?.get(0)?.onboardData?.identityDetails?.aadhaarNo ?: ""
+                        panNumber.value = it.data?.get(0)?.onboardData?.identityDetails?.panNo ?: ""
+                        electricProvide.value =
+                            it.data?.get(0)?.onboardData?.identityDetails?.eleProvider ?: ""
+                        electricBillNumber.value =
+                            it.data?.get(0)?.onboardData?.identityDetails?.eleBillNo ?: ""
+                    }
+                    if (it.data?.get(0)?.onboardData?.bankDetails != null) {
+                        accNameHolder.value =
+                            it.data?.get(0)?.onboardData?.bankDetails?.accHolderName ?: ""
 
-                aadharNumber.value = it.data?.get(0)?.onboardData?.identityDetails?.aadhaarNo ?: ""
-                panNumber.value = it.data?.get(0)?.onboardData?.identityDetails?.panNo ?: ""
-                electricProvide.value =
-                    it.data?.get(0)?.onboardData?.identityDetails?.eleProvider ?: ""
-                electricBillNumber.value =
-                    it.data?.get(0)?.onboardData?.identityDetails?.eleBillNo ?: ""
-
-                accNameHolder.value = it.data?.get(0)?.onboardData?.bankDetails?.accHolderName ?: ""
-
+                    }
+                }
 
             }
         }
@@ -95,7 +112,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     private val uploadDocList =
         listOf("aadhaarFront", "aadhaarBack", "pan", "electricBill", "other")
 
-    fun uploadImage(userId: String) {
+    fun uploadDocImage(userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         val mutableList = mutableListOf<DocImage>()
         for (doc in uploadDocList) {
             val imageUri = when (doc) {
@@ -122,10 +139,51 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                 documentImage = mutableList
             )
         )
-        onBoardUser(body)
+        onBoardUser(body, onSuccess, onFailure)
     }
 
-    fun onBoardUser(body: PartnerOnBoardRequest) {
+    fun onBoardUser(
+        body: PartnerOnBoardRequest, onSuccess: () -> Unit, onFailure: (String) -> Unit = {}
+    ) {
+        ioScope.launch {
+            repo.onBoard(body).handleFlow(onLoading = {}, onFailure = { msg, _, _ ->
+                onFailure(msg)
+            }, onSuccess = {
+                mainScope.launch {
+                    onSuccess()
+                }
+            })
+        }
+    }
 
+    fun uploadParkingImages(userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+        ioScope.launch {
+            val mutableList = mutableListOf<String?>()
+            for (i in 0..3) {
+                val imageUri = when (i) {
+                    0 -> pkImage1.value
+                    1 -> pkImage2.value
+                    2 -> pkImage3.value
+                    3 -> pkImage4.value
+                    else -> {
+                        null
+                    }
+                }
+                if (imageUri != null) {
+                    repo.uploadImage(userId, i.toString(), imageUri, onFailure = {
+                        onFailure(it.toString())
+                    }, onSuccess = {
+                        mutableList.add(it)
+                    })
+                }
+            }
+
+            val body = PartnerOnBoardRequest(
+                userId = userId, onboardData = OnboardData(
+                    parkingImage = mutableList
+                )
+            )
+            onBoardUser(body, onSuccess)
+        }
     }
 }

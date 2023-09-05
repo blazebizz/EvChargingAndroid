@@ -63,7 +63,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                 )
                 RadioButton(
                     selected = viewModel.selected2Wheeler.value,
-                    onClick = { /*TODO*/ },
+                    onClick = { },
                     modifier = Modifier
                         .padding(5.dp)
                         .background(
@@ -95,7 +95,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                 )
                 RadioButton(
                     selected = viewModel.selected4Wheeler.value,
-                    onClick = { /*TODO*/ },
+                    onClick = { },
                     modifier = Modifier
                         .padding(5.dp)
                         .background(
@@ -116,7 +116,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.pressClick {
             viewModel.tcChecked.value = !viewModel.tcChecked.value
         }.fillMaxWidth()) {
-            Checkbox(checked = viewModel.tcChecked.value, onCheckedChange = {})
+            Checkbox(checked = viewModel.tcChecked.value, onCheckedChange = { viewModel.tcChecked.value = !viewModel.tcChecked.value})
             Text("I accept the Terms & Conditions !")
         }
     }

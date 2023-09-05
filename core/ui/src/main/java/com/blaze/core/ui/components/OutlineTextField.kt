@@ -1,16 +1,26 @@
 package com.blaze.core.ui.components
 
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
-fun OutlinedTextField(modifier: Modifier = Modifier, label: String, value: MutableState<String>) {
-    androidx.compose.material3.OutlinedTextField(
-        modifier = modifier,
+fun OutlinedTextField(
+    modifier: Modifier = Modifier,
+    value: MutableState<String>,
+    readOnly:Boolean = false,
+    isError:Boolean = false,
+    label: String,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Done
+) {
+    androidx.compose.material3.OutlinedTextField(modifier = modifier,
         value = value.value,
         onValueChange = {
             value.value = it
@@ -22,6 +32,12 @@ fun OutlinedTextField(modifier: Modifier = Modifier, label: String, value: Mutab
             focusedBorderColor = MaterialTheme.colorScheme.onBackground,
             cursorColor = MaterialTheme.colorScheme.onBackground,
             focusedLabelColor = MaterialTheme.colorScheme.onBackground
-        )
+        ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType, imeAction = imeAction
+        ),
+        singleLine = true,
+        readOnly = readOnly,
+        isError = isError
     )
 }

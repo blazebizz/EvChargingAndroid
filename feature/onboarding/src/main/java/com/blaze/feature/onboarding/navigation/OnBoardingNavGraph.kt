@@ -13,6 +13,6 @@ import com.blaze.feature.onboarding.screen.onboard.OnBoardingScreen
 fun NavGraphBuilder.onBoardingNavGraph(navController: NavController, coreUi: CoreUiViewModel){
     composable(OnBoardingRoute.OnBoardingScreen.route){
         val viewModel = hiltViewModel<OnBoardingViewModel>()
-        OnBoardingScreen(navController,viewModel)
+        OnBoardingScreen(navController,viewModel,coreUi)
     }
 }

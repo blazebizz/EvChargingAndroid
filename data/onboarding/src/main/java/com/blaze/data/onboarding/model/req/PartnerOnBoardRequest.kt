@@ -45,7 +45,10 @@ data class BasicDetails(
 
     @field:SerializedName("fourWheeler") val fourWheeler: Boolean? = null,
 
-    @field:SerializedName("state") val state: String? = null
+    @field:SerializedName("state") val state: String? = null,
+
+    @field:SerializedName("acceptedTC") val acceptedTC: Boolean? = null,
+
 )
 
 data class BankDetails(

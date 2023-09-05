@@ -5,7 +5,9 @@ import com.blaze.core.utils.util.ioScope
 import com.blaze.core.utils.util.mainScope
 import com.blaze.data.onboarding.apiservice.OnBoardingApiService
 import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
+import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.data.onboarding.model.res.FetchPartnerOnBoardDataResponse
+import com.blaze.data.onboarding.model.res.PartnerOnBoardResponse
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.velox.lazeir.utils.handler.NetworkResource
@@ -54,6 +56,10 @@ class OnBoardingRepoImpl @Inject constructor(
                 }
             }
         }
+    }
+
+    override suspend fun onBoard(body: PartnerOnBoardRequest): Flow<NetworkResource<PartnerOnBoardResponse>> {
+       return apiService.onBoardUser(body).handleNetworkResponse()
     }
 
 

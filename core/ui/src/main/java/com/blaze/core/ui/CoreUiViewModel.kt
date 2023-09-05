@@ -11,8 +11,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoreUiViewModel @Inject constructor(): ViewModel(){
-    val snackbarValue :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
-    val toast :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
+    internal val snackbarValue :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
+    internal val toast :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
 
     fun snackbar(message:String=""){
         viewModelScope.launch {

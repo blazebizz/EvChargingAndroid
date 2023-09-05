@@ -2,7 +2,9 @@ package com.blaze.data.onboarding.repositories
 
 import android.net.Uri
 import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
+import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.data.onboarding.model.res.FetchPartnerOnBoardDataResponse
+import com.blaze.data.onboarding.model.res.PartnerOnBoardResponse
 import com.velox.lazeir.utils.handler.NetworkResource
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +20,6 @@ interface OnBoardingRepo {
                                imageUri: Uri,
                                onFailure: (String?) -> Unit,
                                onSuccess: (String?) -> Unit)
+
+    suspend fun onBoard(body:PartnerOnBoardRequest):Flow<NetworkResource<PartnerOnBoardResponse>>
 }

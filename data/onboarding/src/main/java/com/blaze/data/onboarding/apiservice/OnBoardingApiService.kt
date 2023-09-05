@@ -15,8 +15,8 @@ interface OnBoardingApiService {
         @Body body: FetchPartnerOnBoardDataRequest
     ): Response<FetchPartnerOnBoardDataResponse>
 
-    @POST("/partner/onboard")
-    fun onBoardUser(
+    @POST("api/v1/partner/onboard")
+    suspend fun onBoardUser(
         @Body body: PartnerOnBoardRequest
     ): Response<PartnerOnBoardResponse>
 
