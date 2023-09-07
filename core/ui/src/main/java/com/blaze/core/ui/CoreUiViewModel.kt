@@ -11,15 +11,22 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoreUiViewModel @Inject constructor(): ViewModel(){
+    val isInternetAvailable: MutableState<Boolean> = mutableStateOf(false)
     internal val snackbarValue :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
-    internal val toast :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
+    internal val toast :MutableState<String> = mutableStateOf( "Welcome")
 
-    fun snackbar(message:String=""){
+    fun snackbar(message:String){
         viewModelScope.launch {
             snackbarValue.value = Pair(true, message)
             delay(3000)
             snackbarValue.value = Pair(false, message)
 
+        }
+    }
+
+    fun toast(message:String){
+        viewModelScope.launch {
+            toast.value = message
         }
     }
 

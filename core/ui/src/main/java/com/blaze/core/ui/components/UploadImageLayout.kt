@@ -27,8 +27,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.R
-import com.blaze.core.ui.ui.theme.LightGray
-import com.blaze.core.ui.ui.theme.MarbleWhite
+import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.util.getBitmapFromUri
 
 
@@ -50,7 +49,7 @@ fun UploadImageLayout(title: String, uri: MutableState<Uri?>, onClick: () -> Uni
                 .background(Color.Transparent, RoundedCornerShape(10.dp))
 
                 .border(
-                    2.dp, LightGray, RoundedCornerShape(10.dp)
+                    2.dp, SeaSalt, RoundedCornerShape(10.dp)
                 ), contentAlignment = Alignment.Center
         ) {
             if (uri.value != null) {

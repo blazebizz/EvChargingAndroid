@@ -11,7 +11,6 @@ val SeaSalt = Color(0xFFF6F6F6)
 val Night = Color(0xFF101110)
 
 val MarbleWhite = Color(0xFFE7E9EA)
-val LightGray = Color(0xFFD2D4D5)
 
 val AntiFlashWhite = Color(0xFFF3F3F3)
 val LotionWhite = Color(0xFFFAFAFA)
