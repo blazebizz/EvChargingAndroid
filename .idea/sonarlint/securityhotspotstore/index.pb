@@ -47,8 +47,6 @@ Wdata/onboarding/src/main/java/com/blaze/data/onboarding/di/OnBoardingRetrofitBu
 [feature/onboarding/src/main/java/com/blaze/feature/onboarding/screen/OnBoardingViewModel.kt,4\a\4a23686a472d0a0fa81f4dd48ce75df26e202c5a
 Š
 Zdata/onboarding/src/main/java/com/blaze/data/onboarding/apiservice/OnBoardingApiService.kt,6\6\66528acef2e73c6b719fa4b65d9e74df12b96adc
-Š
-Zfeature/onboarding/src/main/java/com/blaze/feature/onboarding/screen/onboard/TermScreen.kt,7\7\778b7d5cf545ad52f4599a6531ba7cb2854a2fb2
 †
 Vdata/onboarding/src/main/java/com/blaze/data/onboarding/repositories/OnBoardingRepo.kt,5\c\5c496a5a41e46cd6648cf5a4b5bb03be208fef3b
 j
@@ -57,3 +55,15 @@ n
 >core/utils/src/main/java/com/blaze/core/utils/util/Constant.kt,2\9\29e9a3a84316fcf4c9567d786c4334146f0ef111
 O
 feature/onboarding/build.gradle,f\8\f8ba9524d47a347fb245babea1bd40fed54503ed
+…
+Ufeature/onboarding/src/main/java/com/blaze/feature/onboarding/screen/onboard/Page6.kt,8\9\8963d50fd4a2b2cd1a752aa488f04234364f48f7
+Š
+Zdata/onboarding/src/main/java/com/blaze/data/onboarding/model/req/PartnerOnBoardRequest.kt,2\b\2ba600f5322b6b059e2e191a64e350b6e69439aa
+v
+Fcore/ui/src/main/java/com/blaze/core/ui/components/OutlineTextField.kt,4\4\44337c2795670008b76cc7d8c906b690890e750e
+Ž
+^feature/onboarding/src/main/java/com/blaze/feature/onboarding/navigation/OnBoardingNavGraph.kt,1\8\187c513a71a81521b5b48d8459404fc6d6e798c2
+j
+:core/ui/src/main/java/com/blaze/core/ui/CoreUiViewModel.kt,0\b\0b1e5f0746bd86f94ccb7284636326487e28849a
+k
+;core/ui/src/main/java/com/blaze/core/ui/CoreUiComponents.kt,5\d\5da9f6d73aa90ed7754a35a82dd75da7f8efebeb

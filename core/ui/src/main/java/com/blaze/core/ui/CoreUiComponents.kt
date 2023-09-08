@@ -39,9 +39,7 @@ val context = LocalContext.current
                 .padding(16.dp)
                 .height(50.dp)
         ) {
-
                 Text(text = model.snackbarValue.value.second)
-
         }
     }
     //endregion

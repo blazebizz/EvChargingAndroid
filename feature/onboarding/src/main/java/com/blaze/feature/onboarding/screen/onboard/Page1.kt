@@ -20,6 +20,8 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,13 +30,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.OutLinedTextFieldSpinner
 import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.utils.util.bankList
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
-
+    val spinnerExpand = remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -107,10 +111,12 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Requirements and Instructions", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(5.dp))
         Text(text = "This part is for instructions and requirements.")
+        OutLinedTextFieldSpinner(spinnerState = spinnerExpand, modifier = Modifier.fillMaxWidth(),text = viewModel.bankName, list = bankList, label = "Bank Name")
 
         Spacer(modifier = Modifier.weight(1f))
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.pressClick {

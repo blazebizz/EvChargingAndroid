@@ -41,6 +41,7 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
+import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.data.onboarding.model.req.BankDetails
 import com.blaze.data.onboarding.model.req.BasicDetails
 import com.blaze.data.onboarding.model.req.IdentityDetails
@@ -53,9 +54,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun OnBoardingScreen(
-    navController: NavController,
-    viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel
+    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreUiViewModel
 ) {
 
     val context = LocalContext.current
@@ -169,7 +168,7 @@ fun OnBoardingScreen(
                 .padding(10.dp)
                 .weight(1f)
                 .fillMaxWidth()
-//                .background(BabyPowderWhite)
+                .background(SeaSalt)
                 .padding(10.dp)
         ) {
             OnBoardingSubNavGraph(onBoardingNavController, viewModel)
@@ -188,7 +187,9 @@ fun OnBoardingScreen(
                     coreUi.snackbar(it)
                 })
             }
+
             Spacer(modifier = Modifier.weight(1f))
+
         }
         Spacer(Modifier.height(12.dp))
     }
@@ -203,18 +204,17 @@ fun nextFunction(
     when (navController.currentDestination?.route) {
         OnBoardingSubScreen.Page1.name -> {
 
-            if(checkPage1(viewModel,onFailure)){
+            if (checkPage1(viewModel, onFailure)) {
                 //nav to next page
                 viewModel.progress1.floatValue = 1f
                 navController.navigate(OnBoardingSubScreen.Page2.name) {
                     popUpTo(OnBoardingSubScreen.Page1.name) { inclusive = true }
                 }
             }
-
         }
 
         OnBoardingSubScreen.Page2.name -> {
-            if (checkPage2(viewModel, onFailure)){
+            if (checkPage2(viewModel, onFailure)) {
                 if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
                     if (viewModel.fetchedOnBoardUserData.value?.data?.get(
                             0
@@ -233,54 +233,60 @@ fun nextFunction(
         }
 
         OnBoardingSubScreen.Page3.name -> {
-            if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
-                        0
-                    )?.onboardData?.identityDetails?.aadhaarNo?.equals(
-                        viewModel.aadharNumber.value
-                    ) == true
-                ) {
-                    toPage4(viewModel, navController)
+            if (checkPage3(viewModel, onFailure)) {
+                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+                    if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
+                            0
+                        )?.onboardData?.identityDetails?.aadhaarNo?.equals(
+                            viewModel.aadharNumber.value
+                        ) == true
+                    ) {
+                        toPage4(viewModel, navController)
+                    } else {
+                        step3(viewModel, onFailure) { toPage4(viewModel, navController) }
+                    }
                 } else {
                     step3(viewModel, onFailure) { toPage4(viewModel, navController) }
                 }
-            } else {
-                step3(viewModel, onFailure) { toPage4(viewModel, navController) }
             }
         }
 
         OnBoardingSubScreen.Page4.name -> {
-
-            //uloaddoc
-            step4(viewModel, onFailure) {
-                toPage5(viewModel, navController)
+            //upload doc
+            if (checkPage4(viewModel, onFailure)) {
+                step4(context, viewModel, onFailure) {
+                    toPage5(viewModel, navController)
+                }
             }
         }
 
         OnBoardingSubScreen.Page5.name -> {
-
-            if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
-                        0
-                    )?.onboardData?.bankDetails?.accHolderName?.equals(
-                        viewModel.accNameHolder.value
-                    ) == true
-                ) {
-                    //nav to next page
-                    toPage6(viewModel, navController)
+            if (checkPage5(viewModel, onFailure)) {
+                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+                    if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
+                            0
+                        )?.onboardData?.bankDetails?.accHolderName?.equals(
+                            viewModel.accNameHolder.value
+                        ) == true
+                    ) {
+                        //nav to next page
+                        toPage6(viewModel, navController)
+                    } else {
+                        step5(viewModel, onFailure) { toPage6(viewModel, navController) }
+                    }
                 } else {
-                    step5(viewModel, onFailure) { toPage6(viewModel, navController) }
-                }
-            } else {
-                step5(viewModel, onFailure) {
-                    toPage6(viewModel, navController)
+                    step5(viewModel, onFailure) {
+                        toPage6(viewModel, navController)
+                    }
                 }
             }
         }
 
         OnBoardingSubScreen.Page6.name -> {
-            step6(viewModel, onFailure) {
-                Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+            if (checkPage6(viewModel, onFailure)) {
+                step6(context, viewModel, onFailure) {
+                    Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -414,8 +420,13 @@ fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
     viewModel.onBoardUser(data, function, onFailure)
 }
 
-fun step4(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
-    viewModel.uploadDocImage("000002", function, onFailure)
+fun step4(
+    context: Context,
+    viewModel: OnBoardingViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
+    viewModel.uploadDocImage(context, "000002", function, onFailure)
 }
 
 fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
@@ -433,8 +444,13 @@ fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
     viewModel.onBoardUser(data, function, onFailure)
 }
 
-fun step6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
-    viewModel.uploadParkingImages("000002", function, onFailure)
+fun step6(
+    context: Context,
+    viewModel: OnBoardingViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
+    viewModel.uploadParkingImages(context, "000002", function, onFailure)
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
@@ -451,7 +467,7 @@ fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
     return true
 }
 
-fun checkPage2(viewModel: OnBoardingViewModel,onFailure: (String) -> Unit): Boolean {
+fun checkPage2(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
 
     if (viewModel.fullName.value.isNullOrBlank()) {
         onFailure("Please Enter Name")
@@ -480,3 +496,95 @@ fun checkPage2(viewModel: OnBoardingViewModel,onFailure: (String) -> Unit): Bool
 
     return true
 }
+
+fun checkPage3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.aadharNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Aadhar Number")
+        return false
+    }
+
+    if (viewModel.panNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Pan Number")
+        return false
+    }
+
+    if (viewModel.electricProvide.value.isEmpty()) {
+        onFailure("Please Select Your Electric Provider Name")
+        return false
+    }
+
+    if (viewModel.electricBillNumber.value.isEmpty()) {
+        onFailure("Please Enter Electric Bill Number")
+        return false
+    }
+
+    return true
+}
+
+fun checkPage4(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.aadharBackUri.value == null) {
+        onFailure("Please Select Aadhar Card Back Image")
+        return false
+    }
+    if (viewModel.aadharFrontUri.value == null) {
+        onFailure("Please Select Aadhar Card Front Image")
+        return false
+    }
+
+    if (viewModel.panUri.value == null) {
+        onFailure("Please Select Pan Card Image")
+        return false
+    }
+
+    if (viewModel.electricBillUri.value == null) {
+        onFailure("Please Select Recent Electric Bill Image")
+        return false
+    }
+
+    return true
+}
+
+fun checkPage5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.accNameHolder.value.isEmpty()) {
+        onFailure("Please Enter Account Holder Name")
+        return false
+    }
+    if (viewModel.bankName.value.isEmpty()) {
+        onFailure("Please Select Your Provider Bank")
+        return false
+    }
+    if (viewModel.accNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Account Number")
+        return false
+    }
+    if (viewModel.accNumber.value == viewModel.accConfirmNumber.value) {
+        onFailure("Please Confirm Your Account Number")
+        return false
+    }
+    if (viewModel.ifscCode.value.isEmpty()) {
+        onFailure("Please Enter IFSC Code")
+        return false
+    }
+    return true
+}
+
+fun checkPage6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.pkImage1Uri.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage2Uri.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage3Uri.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage4Uri.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    return true
+}
+

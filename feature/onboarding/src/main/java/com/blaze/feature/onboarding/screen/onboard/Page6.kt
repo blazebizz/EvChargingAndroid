@@ -21,7 +21,7 @@ fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoarding
     Column(Modifier.fillMaxSize()) {
 
         val showDialog = rememberSaveable { mutableStateOf(false) }
-        val currentSelected = remember { mutableStateOf(viewModel.pkImage1) }
+        val currentSelected = remember { mutableStateOf(viewModel.pkImage1Uri) }
         val scrollState = rememberScrollState()
         Column(
             Modifier
@@ -29,25 +29,25 @@ fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoarding
                 .verticalScroll(scrollState)
         ) {
             Row {
-                UploadImageLayout(title = "", viewModel.pkImage1) {
+                UploadImageLayout(title = "", viewModel.pkImage1Uri) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage1
+                    currentSelected.value = viewModel.pkImage1Uri
                 }
 
-                UploadImageLayout(title = "", viewModel.pkImage2) {
+                UploadImageLayout(title = "", viewModel.pkImage2Uri) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage2
+                    currentSelected.value = viewModel.pkImage2Uri
                 }
             }
             Row {
-                UploadImageLayout(title = "", viewModel.pkImage3) {
+                UploadImageLayout(title = "", viewModel.pkImage3Uri) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage3
+                    currentSelected.value = viewModel.pkImage3Uri
                 }
 
-                UploadImageLayout(title = "", viewModel.pkImage4) {
+                UploadImageLayout(title = "", viewModel.pkImage4Uri) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage4
+                    currentSelected.value = viewModel.pkImage4Uri
                 }
             }
 

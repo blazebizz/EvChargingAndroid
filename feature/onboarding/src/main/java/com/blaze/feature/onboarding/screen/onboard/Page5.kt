@@ -8,11 +8,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.blaze.core.ui.components.OutLinedTextFieldSpinner
 import com.blaze.core.ui.components.OutlinedTextField
+import com.blaze.core.utils.util.bankList
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
@@ -31,9 +34,11 @@ fun BankDetailsScreen(subNavController: NavHostController, viewModel: OnBoarding
             label = "Account Holder Name"
         )
 
-        OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(), value = viewModel.bankName, label = "Bank Name"
-        )
+//        OutlinedTextField(
+//            modifier = Modifier.fillMaxWidth(), value = viewModel.bankName, label = "Bank Name"
+//        )
+        val spinnerState = remember { mutableStateOf(false) }
+        OutLinedTextFieldSpinner(spinnerState = spinnerState, modifier = Modifier.fillMaxWidth(),text = viewModel.bankName, list = bankList, label = "Bank Name")
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),

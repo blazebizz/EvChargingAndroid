@@ -1,9 +1,11 @@
 package com.blaze.feature.onboarding.screen
 
+import android.content.Context
 import android.net.Uri
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.blaze.core.utils.util.compressImage
 import com.blaze.core.utils.util.ioScope
 import com.blaze.core.utils.util.mainScope
 import com.blaze.data.onboarding.model.req.DocImage
@@ -61,10 +63,10 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     val ifscCode = mutableStateOf("")
 
     //page6
-    val pkImage1 = mutableStateOf<Uri?>(null)
-    val pkImage2 = mutableStateOf<Uri?>(null)
-    val pkImage3 = mutableStateOf<Uri?>(null)
-    val pkImage4 = mutableStateOf<Uri?>(null)
+    val pkImage1Uri = mutableStateOf<Uri?>(null)
+    val pkImage2Uri = mutableStateOf<Uri?>(null)
+    val pkImage3Uri = mutableStateOf<Uri?>(null)
+    val pkImage4Uri = mutableStateOf<Uri?>(null)
 
     val fetchedOnBoardUserData = mutableStateOf<FetchPartnerOnBoardDataResponse?>(null)
 
@@ -112,7 +114,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     private val uploadDocList =
         listOf("aadhaarFront", "aadhaarBack", "pan", "electricBill", "other")
 
-    fun uploadDocImage(userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    fun uploadDocImage(context: Context, userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         val mutableList = mutableListOf<DocImage>()
         for (doc in uploadDocList) {
             val imageUri = when (doc) {
@@ -126,11 +128,14 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                 }
             }
             if (imageUri != null) {
-                repo.uploadImage(userId, doc, imageUri, onFailure = {
+                val compressedImageUri = imageUri.compressImage(context)
+                if (compressedImageUri != null){
+                    repo.uploadImage(userId, doc, compressedImageUri, onFailure = {
 
-                }, onSuccess = {
-                    mutableList.add(DocImage(doc, it))
-                })
+                    }, onSuccess = {
+                        mutableList.add(DocImage(doc, it))
+                    })
+                }
             }
         }
 
@@ -156,25 +161,28 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         }
     }
 
-    fun uploadParkingImages(userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
+    fun uploadParkingImages(context:Context,userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit) {
         ioScope.launch {
             val mutableList = mutableListOf<String?>()
             for (i in 0..3) {
                 val imageUri = when (i) {
-                    0 -> pkImage1.value
-                    1 -> pkImage2.value
-                    2 -> pkImage3.value
-                    3 -> pkImage4.value
+                    0 -> pkImage1Uri.value
+                    1 -> pkImage2Uri.value
+                    2 -> pkImage3Uri.value
+                    3 -> pkImage4Uri.value
                     else -> {
                         null
                     }
                 }
                 if (imageUri != null) {
-                    repo.uploadImage(userId, i.toString(), imageUri, onFailure = {
-                        onFailure(it.toString())
-                    }, onSuccess = {
-                        mutableList.add(it)
-                    })
+                    val compressedImageUri = imageUri.compressImage(context)
+                    if (compressedImageUri != null) {
+                        repo.uploadImage(userId, i.toString(), compressedImageUri, onFailure = {
+                            onFailure(it.toString())
+                        }, onSuccess = {
+                            mutableList.add(it)
+                        })
+                    }
                 }
             }
 

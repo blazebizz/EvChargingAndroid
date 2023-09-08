@@ -43,7 +43,7 @@ fun SplashScreen(
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000)
             if (viewModel.firebaseAuth.currentUser != null) {
-                coreUi.snackbar("Welcome back: ${viewModel.firebaseAuth.currentUser?.phoneNumber}")
+                coreUi.toast("Welcome back: ${viewModel.firebaseAuth.currentUser?.phoneNumber}")
                 navController.navigate(
                     DashboardRoute.DashboardScreen.route,
                     navOptions = NavOptions.Builder() //this will remove this screen after it navigate to next screen
@@ -86,7 +86,7 @@ fun Slplashh() {
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "EvoCharge",
+                    text = "deck",
                     fontSize = 35.sp,
                     color =  MaterialTheme.colorScheme.background,
                     fontWeight = FontWeight.Bold
