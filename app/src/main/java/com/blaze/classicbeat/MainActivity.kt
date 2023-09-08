@@ -108,7 +108,6 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
             onUnAvailable = { isInternetAvailable.value = false },
             onLosing = { isInternetAvailable.value = false },
             onLost = { isInternetAvailable.value = false })
-
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {

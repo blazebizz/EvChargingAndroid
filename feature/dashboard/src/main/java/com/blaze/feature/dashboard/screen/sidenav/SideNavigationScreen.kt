@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.SideNavigationItem
 import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
@@ -67,25 +69,90 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             }
             Spacer(modifier = Modifier.weight(1f))
             Image(
-                painter = painterResource(id = R.drawable.logo_square), contentDescription = null,
+                painter = painterResource(id = R.drawable.logo_square),
+                contentDescription = null,
                 Modifier
                     .size(65.dp)
                     .clip(CircleShape)
             )
         }
 
-        Column(
-            Modifier.fillMaxWidth()
+        Row(
+            Modifier
+                .fillMaxWidth()
                 .height(120.dp)
-                ) {
+        ) {
 
-           Box(modifier = Modifier.padding(5.dp).background(SeaSalt, RoundedCornerShape(5.dp)).fillMaxHeight().weight(1f))
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .fillMaxHeight()
+                    .weight(1f), contentAlignment = Center
+            ) {
+
+            }
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .fillMaxHeight()
+                    .weight(1f), contentAlignment = Center
+            ) {
+
+            }
+            Box(
+                modifier = Modifier
+                    .padding(5.dp)
+                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .fillMaxHeight()
+                    .weight(1f), contentAlignment = Center
+
+            ) {
+
+            }
+        }
+
+        SideNavigationItem(
+            image = R.drawable.baseline_account_circle_24,
+            title = "My Account",
+
+            ) {
+
+        }
+        SideNavigationItem(
+            image = R.drawable.baseline_account_circle_24,
+            title = "My Vehicles",
+
+            ) {
+
+        }
+        SideNavigationItem(
+            image = R.drawable.baseline_2k,
+            title = "My Preference",
+            des = "Set search filter options"
+        ) {
+
+        }
+
+        SideNavigationItem(
+            image = R.drawable.baseline_book_24,
+            title = "My Bookings",
+        ) {
+
         }
 
         SideNavigationItem(
             image = R.drawable.baseline_2k,
-            title = "Be a Partner",
-            des = "des"
+            title = "Charging History",
+        ) {
+
+        }
+
+
+
+        SideNavigationItem(
+            image = R.drawable.baseline_2k, title = "Be a Partner", des = "Join with us"
         ) {
             navController.navigate(OnBoardingRoute.OnBoardingScreen.route) {
                 popUpTo(DashboardRoute.SideNavigationScreen.route) {
@@ -94,10 +161,23 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
         SideNavigationItem(
             image = R.drawable.baseline_2k,
-            title = "Log Out"
+            title = "Help & FAQs",
+        ) {
+
+        }
+
+
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(
+            modifier = Modifier
+                .height(1.dp)
+                .fillMaxWidth()
+                .background(SeaSalt)
+        )
+        SideNavigationItem(
+            image = R.drawable.baseline_2k, title = "Log Out"
         ) {
             viewModel.firebaseAuth.signOut()
             Toast.makeText(context, "User Log out", Toast.LENGTH_SHORT).show()
@@ -107,44 +187,5 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
 }
 
 
-@Composable
-fun SideNavigationItem(
-    image: Int,
-    title: String,
-    des: String= "",
-    onClick: () -> Unit = {}
-) {
-    Row(
-        Modifier
-            .clickable { onClick() }
-            .fillMaxWidth()
-            .padding(top = 6.dp)
-            .height(55.dp)
-            .background(
-                SeaSalt,
-                RoundedCornerShape(5.dp)
-            )
-//            .border(1.dp, color = MarbleWhite, RoundedCornerShape(5.dp))
-            .padding(5.dp),
-    ) {
-        Icon(
-            painter = painterResource(id = image), contentDescription = null,
-            modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(5.dp))
 
-        )
-        Spacer(modifier = Modifier.width(10.dp))
-        Column(
-            Modifier
-                .fillMaxHeight()
-                .align(CenterVertically),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(text = title, fontSize = 18.sp)
-            if (des.isNotEmpty()) Text(text = des)
-        }
-    }
-}
 
