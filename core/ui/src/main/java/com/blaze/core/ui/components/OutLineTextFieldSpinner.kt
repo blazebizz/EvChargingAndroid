@@ -1,6 +1,5 @@
 package com.blaze.core.ui.components
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,12 +17,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
@@ -45,11 +39,9 @@ fun OutLinedTextFieldSpinner(
     isError: Boolean = false,
 ) {
 
-    val bList = remember { SnapshotStateList<String>() }
-    bList.addAll(list)
-    val textFieldSize = remember {
-        mutableStateOf(Size.Zero)
-    }
+//    val bList = remember { SnapshotStateList<String>() }
+//    bList.addAll(list)
+
 
     Column(
         modifier = modifier
@@ -63,13 +55,13 @@ fun OutLinedTextFieldSpinner(
             value = text.value,
             onValueChange = { t ->
                 text.value = t
-                spinnerState.value = true
-                bList.clear()
-                list.forEach {
-                    if (it.contains(t)) {
-                        bList.add(it)
-                    }
-                }
+//                spinnerState.value = true
+//                bList.clear()
+//                list.forEach {
+//                    if (it.contains(t)) {
+//                        bList.add(it)
+//                    }
+//                }
             },
             label = {
                 Text(text = label)
@@ -110,23 +102,19 @@ fun OutLinedTextFieldSpinner(
                 .heightIn(max = 200.dp)
                 .width(width.dp)
         ) {
-            bList.forEach {
-                DropdownMenuItem(text = {
-                    Text(
-                        text = it,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-//                    Spacer(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .height(1.dp)
-//                            .background(Color.White)
-//                    )
-                }, onClick = {
-                    text.value = it
-                    spinnerState.value = false
-                },
+            list.forEach {
+                DropdownMenuItem(
+                    text = {
+                        Text(
+                            text = it,
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    },
+                    onClick = {
+                        text.value = it
+                        spinnerState.value = false
+                    },
 //                    modifier = Modifier.padding(3.dp)
                 )
             }

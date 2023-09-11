@@ -38,7 +38,6 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
-    val spinnerExpand = remember { mutableStateOf(false) }
 
     Column(Modifier.fillMaxSize()) {
         Row(
@@ -116,7 +115,8 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
         Text(text = "Requirements and Instructions", fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(5.dp))
         Text(text = "This part is for instructions and requirements.")
-        OutLinedTextFieldSpinner(spinnerState = spinnerExpand, modifier = Modifier.fillMaxWidth(),text = viewModel.bankName, list = bankList, label = "Bank Name")
+
+//        OutLinedTextFieldSpinner(spinnerState = spinnerExpand, modifier = Modifier.fillMaxWidth(),text = viewModel.bankName, list = bankList, label = "Bank Name")
 
         Spacer(modifier = Modifier.weight(1f))
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.pressClick {

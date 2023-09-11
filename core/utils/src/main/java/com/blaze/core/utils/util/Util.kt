@@ -1,21 +1,18 @@
 package com.blaze.core.utils.util
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
 val ioScope = CoroutineScope(Dispatchers.IO)
 val mainScope = CoroutineScope(Dispatchers.Main)
-
-
 
 
 fun getBitmapFromUri(contentResolver: ContentResolver, uri: Uri): Bitmap? {
@@ -62,3 +59,5 @@ fun uriToBitmap(contentResolver: ContentResolver, imageUri: Uri): Bitmap? {
     }
     return null
 }
+
+fun ByteArray.toBitmap(): Bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)

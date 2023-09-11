@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.components.OutLinedTextFieldSpinner
@@ -20,9 +21,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun BankDetailsScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
-    val text = rememberSaveable {
-        mutableStateOf("")
-    }
+
     Column(
         Modifier.fillMaxSize()
     ) {
@@ -38,18 +37,26 @@ fun BankDetailsScreen(subNavController: NavHostController, viewModel: OnBoarding
 //            modifier = Modifier.fillMaxWidth(), value = viewModel.bankName, label = "Bank Name"
 //        )
         val spinnerState = remember { mutableStateOf(false) }
-        OutLinedTextFieldSpinner(spinnerState = spinnerState, modifier = Modifier.fillMaxWidth(),text = viewModel.bankName, list = bankList, label = "Bank Name")
+        OutLinedTextFieldSpinner(
+            spinnerState = spinnerState,
+            modifier = Modifier.fillMaxWidth(),
+            text = viewModel.bankName,
+            list = bankList,
+            label = "Bank Name"
+        )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.accNumber,
-            label = "Account Number"
+            label = "Account Number",
+            keyboardType = KeyboardType.Number,
         )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.accConfirmNumber,
-            label = "Confirm Account Number"
+            label = "Confirm Account Number",
+            keyboardType = KeyboardType.Number,
         )
 
         OutlinedTextField(

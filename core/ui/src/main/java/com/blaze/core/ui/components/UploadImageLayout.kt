@@ -1,6 +1,5 @@
 package com.blaze.core.ui.components
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -28,11 +28,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.R
 import com.blaze.core.ui.ui.theme.SeaSalt
-import com.blaze.core.utils.util.getBitmapFromUri
+import com.blaze.core.utils.util.toBitmap
 
 
 @Composable
-fun UploadImageLayout(title: String, uri: MutableState<Uri?>, onClick: () -> Unit) {
+fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClick: () -> Unit) {
 
     val context = LocalContext.current
     val contentResolver = context.contentResolver // Use the appropriate context
@@ -47,21 +47,20 @@ fun UploadImageLayout(title: String, uri: MutableState<Uri?>, onClick: () -> Uni
                 .fillMaxHeight(1f)
                 .aspectRatio(1f)
                 .background(Color.Transparent, RoundedCornerShape(10.dp))
-
                 .border(
                     2.dp, SeaSalt, RoundedCornerShape(10.dp)
                 ), contentAlignment = Alignment.Center
         ) {
-            if (uri.value != null) {
-                val bitmap = getBitmapFromUri(contentResolver, uri.value!!)
-                if (bitmap != null) {
-                    Image(
-                        bitmap = bitmap.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
+            if (byteArray.value != null) {
+
+                Image(
+                    bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp)),
+                    contentScale = ContentScale.Crop,
+
+                )
+
             }
             Column(
                 modifier = Modifier.align(Alignment.Center),

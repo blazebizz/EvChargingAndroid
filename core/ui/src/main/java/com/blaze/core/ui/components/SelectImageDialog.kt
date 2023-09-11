@@ -1,6 +1,7 @@
 package com.blaze.core.ui.components
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
@@ -20,16 +21,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.blaze.core.utils.util.compressImage
 import com.blaze.core.utils.util.saveBitmapToFile
 
 @Composable
-fun SelectImageDialog(state: MutableState<Boolean>, onImageSelected: (Uri) -> Unit) {
+fun SelectImageDialog(state: MutableState<Boolean>, onImageSelected: (ByteArray) -> Unit) {
 
     val context = LocalContext.current
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
-                onImageSelected(it)
+                val byteArray = it.compressImage(context)
+                if (byteArray != null){
+                    onImageSelected(byteArray)
+                }   else{
+                    Toast.makeText(context, "Unable to select and compress the image", Toast.LENGTH_SHORT).show()
+                }
                 state.value = false
             }
         }
@@ -39,7 +46,12 @@ fun SelectImageDialog(state: MutableState<Boolean>, onImageSelected: (Uri) -> Un
             if (bitmap != null) {
                 val uri = saveBitmapToFile(bitmap, context)
                 if (uri != null) {
-                    onImageSelected(uri)
+                    val byteArray = uri.compressImage(context)
+                    if (byteArray != null){
+                        onImageSelected(byteArray)
+                    }   else{
+                        Toast.makeText(context, "Unable to select and compress the image", Toast.LENGTH_SHORT).show()
+                    }
                 }
                 state.value = false
             }

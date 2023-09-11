@@ -103,18 +103,14 @@ data class BasicDetails(
 
 data class DocumentImage(
 
-	@field:SerializedName("aadhaarFront")
-	val aadhaarFront: String? = null,
+	@field:SerializedName("name")
+	val name: String? = null,
 
-	@field:SerializedName("electricBill")
-	val electricBill: String? = null,
-
-	@field:SerializedName("pan")
-	val pan: String? = null,
-
-	@field:SerializedName("aadhaarBack")
-	val aadhaarBack: String? = null
+	@field:SerializedName("value")
+	val value: String? = null
 )
+
+
 
 data class OnboardData(
 
@@ -122,7 +118,7 @@ data class OnboardData(
 	val bankDetails: BankDetails? = null,
 
 	@field:SerializedName("documentImage")
-	val documentImage: DocumentImage? = null,
+	val documentImage: List<DocumentImage>? = null,
 
 	@field:SerializedName("basicDetails")
 	val basicDetails: BasicDetails? = null,

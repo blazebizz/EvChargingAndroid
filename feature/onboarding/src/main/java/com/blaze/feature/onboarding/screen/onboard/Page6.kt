@@ -21,7 +21,7 @@ fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoarding
     Column(Modifier.fillMaxSize()) {
 
         val showDialog = rememberSaveable { mutableStateOf(false) }
-        val currentSelected = remember { mutableStateOf(viewModel.pkImage1Uri) }
+        val currentSelected = remember { mutableStateOf(viewModel.pkImage1ByteArray) }
         val scrollState = rememberScrollState()
         Column(
             Modifier
@@ -29,25 +29,25 @@ fun ParkingAreaScreen(subNavController: NavHostController, viewModel: OnBoarding
                 .verticalScroll(scrollState)
         ) {
             Row {
-                UploadImageLayout(title = "", viewModel.pkImage1Uri) {
+                UploadImageLayout(title = "", viewModel.pkImage1ByteArray) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage1Uri
+                    currentSelected.value = viewModel.pkImage1ByteArray
                 }
 
-                UploadImageLayout(title = "", viewModel.pkImage2Uri) {
+                UploadImageLayout(title = "", viewModel.pkImage2ByteArray) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage2Uri
+                    currentSelected.value = viewModel.pkImage2ByteArray
                 }
             }
             Row {
-                UploadImageLayout(title = "", viewModel.pkImage3Uri) {
+                UploadImageLayout(title = "", viewModel.pkImage3ByteArray) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage3Uri
+                    currentSelected.value = viewModel.pkImage3ByteArray
                 }
 
-                UploadImageLayout(title = "", viewModel.pkImage4Uri) {
+                UploadImageLayout(title = "", viewModel.pkImage4ByteArray) {
                     showDialog.value = true
-                    currentSelected.value = viewModel.pkImage4Uri
+                    currentSelected.value = viewModel.pkImage4ByteArray
                 }
             }
 

@@ -90,7 +90,7 @@ fun OnBoardingScreen(
     val onBoardingNavController = rememberNavController()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData("000002")
+        viewModel.fetchOnBoardUserData("000002",coreUi.loading)
     }
 
     BackHandler {
@@ -163,13 +163,13 @@ fun OnBoardingScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
 
+
         Column(
             Modifier
-                .padding(10.dp)
+                .padding(16.dp)
                 .weight(1f)
                 .fillMaxWidth()
                 .background(SeaSalt)
-                .padding(10.dp)
         ) {
             OnBoardingSubNavGraph(onBoardingNavController, viewModel)
         }
@@ -286,6 +286,7 @@ fun nextFunction(
             if (checkPage6(viewModel, onFailure)) {
                 step6(context, viewModel, onFailure) {
                     Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
                 }
             }
         }
@@ -522,21 +523,21 @@ fun checkPage3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
 }
 
 fun checkPage4(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
-    if (viewModel.aadharBackUri.value == null) {
+    if (viewModel.aadharBackByteArray.value == null) {
         onFailure("Please Select Aadhar Card Back Image")
         return false
     }
-    if (viewModel.aadharFrontUri.value == null) {
+    if (viewModel.aadharFrontByteArray.value == null) {
         onFailure("Please Select Aadhar Card Front Image")
         return false
     }
 
-    if (viewModel.panUri.value == null) {
+    if (viewModel.panByteArray.value == null) {
         onFailure("Please Select Pan Card Image")
         return false
     }
 
-    if (viewModel.electricBillUri.value == null) {
+    if (viewModel.electricBillByteArray.value == null) {
         onFailure("Please Select Recent Electric Bill Image")
         return false
     }
@@ -557,7 +558,7 @@ fun checkPage5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
         onFailure("Please Enter Your Account Number")
         return false
     }
-    if (viewModel.accNumber.value == viewModel.accConfirmNumber.value) {
+    if (viewModel.accNumber.value != viewModel.accConfirmNumber.value) {
         onFailure("Please Confirm Your Account Number")
         return false
     }
@@ -569,19 +570,19 @@ fun checkPage5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
 }
 
 fun checkPage6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
-    if (viewModel.pkImage1Uri.value == null) {
+    if (viewModel.pkImage1ByteArray.value == null) {
         onFailure("Please Select 4 Image")
         return false
     }
-    if (viewModel.pkImage2Uri.value == null) {
+    if (viewModel.pkImage2ByteArray.value == null) {
         onFailure("Please Select 4 Image")
         return false
     }
-    if (viewModel.pkImage3Uri.value == null) {
+    if (viewModel.pkImage3ByteArray.value == null) {
         onFailure("Please Select 4 Image")
         return false
     }
-    if (viewModel.pkImage4Uri.value == null) {
+    if (viewModel.pkImage4ByteArray.value == null) {
         onFailure("Please Select 4 Image")
         return false
     }
