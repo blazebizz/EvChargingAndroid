@@ -41,6 +41,8 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
+import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.data.onboarding.model.req.BankDetails
 import com.blaze.data.onboarding.model.req.BasicDetails
 import com.blaze.data.onboarding.model.req.IdentityDetails
@@ -280,7 +282,12 @@ fun nextFunction(
 
         OnBoardingSubScreen.Page6.name -> {
             step6(viewModel, onFailure) {
-                Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                navController.navigate(OnBoardingRoute.OnBoardingCompleteScreen.route) {
+                    popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
+                        inclusive = true
+                    }
+                }
             }
         }
     }

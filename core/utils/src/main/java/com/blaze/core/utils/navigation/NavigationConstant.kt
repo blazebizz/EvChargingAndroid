@@ -17,6 +17,7 @@ sealed class StartUpRoute(val route: String) {
 
 sealed class OnBoardingRoute(val route: String) {
     object OnBoardingScreen : NavigationRoute(route = "OnBoardingScreen")
+    object OnBoardingCompleteScreen : NavigationRoute(route = "OnBoardingCompleteScreen")
 }
 
 sealed class DashboardRoute(val route: String) {
