@@ -1,5 +1,6 @@
 package com.blaze.core.ui.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +18,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
@@ -43,13 +45,15 @@ fun OutLinedTextFieldSpinner(
 //    bList.addAll(list)
 
 
-    Column(
+    Box(
         modifier = modifier
 //        .padding(0.dp)
             .fillMaxWidth()
 //        .bounceClick {
 //            spinnerState.value = true
 //        }
+        ,
+//        contentAlignment = Alignment.CenterEnd
     ) {
         androidx.compose.material3.OutlinedTextField(modifier = modifier,
             value = text.value,
@@ -84,8 +88,7 @@ fun OutLinedTextFieldSpinner(
                     modifier = Modifier
                         .pressClick {
                             spinnerState.value = !spinnerState.value
-                        }
-                        .size(40.dp))
+                        })
             })
 
         val width = LocalConfiguration.current.screenWidthDp - 60

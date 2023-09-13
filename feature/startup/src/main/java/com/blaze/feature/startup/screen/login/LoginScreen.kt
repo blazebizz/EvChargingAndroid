@@ -30,7 +30,6 @@ import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColors
 import com.blaze.core.ui.ui.theme.AntiFlashWhite
-import com.blaze.core.ui.ui.theme.PrimaryColor
 import com.blaze.core.utils.navigation.StartUpRoute
 
 
@@ -40,7 +39,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
     val stdCode = remember { mutableStateOf("+91") }
     Column(
         Modifier
-            .background(PrimaryColor)
+            .background(MaterialTheme.colorScheme.primary)
             .fillMaxSize()
             .padding(16.dp)
     ) {

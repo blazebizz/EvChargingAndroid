@@ -39,7 +39,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 @Composable
 fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
 
-    Column(Modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize().padding(16.dp)) {
         Row(
             Modifier
                 .fillMaxWidth()

@@ -2,27 +2,39 @@ package com.blaze.feature.dashboard.screen.dashboard
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.blaze.core.ui.R
+import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.DashboardRoute
 
 @Composable
@@ -31,42 +43,62 @@ fun DashboardScreen(navController: NavController) {
     BackHandler {
         activity.finishAffinity()
     }
-    Scaffold(
-        topBar = {
-            Row(
-                Modifier
-                    .statusBarsPadding()
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Icon(
-                    Icons.Default.Menu,
-                    contentDescription = "Menu",
-                    modifier = Modifier
-                        .clickable {
-                            navController.navigate(DashboardRoute.SideNavigationScreen.route)
-                        }
-                        .size(35.dp)
-                )
-                Spacer(Modifier.width(12.dp))
-                OutlinedTextField(
-                    value = "Your current Location",
-                    onValueChange = {},
-                    trailingIcon = {
-                        Icon(
-                            Icons.Default.Search, contentDescription = "Search"
-                        )
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.width(12.dp))
-            }
-        },
+    ClassicBeatTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    Modifier
+                        .statusBarsPadding()
+                        .fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.background)
+                        .padding(16.dp),
+                    verticalAlignment = CenterVertically
+                ) {
+                    Image(painter = painterResource(id = R.drawable.logo_square),
+                        contentDescription = null,
+                        Modifier
+                            .clickable {
+                                navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                            }
+                            .size(40.dp)
+                            .clip(CircleShape)
+                            .align(CenterVertically))
 
+                    Spacer(Modifier.width(12.dp))
+                    Text(
+                        text = "Random",
+                        modifier = Modifier
+                            .height(30.dp)
+                            .weight(1f)
+                            .align(CenterVertically),
+                        textAlign = TextAlign.Center,
+                        fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Spacer(Modifier.width(12.dp))
+                    Icon(
+                        Icons.Default.Notifications,
+                        contentDescription = "notification",
+                        modifier = Modifier
+                            .pressClick {
+                                //todo
+                            }
+                            .align(CenterVertically),
+//                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(Modifier.width(12.dp))
+                }
+            },
         ) {
 
-        Column(Modifier.padding(it)) {
-            Text(text = "dashboard screen")
+            Box(
+                Modifier.padding(it)
+            ) {
+                //region map view
+                //endregion
+
+            }
         }
+
     }
 }

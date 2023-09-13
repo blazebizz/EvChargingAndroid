@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -24,9 +23,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.R
-import com.blaze.core.ui.ui.theme.PrimaryColor
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -38,6 +37,11 @@ fun SplashScreen(
     viewModel: SplashScreenViewModel,
     coreUi: CoreUiViewModel
 ) {
+    //    //region status color
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(color = MaterialTheme.colorScheme.primary)
+    systemUiController.setStatusBarColor(color = MaterialTheme.colorScheme.primary)
+//    //endregion
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         CoroutineScope(Dispatchers.Main).launch {
@@ -67,7 +71,9 @@ fun SplashScreen(
 @Composable
 @Preview
 fun Slplashh() {
-    Box(modifier = Modifier.background(PrimaryColor).fillMaxSize()) {
+    Box(modifier = Modifier
+        .background(MaterialTheme.colorScheme.primary)
+        .fillMaxSize()) {
 
         Image(
             painter = painterResource(id = R.drawable.young_bg), contentDescription = "",
@@ -75,23 +81,22 @@ fun Slplashh() {
             contentScale = ContentScale.FillWidth
         )
 
+        Column(Modifier.padding(30.dp)) {
+            Spacer(modifier = Modifier.weight(1f))
 
-            Column(Modifier.padding(30.dp)) {
-                Spacer(modifier = Modifier.weight(1f))
-
-                Text(
-                    text = "Power Up Your Drive with",
-                    fontSize = 30.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    fontWeight = FontWeight.SemiBold
-                )
-                Text(
-                    text = "deck",
-                    fontSize = 35.sp,
-                    color =  MaterialTheme.colorScheme.background,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.weight(6f))
-            }
+            Text(
+                text = "Power Up Your Drive with",
+                fontSize = 30.sp,
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.SemiBold
+            )
+            Text(
+                text = "deck",
+                fontSize = 35.sp,
+                color = MaterialTheme.colorScheme.background,
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(modifier = Modifier.weight(6f))
+        }
     }
 }

@@ -7,6 +7,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,8 +30,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -90,18 +96,41 @@ fun OnBoardingScreen(
     val onBoardingNavController = rememberNavController()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData("000002",coreUi.loading)
+        viewModel.fetchOnBoardUserData("000003",coreUi.loading)
     }
 
     BackHandler {
         previousFunction(onBoardingNavController, viewModel, navController)
     }
+    var offsetX = remember { mutableStateOf(0f) }
+
 
 
     Column(
         Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+
+                }
+                detectTransformGestures { centroid, pan, zoom, rotation ->
+                    offsetX.value += centroid.x
+                    val sensitivity = 10f // Adjust this value to control swipe sensitivity
+
+                    if (offsetX.value > sensitivity) {
+                        Toast
+                            .makeText(context, "right", Toast.LENGTH_SHORT)
+                            .show()
+                        offsetX.value = 0f
+                    } else if (offsetX.value < -sensitivity) {
+                        Toast
+                            .makeText(context, "left", Toast.LENGTH_SHORT)
+                            .show()
+                        offsetX.value = 0f
+                    }
+                }
+            }
     ) {
         Row(
             Modifier
@@ -388,7 +417,7 @@ fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
 
 fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSuccess: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             basicDetails = BasicDetails(
                 pincode = viewModel.pincode.value,
                 twoWheeler = viewModel.selected2Wheeler.value,
@@ -408,7 +437,7 @@ fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSucces
 
 fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             identityDetails = IdentityDetails(
                 aadhaarNo = viewModel.aadharNumber.value,
                 panNo = viewModel.panNumber.value,
@@ -427,12 +456,12 @@ fun step4(
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadDocImage(context, "000002", function, onFailure)
+    viewModel.uploadDocImage(context, "000003", function, onFailure)
 }
 
 fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             bankDetails = BankDetails(
                 bankValue = viewModel.bankName.value,
                 accNo = viewModel.accNumber.value,
@@ -451,7 +480,7 @@ fun step6(
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadParkingImages(context, "000002", function, onFailure)
+    viewModel.uploadParkingImages(context, "000003", function, onFailure)
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {

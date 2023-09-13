@@ -52,44 +52,43 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val permissionState = rememberMultiplePermissionsState(
-                listOf(
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.CAMERA
-                ),
-            )
+            ClassicBeatTheme {
+                val permissionState = rememberMultiplePermissionsState(
+                    listOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.CAMERA
+                    ),
+                )
 
-            // Keeps track of the rationale dialog state, needed when the user requires further rationale
-            val rationaleState = remember {
-                mutableStateOf<RationaleState?>(null)
-            }
+                // Keeps track of the rationale dialog state, needed when the user requires further rationale
+                val rationaleState = remember {
+                    mutableStateOf<RationaleState?>(null)
+                }
 
-            fun askForPermission() {
-                if (permissionState.shouldShowRationale) {
-                    rationaleState.value = RationaleState(
-                        "Request Precise Location",
-                        "In order to use this feature please grant access by accepting " + "the location permission dialog." + "\n\nWould you like to continue?",
-                    ) { proceed ->
-                        if (proceed) {
-                            permissionState.launchMultiplePermissionRequest()
+                fun askForPermission() {
+                    if (permissionState.shouldShowRationale) {
+                        rationaleState.value = RationaleState(
+                            "Request Precise Location",
+                            "In order to use this feature please grant access by accepting " + "the location permission dialog." + "\n\nWould you like to continue?",
+                        ) { proceed ->
+                            if (proceed) {
+                                permissionState.launchMultiplePermissionRequest()
+                            }
+                            rationaleState.value = null
                         }
-                        rationaleState.value = null
+                    } else {
+                        permissionState.launchMultiplePermissionRequest()
                     }
-                } else {
-                    permissionState.launchMultiplePermissionRequest()
                 }
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                if (!permissionState.allPermissionsGranted) {
-                    askForPermission()
+                LaunchedEffect(key1 = Unit) {
+                    if (!permissionState.allPermissionsGranted) {
+                        askForPermission()
+                    }
                 }
+                MainActivityScreen(lifecycleScope)
             }
-
-            MainActivityScreen(lifecycleScope)
-
         }
     }
 }
@@ -135,7 +134,9 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
                             Image(
                                 painter = painterResource(id = com.blaze.core.ui.R.drawable.logo_square),
                                 contentDescription = null,
-                                modifier = Modifier.height(30.dp).clip(CircleShape)
+                                modifier = Modifier
+                                    .height(30.dp)
+                                    .clip(CircleShape)
                             )
                         }
 

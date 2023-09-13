@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!--    <style name="Theme.ClassicBeat" parent="android:Theme.Material.NoActionBar" />-->
+
+    <style name="Theme.ClassicBeatScheme" parent="android:Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/status_bar</item>
+    </style>
+
+    <style name="Theme.Material.DayNight.NoActionBar" parent="@android:style/Theme.Material.Light.NoActionBar" />
+
     <style name="Theme.ClassicBeat" parent="android:Theme.Material.NoActionBar.TranslucentDecor" />
 </resources>
