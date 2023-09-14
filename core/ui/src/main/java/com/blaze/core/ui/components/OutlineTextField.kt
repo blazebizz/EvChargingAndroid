@@ -18,12 +18,19 @@ fun OutlinedTextField(
     isError:Boolean = false,
     label: String,
     keyboardType: KeyboardType = KeyboardType.Text,
-    imeAction: ImeAction = ImeAction.Done
+    imeAction: ImeAction = ImeAction.Done,
+    maxChar:Int = 0
 ) {
     androidx.compose.material3.OutlinedTextField(modifier = modifier,
         value = value.value,
         onValueChange = {
-            value.value = it
+            if (maxChar==(0)){
+                value.value = it
+            }else{
+                if (it.length < maxChar+1){
+                    value.value = it
+                }
+            }
         },
         label = {
             Text(text = label)

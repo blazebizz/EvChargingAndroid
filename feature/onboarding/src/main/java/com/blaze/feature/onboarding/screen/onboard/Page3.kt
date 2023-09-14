@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.blaze.core.ui.components.OutlinedTextField
@@ -18,9 +19,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
-    val text = rememberSaveable {
-        mutableStateOf("")
-    }
+
     val scrollState = rememberScrollState()
     Column(
         Modifier
@@ -32,12 +31,14 @@ fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoard
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.aadharNumber,
-            label = "Aadhar Number"
+            label = "Aadhar Number",
+            keyboardType = KeyboardType.Number,
+            maxChar = 12
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.panNumber,
-            label = "Pan Number"
+            label = "Pan Number",
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -48,7 +49,8 @@ fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoard
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.electricBillNumber,
-            label = "Bill Account Number"
+            label = "Bill Account Number",
+            keyboardType = KeyboardType.Number,
         )
 
     }

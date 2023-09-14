@@ -19,7 +19,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 fun DocumentImageScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
-    val currentSelected = remember { mutableStateOf(viewModel.aadharFrontUri) }
+    val currentSelected = remember { mutableStateOf(viewModel.aadharFrontByteArray) }
     val scrollState = rememberScrollState()
     Column(
         Modifier
@@ -27,27 +27,27 @@ fun DocumentImageScreen(subNavController: NavHostController, viewModel: OnBoardi
             .verticalScroll(scrollState)
     ) {
         Row {
-            UploadImageLayout(title = "Aadhar Front", viewModel.aadharFrontUri) {
+            UploadImageLayout(title = "Aadhar Front", viewModel.aadharFrontByteArray) {
                 showDialog.value = true
-                currentSelected.value = viewModel.aadharFrontUri
+                currentSelected.value = viewModel.aadharFrontByteArray
             }
 
-            UploadImageLayout(title = "Aadhar Back", viewModel.aadharBackUri) {
+            UploadImageLayout(title = "Aadhar Back", viewModel.aadharBackByteArray) {
                 showDialog.value = true
-                currentSelected.value = viewModel.aadharBackUri
+                currentSelected.value = viewModel.aadharBackByteArray
             }
         }
-        UploadImageLayout(title = "Pan", viewModel.panUri) {
+        UploadImageLayout(title = "Pan", viewModel.panByteArray) {
             showDialog.value = true
-            currentSelected.value = viewModel.panUri
+            currentSelected.value = viewModel.panByteArray
         }
-        UploadImageLayout(title = "Electric Bill", viewModel.electricBillUri) {
+        UploadImageLayout(title = "Electric Bill", viewModel.electricBillByteArray) {
             showDialog.value = true
-            currentSelected.value = viewModel.electricBillUri
+            currentSelected.value = viewModel.electricBillByteArray
         }
-        UploadImageLayout(title = "Any Other Document\n(optional)", viewModel.otherUri) {
+        UploadImageLayout(title = "Any Other Document\n(optional)", viewModel.otherByteArray) {
             showDialog.value = true
-            currentSelected.value = viewModel.otherUri
+            currentSelected.value = viewModel.otherByteArray
         }
     }
 

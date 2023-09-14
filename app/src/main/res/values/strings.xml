@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">Zape</string>
+    <string name="app_name">Random</string>
+    <string name="title_activity_main_launch">MainActivityLaunch</string>
 </resources>

@@ -7,6 +7,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,8 +30,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
@@ -41,8 +47,7 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
-import com.blaze.core.utils.navigation.DashboardRoute
-import com.blaze.core.utils.navigation.OnBoardingRoute
+import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.data.onboarding.model.req.BankDetails
 import com.blaze.data.onboarding.model.req.BasicDetails
 import com.blaze.data.onboarding.model.req.IdentityDetails
@@ -55,9 +60,7 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun OnBoardingScreen(
-    navController: NavController,
-    viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel
+    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreUiViewModel
 ) {
 
     val context = LocalContext.current
@@ -93,18 +96,41 @@ fun OnBoardingScreen(
     val onBoardingNavController = rememberNavController()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData("000002")
+        viewModel.fetchOnBoardUserData("000003",coreUi.loading)
     }
 
     BackHandler {
         previousFunction(onBoardingNavController, viewModel, navController)
     }
+    var offsetX = remember { mutableStateOf(0f) }
+
 
 
     Column(
         Modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { change, dragAmount ->
+
+                }
+                detectTransformGestures { centroid, pan, zoom, rotation ->
+                    offsetX.value += centroid.x
+                    val sensitivity = 10f // Adjust this value to control swipe sensitivity
+
+                    if (offsetX.value > sensitivity) {
+                        Toast
+                            .makeText(context, "right", Toast.LENGTH_SHORT)
+                            .show()
+                        offsetX.value = 0f
+                    } else if (offsetX.value < -sensitivity) {
+                        Toast
+                            .makeText(context, "left", Toast.LENGTH_SHORT)
+                            .show()
+                        offsetX.value = 0f
+                    }
+                }
+            }
     ) {
         Row(
             Modifier
@@ -166,13 +192,13 @@ fun OnBoardingScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
 
+
         Column(
             Modifier
-                .padding(10.dp)
+                .padding(16.dp)
                 .weight(1f)
                 .fillMaxWidth()
-//                .background(BabyPowderWhite)
-                .padding(10.dp)
+                .background(SeaSalt)
         ) {
             OnBoardingSubNavGraph(onBoardingNavController, viewModel)
         }
@@ -190,7 +216,9 @@ fun OnBoardingScreen(
                     coreUi.snackbar(it)
                 })
             }
+
             Spacer(modifier = Modifier.weight(1f))
+
         }
         Spacer(Modifier.height(12.dp))
     }
@@ -205,18 +233,17 @@ fun nextFunction(
     when (navController.currentDestination?.route) {
         OnBoardingSubScreen.Page1.name -> {
 
-            if(checkPage1(viewModel,onFailure)){
+            if (checkPage1(viewModel, onFailure)) {
                 //nav to next page
                 viewModel.progress1.floatValue = 1f
                 navController.navigate(OnBoardingSubScreen.Page2.name) {
                     popUpTo(OnBoardingSubScreen.Page1.name) { inclusive = true }
                 }
             }
-
         }
 
         OnBoardingSubScreen.Page2.name -> {
-            if (checkPage2(viewModel, onFailure)){
+            if (checkPage2(viewModel, onFailure)) {
                 if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
                     if (viewModel.fetchedOnBoardUserData.value?.data?.get(
                             0
@@ -235,58 +262,60 @@ fun nextFunction(
         }
 
         OnBoardingSubScreen.Page3.name -> {
-            if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
-                        0
-                    )?.onboardData?.identityDetails?.aadhaarNo?.equals(
-                        viewModel.aadharNumber.value
-                    ) == true
-                ) {
-                    toPage4(viewModel, navController)
+            if (checkPage3(viewModel, onFailure)) {
+                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+                    if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
+                            0
+                        )?.onboardData?.identityDetails?.aadhaarNo?.equals(
+                            viewModel.aadharNumber.value
+                        ) == true
+                    ) {
+                        toPage4(viewModel, navController)
+                    } else {
+                        step3(viewModel, onFailure) { toPage4(viewModel, navController) }
+                    }
                 } else {
                     step3(viewModel, onFailure) { toPage4(viewModel, navController) }
                 }
-            } else {
-                step3(viewModel, onFailure) { toPage4(viewModel, navController) }
             }
         }
 
         OnBoardingSubScreen.Page4.name -> {
-
-            //uloaddoc
-            step4(viewModel, onFailure) {
-                toPage5(viewModel, navController)
+            //upload doc
+            if (checkPage4(viewModel, onFailure)) {
+                step4(context, viewModel, onFailure) {
+                    toPage5(viewModel, navController)
+                }
             }
         }
 
         OnBoardingSubScreen.Page5.name -> {
-
-            if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
-                        0
-                    )?.onboardData?.bankDetails?.accHolderName?.equals(
-                        viewModel.accNameHolder.value
-                    ) == true
-                ) {
-                    //nav to next page
-                    toPage6(viewModel, navController)
+            if (checkPage5(viewModel, onFailure)) {
+                if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+                    if (viewModel.fetchedOnBoardUserData.value != null && viewModel.fetchedOnBoardUserData.value?.data?.get(
+                            0
+                        )?.onboardData?.bankDetails?.accHolderName?.equals(
+                            viewModel.accNameHolder.value
+                        ) == true
+                    ) {
+                        //nav to next page
+                        toPage6(viewModel, navController)
+                    } else {
+                        step5(viewModel, onFailure) { toPage6(viewModel, navController) }
+                    }
                 } else {
-                    step5(viewModel, onFailure) { toPage6(viewModel, navController) }
-                }
-            } else {
-                step5(viewModel, onFailure) {
-                    toPage6(viewModel, navController)
+                    step5(viewModel, onFailure) {
+                        toPage6(viewModel, navController)
+                    }
                 }
             }
         }
 
         OnBoardingSubScreen.Page6.name -> {
-            step6(viewModel, onFailure) {
-//                Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
-                navController.navigate(OnBoardingRoute.OnBoardingCompleteScreen.route) {
-                    popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
-                        inclusive = true
-                    }
+            if (checkPage6(viewModel, onFailure)) {
+                step6(context, viewModel, onFailure) {
+                    Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                    navController.popBackStack()
                 }
             }
         }
@@ -388,7 +417,7 @@ fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
 
 fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSuccess: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             basicDetails = BasicDetails(
                 pincode = viewModel.pincode.value,
                 twoWheeler = viewModel.selected2Wheeler.value,
@@ -408,7 +437,7 @@ fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSucces
 
 fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             identityDetails = IdentityDetails(
                 aadhaarNo = viewModel.aadharNumber.value,
                 panNo = viewModel.panNumber.value,
@@ -421,13 +450,18 @@ fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
     viewModel.onBoardUser(data, function, onFailure)
 }
 
-fun step4(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
-    viewModel.uploadDocImage("000002", function, onFailure)
+fun step4(
+    context: Context,
+    viewModel: OnBoardingViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
+    viewModel.uploadDocImage(context, "000003", function, onFailure)
 }
 
 fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000002", onboardData = OnboardData(
+        userId = "000003", onboardData = OnboardData(
             bankDetails = BankDetails(
                 bankValue = viewModel.bankName.value,
                 accNo = viewModel.accNumber.value,
@@ -440,8 +474,13 @@ fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
     viewModel.onBoardUser(data, function, onFailure)
 }
 
-fun step6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
-    viewModel.uploadParkingImages("000002", function, onFailure)
+fun step6(
+    context: Context,
+    viewModel: OnBoardingViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
+    viewModel.uploadParkingImages(context, "000003", function, onFailure)
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
@@ -458,7 +497,7 @@ fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
     return true
 }
 
-fun checkPage2(viewModel: OnBoardingViewModel,onFailure: (String) -> Unit): Boolean {
+fun checkPage2(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
 
     if (viewModel.fullName.value.isNullOrBlank()) {
         onFailure("Please Enter Name")
@@ -487,3 +526,95 @@ fun checkPage2(viewModel: OnBoardingViewModel,onFailure: (String) -> Unit): Bool
 
     return true
 }
+
+fun checkPage3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.aadharNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Aadhar Number")
+        return false
+    }
+
+    if (viewModel.panNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Pan Number")
+        return false
+    }
+
+    if (viewModel.electricProvide.value.isEmpty()) {
+        onFailure("Please Select Your Electric Provider Name")
+        return false
+    }
+
+    if (viewModel.electricBillNumber.value.isEmpty()) {
+        onFailure("Please Enter Electric Bill Number")
+        return false
+    }
+
+    return true
+}
+
+fun checkPage4(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.aadharBackByteArray.value == null) {
+        onFailure("Please Select Aadhar Card Back Image")
+        return false
+    }
+    if (viewModel.aadharFrontByteArray.value == null) {
+        onFailure("Please Select Aadhar Card Front Image")
+        return false
+    }
+
+    if (viewModel.panByteArray.value == null) {
+        onFailure("Please Select Pan Card Image")
+        return false
+    }
+
+    if (viewModel.electricBillByteArray.value == null) {
+        onFailure("Please Select Recent Electric Bill Image")
+        return false
+    }
+
+    return true
+}
+
+fun checkPage5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.accNameHolder.value.isEmpty()) {
+        onFailure("Please Enter Account Holder Name")
+        return false
+    }
+    if (viewModel.bankName.value.isEmpty()) {
+        onFailure("Please Select Your Provider Bank")
+        return false
+    }
+    if (viewModel.accNumber.value.isEmpty()) {
+        onFailure("Please Enter Your Account Number")
+        return false
+    }
+    if (viewModel.accNumber.value != viewModel.accConfirmNumber.value) {
+        onFailure("Please Confirm Your Account Number")
+        return false
+    }
+    if (viewModel.ifscCode.value.isEmpty()) {
+        onFailure("Please Enter IFSC Code")
+        return false
+    }
+    return true
+}
+
+fun checkPage6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
+    if (viewModel.pkImage1ByteArray.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage2ByteArray.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage3ByteArray.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    if (viewModel.pkImage4ByteArray.value == null) {
+        onFailure("Please Select 4 Image")
+        return false
+    }
+    return true
+}
+

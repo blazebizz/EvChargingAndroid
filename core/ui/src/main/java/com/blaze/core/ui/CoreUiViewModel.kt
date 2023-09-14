@@ -10,12 +10,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoreUiViewModel @Inject constructor(): ViewModel(){
+class CoreUiViewModel @Inject constructor() : ViewModel() {
+    val loading: MutableState<Boolean> = mutableStateOf(false)
     val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)
-    internal val snackbarValue :MutableState<Pair<Boolean,String>> = mutableStateOf(Pair(false, ""))
-    internal val toast :MutableState<String> = mutableStateOf( "Welcome")
+    internal val snackbarValue: MutableState<Pair<Boolean, String>> =
+        mutableStateOf(Pair(false, ""))
+    internal val toast: MutableState<String> = mutableStateOf("Welcome")
 
-    fun snackbar(message:String){
+    fun snackbar(message: String) {
         viewModelScope.launch {
             snackbarValue.value = Pair(true, message)
             delay(3000)
@@ -24,11 +26,10 @@ class CoreUiViewModel @Inject constructor(): ViewModel(){
         }
     }
 
-    fun toast(message:String){
+    fun toast(message: String) {
         viewModelScope.launch {
             toast.value = message
         }
     }
-
 
 }

@@ -17,7 +17,7 @@ interface OnBoardingRepo {
 
     fun uploadImage(   userId: String,
                                imageId: String,
-                               imageUri: Uri,
+                               imageByteArray: ByteArray,
                                onFailure: (String?) -> Unit,
                                onSuccess: (String?) -> Unit)
 

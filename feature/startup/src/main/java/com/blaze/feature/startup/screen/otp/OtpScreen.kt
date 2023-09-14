@@ -3,29 +3,36 @@ package com.blaze.feature.startup.screen.otp
 
 import android.app.Activity
 import android.util.Log
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,7 +40,6 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OtpView
-import com.blaze.core.ui.ui.theme.PrimaryColor
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
@@ -231,7 +237,7 @@ internal fun OtpContent(
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(top = 16.dp)
-            .padding(16.dp ),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
@@ -274,7 +280,7 @@ internal fun OtpContent(
                     Text(text = "$seconds seconds")
                     Spacer(Modifier.weight(1f))
                     Text(text = "Resend",
-                        color = if (seconds == 0) PrimaryColor else Color.LightGray,
+                        color = if (seconds == 0) MaterialTheme.colorScheme.primary else Color.LightGray,
                         modifier = Modifier.clickable {
                             if (seconds == 0) {
                                 onResendClick.invoke()
@@ -300,8 +306,6 @@ internal fun OtpContent(
         Spacer(Modifier.weight(4f))
     }
 }
-
-
 
 
 // filo

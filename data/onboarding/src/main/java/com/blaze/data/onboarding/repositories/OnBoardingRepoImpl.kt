@@ -26,7 +26,7 @@ class OnBoardingRepoImpl @Inject constructor(
     override fun uploadImage(
         userId: String,
         imageId: String,
-        imageUri: Uri,
+        imageByteArray: ByteArray,
         onFailure: (String?) -> Unit,
         onSuccess: (String?) -> Unit
     ) {
@@ -34,7 +34,7 @@ class OnBoardingRepoImpl @Inject constructor(
             val storage = Firebase.storage
             val reference =
                 storage.reference.child("OnBoardPartner").child(userId).child("$imageId.jpg")
-            val uploadTask = reference.putFile(imageUri)
+            val uploadTask = reference.putBytes(imageByteArray)
 
             uploadTask.addOnFailureListener {
                 // Handle unsuccessful uploads

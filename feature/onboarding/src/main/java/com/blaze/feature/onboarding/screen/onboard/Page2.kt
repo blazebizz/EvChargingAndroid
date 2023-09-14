@@ -9,36 +9,42 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.blaze.core.ui.components.OutLinedTextFieldSpinner
 import com.blaze.core.ui.components.OutlinedTextField
+import com.blaze.core.utils.util.stateList
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+    val spinnerExpand = remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
-    val text = rememberSaveable {
-        mutableStateOf("")
-    }
+
     Column(
         Modifier
             .fillMaxWidth()
-            .verticalScroll(scrollState)) {
+            .verticalScroll(scrollState)
+    ) {
         Text(text = "Basic Information")
         Spacer(modifier = Modifier.height(5.dp))
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.fullName,
-            label =  "Full Name")
+            label = "Full Name"
+        )
 
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.mobile,
-            label = "Mobile Number")
+            label = "Mobile Number",
+            keyboardType = KeyboardType.Phone
+        )
         Spacer(modifier = Modifier.height(5.dp))
 
         Text(text = "Address")
@@ -46,22 +52,32 @@ fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewMod
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.addressL1,
-            label = "Address Line 1")
+            label = "Address Line 1"
+        )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.addressL2,
-            label = "Address Line 2")
-        OutlinedTextField(
+            label = "Address Line 2"
+        )
+
+        OutLinedTextFieldSpinner(
+            spinnerState = spinnerExpand,
             modifier = Modifier.fillMaxWidth(),
-            value = viewModel.state,
-            label = "state")
+            text = viewModel.state,
+            list = stateList,
+            label = "State"
+        )
+
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.pincode,
-            label = "Pincode")
+            label = "Pincode",
+            keyboardType = KeyboardType.Number,
+            maxChar = 6
+        )
 
         Spacer(modifier = Modifier.height(5.dp))
 
-     
+
     }
 }
