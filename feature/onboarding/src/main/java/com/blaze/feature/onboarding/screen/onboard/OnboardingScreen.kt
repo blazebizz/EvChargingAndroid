@@ -28,13 +28,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.semantics
@@ -48,6 +46,9 @@ import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
 import com.blaze.core.ui.ui.theme.SeaSalt
+import com.blaze.core.utils.navigation.OnBoardingRoute
+import com.blaze.core.utils.util.USER_ID
+import com.blaze.core.utils.util.mainScope
 import com.blaze.data.onboarding.model.req.BankDetails
 import com.blaze.data.onboarding.model.req.BasicDetails
 import com.blaze.data.onboarding.model.req.IdentityDetails
@@ -56,6 +57,7 @@ import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.feature.onboarding.navigation.OnBoardingSubNavGraph
 import com.blaze.feature.onboarding.navigation.OnBoardingSubScreen
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -95,9 +97,7 @@ fun OnBoardingScreen(
 
     val onBoardingNavController = rememberNavController()
 
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData("000003",coreUi.loading)
-    }
+
 
     BackHandler {
         previousFunction(onBoardingNavController, viewModel, navController)
@@ -214,7 +214,7 @@ fun OnBoardingScreen(
             Button(text = "Continue") {
                 nextFunction(onBoardingNavController, viewModel, context, onFailure = {
                     coreUi.snackbar(it)
-                })
+                },navController)
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -225,18 +225,19 @@ fun OnBoardingScreen(
 }
 
 fun nextFunction(
-    navController: NavHostController,
+    onBoardingNavController: NavHostController,
     viewModel: OnBoardingViewModel,
     context: Context,
-    onFailure: (String) -> Unit = {}
+    onFailure: (String) -> Unit = {},
+    navController: NavController
 ) {
-    when (navController.currentDestination?.route) {
+    when (onBoardingNavController.currentDestination?.route) {
         OnBoardingSubScreen.Page1.name -> {
 
             if (checkPage1(viewModel, onFailure)) {
                 //nav to next page
                 viewModel.progress1.floatValue = 1f
-                navController.navigate(OnBoardingSubScreen.Page2.name) {
+                onBoardingNavController.navigate(OnBoardingSubScreen.Page2.name) {
                     popUpTo(OnBoardingSubScreen.Page1.name) { inclusive = true }
                 }
             }
@@ -251,12 +252,12 @@ fun nextFunction(
                             viewModel.fullName.value
                         ) == true
                     ) {
-                        toPage3(viewModel, navController)
+                        toPage3(viewModel, onBoardingNavController)
                     } else {
-                        step12(viewModel, onFailure) { toPage3(viewModel, navController) }
+                        step12(viewModel, onFailure) { toPage3(viewModel, onBoardingNavController) }
                     }
                 } else {
-                    step12(viewModel, onFailure) { toPage3(viewModel, navController) }
+                    step12(viewModel, onFailure) { toPage3(viewModel, onBoardingNavController) }
                 }
             }
         }
@@ -270,12 +271,12 @@ fun nextFunction(
                             viewModel.aadharNumber.value
                         ) == true
                     ) {
-                        toPage4(viewModel, navController)
+                        toPage4(viewModel, onBoardingNavController)
                     } else {
-                        step3(viewModel, onFailure) { toPage4(viewModel, navController) }
+                        step3(viewModel, onFailure) { toPage4(viewModel, onBoardingNavController) }
                     }
                 } else {
-                    step3(viewModel, onFailure) { toPage4(viewModel, navController) }
+                    step3(viewModel, onFailure) { toPage4(viewModel, onBoardingNavController) }
                 }
             }
         }
@@ -284,7 +285,7 @@ fun nextFunction(
             //upload doc
             if (checkPage4(viewModel, onFailure)) {
                 step4(context, viewModel, onFailure) {
-                    toPage5(viewModel, navController)
+                    toPage5(viewModel, onBoardingNavController)
                 }
             }
         }
@@ -299,13 +300,13 @@ fun nextFunction(
                         ) == true
                     ) {
                         //nav to next page
-                        toPage6(viewModel, navController)
+                        toPage6(viewModel, onBoardingNavController)
                     } else {
-                        step5(viewModel, onFailure) { toPage6(viewModel, navController) }
+                        step5(viewModel, onFailure) { toPage6(viewModel, onBoardingNavController) }
                     }
                 } else {
                     step5(viewModel, onFailure) {
-                        toPage6(viewModel, navController)
+                        toPage6(viewModel, onBoardingNavController)
                     }
                 }
             }
@@ -314,8 +315,15 @@ fun nextFunction(
         OnBoardingSubScreen.Page6.name -> {
             if (checkPage6(viewModel, onFailure)) {
                 step6(context, viewModel, onFailure) {
-                    Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
-                    navController.popBackStack()
+                    mainScope.launch {
+                        Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                        navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route){
+                            popUpTo(OnBoardingRoute.OnBoardingScreen.route){
+                                inclusive = true
+                            }
+                        }
+
+                    }
                 }
             }
         }
@@ -417,7 +425,7 @@ fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
 
 fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSuccess: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000003", onboardData = OnboardData(
+        userId = USER_ID, onboardData = OnboardData(
             basicDetails = BasicDetails(
                 pincode = viewModel.pincode.value,
                 twoWheeler = viewModel.selected2Wheeler.value,
@@ -437,7 +445,7 @@ fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSucces
 
 fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000003", onboardData = OnboardData(
+        userId = USER_ID, onboardData = OnboardData(
             identityDetails = IdentityDetails(
                 aadhaarNo = viewModel.aadharNumber.value,
                 panNo = viewModel.panNumber.value,
@@ -456,12 +464,12 @@ fun step4(
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadDocImage(context, "000003", function, onFailure)
+    viewModel.uploadDocImage(context, USER_ID, function, onFailure)
 }
 
 fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
     val data = PartnerOnBoardRequest(
-        userId = "000003", onboardData = OnboardData(
+        userId = USER_ID, onboardData = OnboardData(
             bankDetails = BankDetails(
                 bankValue = viewModel.bankName.value,
                 accNo = viewModel.accNumber.value,
@@ -480,7 +488,7 @@ fun step6(
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadParkingImages(context, "000003", function, onFailure)
+    viewModel.uploadParkingImages(context, USER_ID, function, onFailure)
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
