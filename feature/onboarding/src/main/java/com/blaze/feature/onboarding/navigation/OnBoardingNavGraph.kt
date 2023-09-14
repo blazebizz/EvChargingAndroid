@@ -11,13 +11,19 @@ import com.blaze.feature.onboarding.screen.onboard.OnBoardingCompleteScreen
 import com.blaze.feature.onboarding.screen.onboard.OnBoardingScreen
 
 
-fun NavGraphBuilder.onBoardingNavGraph(navController: NavController, coreUi: CoreUiViewModel){
+fun NavGraphBuilder.onBoardingNavGraph(
+    navController: NavController,
+    coreUi: CoreUiViewModel,
+    onBoardingViewModel: OnBoardingViewModel
+){
     composable(OnBoardingRoute.OnBoardingScreen.route){
-        val viewModel = hiltViewModel<OnBoardingViewModel>()
-        OnBoardingScreen(navController,viewModel,coreUi)
+        OnBoardingScreen(navController,onBoardingViewModel,coreUi)
     }
-    composable(OnBoardingRoute.OnBoardingCompleteScreen.route){
-        val viewModel = hiltViewModel<OnBoardingViewModel>()
-        OnBoardingCompleteScreen(navController,viewModel,coreUi)
+
+    composable(OnBoardingRoute.BoardingCompleteScreen.route){
+        OnBoardingCompleteScreen(navController,onBoardingViewModel,coreUi)
     }
+
+
+
 }

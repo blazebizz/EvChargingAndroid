@@ -1,4 +1,5 @@
 package com.blaze.feature.onboarding.screen.onboard
+import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,7 +24,6 @@ import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
-import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun OnBoardingCompleteScreen(
@@ -32,7 +33,7 @@ fun OnBoardingCompleteScreen(
 ) {
     CompleteScreen {
         navController.navigate(DashboardRoute.DashboardScreen.route) {
-            popUpTo(OnBoardingRoute.OnBoardingCompleteScreen.route) {
+            popUpTo(OnBoardingRoute.BoardingCompleteScreen.route) {
                 inclusive = true
             }
         }
@@ -48,7 +49,8 @@ fun CompleteScreen(
     Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
