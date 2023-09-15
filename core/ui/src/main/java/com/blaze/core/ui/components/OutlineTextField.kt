@@ -14,20 +14,20 @@ import androidx.compose.ui.text.input.KeyboardType
 fun OutlinedTextField(
     modifier: Modifier = Modifier,
     value: MutableState<String>,
-    readOnly:Boolean = false,
-    isError:Boolean = false,
+    readOnly: Boolean = false,
+    isError: Boolean = false,
     label: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Done,
-    maxChar:Int = 0
+    maxChar: Int = 0
 ) {
     androidx.compose.material3.OutlinedTextField(modifier = modifier,
         value = value.value,
         onValueChange = {
-            if (maxChar==(0)){
+            if (!readOnly) if (maxChar == (0)) {
                 value.value = it
-            }else{
-                if (it.length < maxChar+1){
+            } else {
+                if (it.length < maxChar + 1) {
                     value.value = it
                 }
             }
@@ -46,5 +46,25 @@ fun OutlinedTextField(
         singleLine = true,
         readOnly = readOnly,
         isError = isError
+    )
+}
+
+@Composable
+fun OutlinedTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    label:String
+) {
+    androidx.compose.material3.OutlinedTextField(modifier = modifier,
+        value = value,
+        onValueChange = {},
+        label = { Text(text = label) },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.onBackground,
+            cursorColor = MaterialTheme.colorScheme.onBackground,
+            focusedLabelColor = MaterialTheme.colorScheme.onBackground
+        ),
+        singleLine = true,
+        readOnly = true,
     )
 }

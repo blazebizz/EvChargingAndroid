@@ -17,10 +17,10 @@ val SonicSilver = Color(0xFF787878)
 
 
 val light_primary = Color(0xFFF6F6F6)
-val light_onPrimary = Color(0xFFFFFFFF)
+val light_onPrimary = Color(0xFF000000)
 val light_primaryContainer = Color(0xFFFFDDB3)
 val light_onPrimaryContainer = Color(0xFF291800)
-val light_secondary = Color(0xFF6F5B40)
+val light_secondary = Color(0xFFFFFFFF)
 val light_onSecondary = Color(0xFFFFFFFF)
 val light_secondaryContainer = Color(0xFFFBDEBC)
 val light_onSecondaryContainer = Color(0xFF271904)

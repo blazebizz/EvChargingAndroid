@@ -22,8 +22,8 @@ data class DataItem(
 	@field:SerializedName("updated_at")
 	val updatedAt: String? = null,
 
-	@field:SerializedName("reject_list")
-	val rejectList: List<String?>? = null,
+//	@field:SerializedName("reject_list")
+//	val rejectList: List<String?>? = null,
 
 	@field:SerializedName("created_at")
 	val createdAt: String? = null,

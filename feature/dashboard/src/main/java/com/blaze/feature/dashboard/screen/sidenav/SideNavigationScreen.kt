@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,6 +42,7 @@ import com.blaze.core.ui.components.SideNavigationItem
 import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
+import com.blaze.core.utils.util.USER_ID
 
 
 @Composable
@@ -86,7 +88,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             Box(
                 modifier = Modifier
                     .padding(5.dp)
-                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -95,7 +97,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             Box(
                 modifier = Modifier
                     .padding(5.dp)
-                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -104,7 +106,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             Box(
                 modifier = Modifier
                     .padding(5.dp)
-                    .background(SeaSalt, RoundedCornerShape(5.dp))
+                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
 
@@ -154,7 +156,8 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
         SideNavigationItem(
             image = R.drawable.baseline_2k, title = "Be a Partner", des = "Join with us"
         ) {
-            navController.navigate(OnBoardingRoute.OnBoardingScreen.route) {
+            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
+            navController.navigate(OnBoardingRoute.BoardingStatusScreen.route) {
                 popUpTo(DashboardRoute.SideNavigationScreen.route) {
                     inclusive = true
                 }

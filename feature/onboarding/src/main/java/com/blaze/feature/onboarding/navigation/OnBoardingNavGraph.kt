@@ -9,19 +9,23 @@ import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.blaze.feature.onboarding.screen.onboard.OnBoardingCompleteScreen
 import com.blaze.feature.onboarding.screen.onboard.OnBoardingScreen
+import com.blaze.feature.onboarding.screen.onboard.OnBoardingStatusScreen
 
 
 fun NavGraphBuilder.onBoardingNavGraph(
     navController: NavController,
-    coreUi: CoreUiViewModel,
+    coreVm: CoreUiViewModel,
     onBoardingViewModel: OnBoardingViewModel
 ){
     composable(OnBoardingRoute.OnBoardingScreen.route){
-        OnBoardingScreen(navController,onBoardingViewModel,coreUi)
+        OnBoardingScreen(navController,onBoardingViewModel,coreVm)
     }
 
     composable(OnBoardingRoute.BoardingCompleteScreen.route){
-        OnBoardingCompleteScreen(navController,onBoardingViewModel,coreUi)
+        OnBoardingCompleteScreen(navController,onBoardingViewModel,coreVm)
+    }
+    composable(OnBoardingRoute.BoardingStatusScreen.route){
+        OnBoardingStatusScreen(navController,onBoardingViewModel,coreVm)
     }
 
 

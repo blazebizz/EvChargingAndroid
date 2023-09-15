@@ -22,7 +22,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,13 +35,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.OutlinedTextField
 import com.blaze.core.ui.components.pressClick
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.util.USER_ID
 
 @Composable
 fun DashboardScreen(navController: NavController) {
     val activity = LocalContext.current as Activity
+    val value = remember { mutableStateOf("") }
+    LaunchedEffect(key1 = value.value){
+        USER_ID = value.value
+    }
     BackHandler {
         activity.finishAffinity()
     }
@@ -97,6 +105,11 @@ fun DashboardScreen(navController: NavController) {
                 //region map view
                 //endregion
 
+                OutlinedTextField(
+                    value = value,
+                    label = "userId",
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
         }
 
