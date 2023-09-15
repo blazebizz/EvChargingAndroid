@@ -3,6 +3,8 @@ package com.blaze.core.utils.util
 const val BASE_URL = "https://ev-charginh-point-backend.onrender.com/"
 
 var USER_ID = "000005"
+
+
 val bankList = listOf(
 
     "AB Bank Ltd.",

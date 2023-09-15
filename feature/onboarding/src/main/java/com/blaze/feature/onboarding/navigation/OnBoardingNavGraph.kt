@@ -27,7 +27,4 @@ fun NavGraphBuilder.onBoardingNavGraph(
     composable(OnBoardingRoute.BoardingStatusScreen.route){
         OnBoardingStatusScreen(navController,onBoardingViewModel,coreVm)
     }
-
-
-
 }

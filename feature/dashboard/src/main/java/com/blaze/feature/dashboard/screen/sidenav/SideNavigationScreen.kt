@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.SideNavigationItem
-import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.util.USER_ID
@@ -87,8 +86,8 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
 
             Box(
                 modifier = Modifier
-                    .padding(5.dp)
-                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
+                    .padding(end = 5.dp, top = 5.dp, bottom = 5.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -97,7 +96,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             Box(
                 modifier = Modifier
                     .padding(5.dp)
-                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -105,8 +104,8 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             }
             Box(
                 modifier = Modifier
-                    .padding(5.dp)
-                    .background(MaterialTheme.colorScheme.secondary, RoundedCornerShape(5.dp))
+                    .padding(start = 5.dp, top = 5.dp, bottom = 5.dp)
+                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
 
@@ -177,7 +176,7 @@ fun SideNavigationScreen(navController: NavController, viewModel: SideNavigation
             modifier = Modifier
                 .height(1.dp)
                 .fillMaxWidth()
-                .background(SeaSalt)
+                .background(MaterialTheme.colorScheme.onPrimary)
         )
         SideNavigationItem(
             image = R.drawable.baseline_2k, title = "Log Out"

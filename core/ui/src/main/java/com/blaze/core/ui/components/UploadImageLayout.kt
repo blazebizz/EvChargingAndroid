@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -27,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.R
-import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.util.toBitmap
 
 
@@ -43,12 +43,9 @@ fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClic
             .bounceClick { onClick() }
             .size(200.dp)) {
         Box(
-            Modifier
-                .fillMaxHeight(1f)
-                .aspectRatio(1f)
-                .background(Color.Transparent, RoundedCornerShape(10.dp))
-                .border(
-                    2.dp, SeaSalt, RoundedCornerShape(10.dp)
+            Modifier.fillMaxHeight(1f).aspectRatio(1f)
+                .background(Color.Transparent, RoundedCornerShape(10.dp)).border(
+                    2.dp, MaterialTheme.colorScheme.onPrimary, RoundedCornerShape(10.dp)
                 ), contentAlignment = Alignment.Center
         ) {
             if (byteArray.value != null) {
@@ -56,10 +53,12 @@ fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClic
                 Image(
                     bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(10.dp)),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp)),
                     contentScale = ContentScale.Crop,
 
-                )
+                    )
 
             }
             Column(

@@ -74,6 +74,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 
     fun fetchOnBoardUserData(userId: String, loading: MutableState<Boolean>) {
         loading.value = true
+        fetchedOnBoardUserData.value = null
         val body = FetchPartnerOnBoardDataRequest(userId = userId)
         ioScope.launch {
             repo.fetchUserOnBoardData(body).handleFlow(onLoading = {
@@ -119,53 +120,72 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         listOf("aadhaarFront", "aadhaarBack", "pan", "electricBill", "other")
 
     fun uploadDocImage(
-        context: Context, userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit
+        context: Context,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+        loading: MutableState<Boolean>
     ) {
         val mutableList = mutableListOf<DocImage>()
 
         val currentIndex = mutableIntStateOf(0)
-        uploadDoc(context, uploadDocList, currentIndex,mutableList,onSuccess,onFailure,userId)
+        uploadDoc(
+            context,
+            uploadDocList,
+            currentIndex,
+            mutableList,
+            onSuccess,
+            onFailure,
+            userId,
+            loading
+        )
 
-      /*  uploadDocList.forEachIndexed { index, doc ->
-            val imageUri = when (doc) {
-                "aadhaarFront" -> aadharFrontByteArray.value
-                "aadhaarBack" -> aadharBackByteArray.value
-                "pan" -> panByteArray.value
-                "electricBill" -> electricBillByteArray.value
-                "other" -> otherByteArray.value
-                else -> {
-                    null
-                }
-            }
-            if (imageUri != null) {
-                repo.uploadImage(userId, doc, imageUri, onFailure = {
-                    onFailure(it.toString())
-                }, onSuccess = {
-                    mutableList.add(DocImage(doc, it))
-                    Toast.makeText(
-                        context, "${mutableList.size} image url: $it", Toast.LENGTH_SHORT
-                    ).show()
-                    if (index == uploadDocList.size - 1) {
-                        Toast.makeText(
-                            context, "${mutableList.size} image list", Toast.LENGTH_SHORT
-                        ).show()
-                        val body = PartnerOnBoardRequest(
-                            userId = userId, onboardData = OnboardData(
-                                documentImage = mutableList
-                            )
-                        )
-                        onBoardUser(body, onSuccess, onFailure)
-                    }
-                })
-            }
-        }*/
+        /*  uploadDocList.forEachIndexed { index, doc ->
+              val imageUri = when (doc) {
+                  "aadhaarFront" -> aadharFrontByteArray.value
+                  "aadhaarBack" -> aadharBackByteArray.value
+                  "pan" -> panByteArray.value
+                  "electricBill" -> electricBillByteArray.value
+                  "other" -> otherByteArray.value
+                  else -> {
+                      null
+                  }
+              }
+              if (imageUri != null) {
+                  repo.uploadImage(userId, doc, imageUri, onFailure = {
+                      onFailure(it.toString())
+                  }, onSuccess = {
+                      mutableList.add(DocImage(doc, it))
+                      Toast.makeText(
+                          context, "${mutableList.size} image url: $it", Toast.LENGTH_SHORT
+                      ).show()
+                      if (index == uploadDocList.size - 1) {
+                          Toast.makeText(
+                              context, "${mutableList.size} image list", Toast.LENGTH_SHORT
+                          ).show()
+                          val body = PartnerOnBoardRequest(
+                              userId = userId, onboardData = OnboardData(
+                                  documentImage = mutableList
+                              )
+                          )
+                          onBoardUser(body, onSuccess, onFailure)
+                      }
+                  })
+              }
+          }*/
     }
 
     fun onBoardUser(
-        body: PartnerOnBoardRequest, onSuccess: () -> Unit, onFailure: (String) -> Unit = {}
+        body: PartnerOnBoardRequest,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit = {},
+        loading: MutableState<Boolean>
     ) {
         ioScope.launch {
-            repo.onBoard(body).handleFlow(onLoading = {}, onFailure = { msg, _, _ ->
+            loading.value = true
+            repo.onBoard(body).handleFlow(onLoading = {
+                loading.value = it
+            }, onFailure = { msg, _, _ ->
                 onFailure(msg)
             }, onSuccess = {
                 mainScope.launch {
@@ -176,38 +196,51 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     }
 
     fun uploadParkingImages(
-        context: Context, userId: String, onSuccess: () -> Unit, onFailure: (String) -> Unit
+        context: Context,
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (String) -> Unit,
+        loading: MutableState<Boolean>
     ) {
         ioScope.launch {
 
 
             val mutableList = mutableListOf<String?>()
             val currentIndex = mutableIntStateOf(0)
-            uploadPark(context, uploadDocList, currentIndex,mutableList,onSuccess,onFailure,userId)
+            uploadPark(
+                context,
+                uploadDocList,
+                currentIndex,
+                mutableList,
+                onSuccess,
+                onFailure,
+                userId,
+                loading
+            )
 
-         /*   for (i in 0..3) {
-                val imageUri = when (i) {
-                    0 -> pkImage1ByteArray.value
-                    1 -> pkImage2ByteArray.value
-                    2 -> pkImage3ByteArray.value
-                    3 -> pkImage4ByteArray.value
-                    else -> {
-                        null
-                    }
-                }
+            /*   for (i in 0..3) {
+                   val imageUri = when (i) {
+                       0 -> pkImage1ByteArray.value
+                       1 -> pkImage2ByteArray.value
+                       2 -> pkImage3ByteArray.value
+                       3 -> pkImage4ByteArray.value
+                       else -> {
+                           null
+                       }
+                   }
 
-            }
+               }
 
-            if (mutableList.isNotEmpty()) {
-                val body = PartnerOnBoardRequest(
-                    userId = userId, onboardData = OnboardData(
-                        parkingImage = mutableList
-                    )
-                )
-                onBoardUser(body, onSuccess)
-            } else {
-                onFailure("Please upload images")
-            }*/
+               if (mutableList.isNotEmpty()) {
+                   val body = PartnerOnBoardRequest(
+                       userId = userId, onboardData = OnboardData(
+                           parkingImage = mutableList
+                       )
+                   )
+                   onBoardUser(body, onSuccess)
+               } else {
+                   onFailure("Please upload images")
+               }*/
         }
     }
 
@@ -218,7 +251,8 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         mutableList: MutableList<DocImage>,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
-        userId: String
+        userId: String,
+        loading: MutableState<Boolean>
     ) {
         val imageUri = when (uploadDocList[currentIndex.value]) {
             "aadhaarFront" -> aadharFrontByteArray.value
@@ -247,11 +281,20 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                             documentImage = mutableList
                         )
                     )
-                    onBoardUser(body, onSuccess, onFailure)
+                    onBoardUser(body, onSuccess, onFailure, loading)
                     return@uploadImage
                 }
-                currentIndex.value = currentIndex.value+1
-                uploadDoc(context, uploadDocList, currentIndex,mutableList,onSuccess,onFailure,userId)
+                currentIndex.value = currentIndex.value + 1
+                uploadDoc(
+                    context,
+                    uploadDocList,
+                    currentIndex,
+                    mutableList,
+                    onSuccess,
+                    onFailure,
+                    userId,
+                    loading
+                )
 
             })
         }
@@ -264,7 +307,8 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         mutableList: MutableList<String?>,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
-        userId: String
+        userId: String,
+        loading: MutableState<Boolean>
     ) {
         val imageUri = when (currentIndex.intValue) {
             0 -> pkImage1ByteArray.value
@@ -290,15 +334,24 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                             parkingImage = mutableList
                         )
                     )
-                    onBoardUser(body, onSuccess)
+                    onBoardUser(body, onSuccess, onFailure, loading)
                     return@uploadImage
                 }
 
-                currentIndex.intValue = currentIndex.intValue+1
-                uploadPark(context, uploadDocList, currentIndex,mutableList,onSuccess,onFailure,userId)
+                currentIndex.intValue = currentIndex.intValue + 1
+                uploadPark(
+                    context,
+                    uploadDocList,
+                    currentIndex,
+                    mutableList,
+                    onSuccess,
+                    onFailure,
+                    userId,
+                    loading
+                )
 
             })
-         }
+        }
 
     }
 }

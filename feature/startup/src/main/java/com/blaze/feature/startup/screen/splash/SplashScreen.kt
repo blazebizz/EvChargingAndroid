@@ -76,7 +76,7 @@ fun Slplashh() {
         .fillMaxSize()) {
 
         Image(
-            painter = painterResource(id = R.drawable.young_bg), contentDescription = "",
+            painter = painterResource(id = R.drawable.logo_square), contentDescription = "",
             Modifier.fillMaxSize(),
             contentScale = ContentScale.FillWidth
         )
@@ -91,7 +91,7 @@ fun Slplashh() {
                 fontWeight = FontWeight.SemiBold
             )
             Text(
-                text = "deck",
+                text = "Random",
                 fontSize = 35.sp,
                 color = MaterialTheme.colorScheme.background,
                 fontWeight = FontWeight.Bold

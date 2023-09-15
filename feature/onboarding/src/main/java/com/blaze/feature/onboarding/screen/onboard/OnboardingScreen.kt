@@ -45,7 +45,6 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
-import com.blaze.core.ui.ui.theme.SeaSalt
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.util.USER_ID
 import com.blaze.core.utils.util.mainScope
@@ -198,7 +197,7 @@ fun OnBoardingScreen(
                 .padding(16.dp)
                 .weight(1f)
                 .fillMaxWidth()
-                .background(SeaSalt)
+                .background(MaterialTheme.colorScheme.primary)
         ) {
             OnBoardingSubNavGraph(onBoardingNavController, viewModel)
         }
@@ -212,9 +211,9 @@ fun OnBoardingScreen(
             Spacer(modifier = Modifier.weight(3f))
 
             Button(text = "Continue") {
-                nextFunction(onBoardingNavController, viewModel, context, onFailure = {
+                nextFunction(onBoardingNavController, viewModel, coreUi, context, onFailure = {
                     coreUi.snackbar(it)
-                },navController)
+                }, navController)
             }
 
             Spacer(modifier = Modifier.weight(1f))
@@ -227,6 +226,7 @@ fun OnBoardingScreen(
 fun nextFunction(
     onBoardingNavController: NavHostController,
     viewModel: OnBoardingViewModel,
+    coreUi: CoreUiViewModel,
     context: Context,
     onFailure: (String) -> Unit = {},
     navController: NavController
@@ -254,10 +254,20 @@ fun nextFunction(
                     ) {
                         toPage3(viewModel, onBoardingNavController)
                     } else {
-                        step12(viewModel, onFailure) { toPage3(viewModel, onBoardingNavController) }
+                        step12(viewModel, coreUi, onFailure) {
+                            toPage3(
+                                viewModel,
+                                onBoardingNavController
+                            )
+                        }
                     }
                 } else {
-                    step12(viewModel, onFailure) { toPage3(viewModel, onBoardingNavController) }
+                    step12(viewModel, coreUi, onFailure) {
+                        toPage3(
+                            viewModel,
+                            onBoardingNavController
+                        )
+                    }
                 }
             }
         }
@@ -273,10 +283,20 @@ fun nextFunction(
                     ) {
                         toPage4(viewModel, onBoardingNavController)
                     } else {
-                        step3(viewModel, onFailure) { toPage4(viewModel, onBoardingNavController) }
+                        step3(viewModel, coreUi, onFailure) {
+                            toPage4(
+                                viewModel,
+                                onBoardingNavController
+                            )
+                        }
                     }
                 } else {
-                    step3(viewModel, onFailure) { toPage4(viewModel, onBoardingNavController) }
+                    step3(viewModel, coreUi, onFailure) {
+                        toPage4(
+                            viewModel,
+                            onBoardingNavController
+                        )
+                    }
                 }
             }
         }
@@ -284,7 +304,7 @@ fun nextFunction(
         OnBoardingSubScreen.Page4.name -> {
             //upload doc
             if (checkPage4(viewModel, onFailure)) {
-                step4(context, viewModel, onFailure) {
+                step4(context, viewModel, coreUi, onFailure) {
                     toPage5(viewModel, onBoardingNavController)
                 }
             }
@@ -302,10 +322,15 @@ fun nextFunction(
                         //nav to next page
                         toPage6(viewModel, onBoardingNavController)
                     } else {
-                        step5(viewModel, onFailure) { toPage6(viewModel, onBoardingNavController) }
+                        step5(viewModel, coreUi, onFailure) {
+                            toPage6(
+                                viewModel,
+                                onBoardingNavController
+                            )
+                        }
                     }
                 } else {
-                    step5(viewModel, onFailure) {
+                    step5(viewModel, coreUi, onFailure) {
                         toPage6(viewModel, onBoardingNavController)
                     }
                 }
@@ -314,11 +339,11 @@ fun nextFunction(
 
         OnBoardingSubScreen.Page6.name -> {
             if (checkPage6(viewModel, onFailure)) {
-                step6(context, viewModel, onFailure) {
+                step6(context, viewModel, onFailure, coreUi) {
                     mainScope.launch {
                         Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
-                        navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route){
-                            popUpTo(OnBoardingRoute.OnBoardingScreen.route){
+                        navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
+                            popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
                                 inclusive = true
                             }
                         }
@@ -423,7 +448,12 @@ fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
 }
 
 
-fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSuccess: () -> Unit) {
+fun step12(
+    viewModel: OnBoardingViewModel,
+    coreUi: CoreUiViewModel,
+    onFailure: (String) -> Unit,
+    onSuccess: () -> Unit
+) {
     val data = PartnerOnBoardRequest(
         userId = USER_ID, onboardData = OnboardData(
             basicDetails = BasicDetails(
@@ -440,10 +470,15 @@ fun step12(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, onSucces
             )
         )
     )
-    viewModel.onBoardUser(data, onSuccess, onFailure)
+    viewModel.onBoardUser(data, onSuccess, onFailure, coreUi.loading)
 }
 
-fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
+fun step3(
+    viewModel: OnBoardingViewModel,
+    coreUi: CoreUiViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
     val data = PartnerOnBoardRequest(
         userId = USER_ID, onboardData = OnboardData(
             identityDetails = IdentityDetails(
@@ -455,19 +490,25 @@ fun step3(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
             )
         )
     )
-    viewModel.onBoardUser(data, function, onFailure)
+    viewModel.onBoardUser(data, function, onFailure, coreUi.loading)
 }
 
 fun step4(
     context: Context,
     viewModel: OnBoardingViewModel,
+    coreUi: CoreUiViewModel,
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadDocImage(context, USER_ID, function, onFailure)
+    viewModel.uploadDocImage(context, USER_ID, function, onFailure, coreUi.loading)
 }
 
-fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function: () -> Unit) {
+fun step5(
+    viewModel: OnBoardingViewModel,
+    coreUi: CoreUiViewModel,
+    onFailure: (String) -> Unit,
+    function: () -> Unit
+) {
     val data = PartnerOnBoardRequest(
         userId = USER_ID, onboardData = OnboardData(
             bankDetails = BankDetails(
@@ -479,16 +520,17 @@ fun step5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit, function:
             )
         )
     )
-    viewModel.onBoardUser(data, function, onFailure)
+    viewModel.onBoardUser(data, function, onFailure, coreUi.loading)
 }
 
 fun step6(
     context: Context,
     viewModel: OnBoardingViewModel,
     onFailure: (String) -> Unit,
+    coreUi: CoreUiViewModel,
     function: () -> Unit
 ) {
-    viewModel.uploadParkingImages(context, USER_ID, function, onFailure)
+    viewModel.uploadParkingImages(context, USER_ID, function, onFailure, coreUi.loading)
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
@@ -507,27 +549,27 @@ fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
 
 fun checkPage2(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
 
-    if (viewModel.fullName.value.isNullOrBlank()) {
+    if (viewModel.fullName.value.isBlank()) {
         onFailure("Please Enter Name")
         return false
     }
 
-    if (viewModel.mobile.value.isNullOrBlank() && viewModel.mobile.value.length != 10) {
+    if (viewModel.mobile.value.isBlank() && viewModel.mobile.value.length != 10) {
         onFailure("Please Enter Valid Mobile Number")
         return false
     }
 
-    if (viewModel.addressL1.value.isNullOrBlank()) {
+    if (viewModel.addressL1.value.isBlank()) {
         onFailure("Please Enter Address Line 1")
         return false
     }
 
-    if (viewModel.state.value.isNullOrBlank()) {
+    if (viewModel.state.value.isBlank()) {
         onFailure("Please Enter State")
         return false
     }
 
-    if (viewModel.pincode.value.isNullOrBlank() && viewModel.pincode.value.length != 6) {
+    if (viewModel.pincode.value.isBlank() && viewModel.pincode.value.length != 6) {
         onFailure("Please Enter Valid Pincode")
         return false
     }

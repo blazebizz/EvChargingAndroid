@@ -73,6 +73,14 @@ fun OnBoardingStatusScreen(
                 }
             }
         }
+        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
+                if (it?.status.equals("REJECT")) {
+                    boardedUserStatus = 3
+                    return@LaunchedEffect
+                }
+            }
+        }
     }
 
     when (boardedUserStatus) {
@@ -242,6 +250,59 @@ fun PendingStatusScreen(
 }
 
 @Composable
-fun RejectStatusScreen() {
+fun RejectStatusScreen( onBack: () -> Unit = {},
+                        onModify: () -> Unit = {},
+) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
 
+        Image(
+            painter = painterResource(id = R.drawable.logo_square),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .aspectRatio(1f)
+                .clip(CircleShape)
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+        Text(
+            text = "Rejected",
+            Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground
+
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = "We appreciate your interest, but we regret to inform you that your application has been declined at this time. Don't be discouraged! We believe in second chances. You are welcome to reapply in the future if your circumstances change or if you believe you now meet our requirements.",
+            Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+
+        )
+
+        Spacer(Modifier.height(10.dp))
+        Text(
+            text = "",
+            Modifier.fillMaxWidth(),
+//            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onBackground
+
+        )
+        Spacer(modifier = Modifier.weight(1f))
+        Button(text = "Return to Dashboard", onClick = onBack)
+        Spacer(modifier = Modifier.weight(1f))
+        Text(text = "Modify Your Application",
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.pressClick {
+                onModify()
+            })
+    }
 }

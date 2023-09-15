@@ -29,7 +29,6 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreUiViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColors
-import com.blaze.core.ui.ui.theme.AntiFlashWhite
 import com.blaze.core.utils.navigation.StartUpRoute
 
 
@@ -50,7 +49,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     stdCode.value = it
                 },
                 label = {
-                    Text(text = "STD", color = AntiFlashWhite)
+                    Text(text = "STD", color = MaterialTheme.colorScheme.onPrimary)
                 },
                 textStyle = TextStyle(
                     textAlign = TextAlign.Center,
@@ -61,12 +60,12 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
                 ),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = AntiFlashWhite,
-                    focusedLabelColor = AntiFlashWhite,
-                    focusedBorderColor = AntiFlashWhite,
-                    unfocusedBorderColor = AntiFlashWhite,
-                    unfocusedTextColor = AntiFlashWhite,
-                    cursorColor = AntiFlashWhite
+                    focusedTextColor =  MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor =  MaterialTheme.colorScheme.onPrimary,
+                    focusedBorderColor =  MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor =  MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor =  MaterialTheme.colorScheme.onPrimary,
+                    cursorColor =  MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.width(8.dp))
@@ -151,12 +150,12 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     }
                 }),
                 colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = AntiFlashWhite,
-                    focusedLabelColor = AntiFlashWhite,
-                    focusedBorderColor = AntiFlashWhite,
-                    unfocusedBorderColor = AntiFlashWhite,
-                    unfocusedTextColor = AntiFlashWhite,
-                    cursorColor = AntiFlashWhite
+                    focusedTextColor =  MaterialTheme.colorScheme.onPrimary,
+                    focusedLabelColor =  MaterialTheme.colorScheme.onPrimary,
+                    focusedBorderColor =  MaterialTheme.colorScheme.onPrimary,
+                    unfocusedBorderColor =  MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor =  MaterialTheme.colorScheme.onPrimary,
+                    cursorColor =  MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
