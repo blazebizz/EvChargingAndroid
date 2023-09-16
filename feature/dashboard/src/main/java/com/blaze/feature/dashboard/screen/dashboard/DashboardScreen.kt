@@ -44,7 +44,7 @@ import com.blaze.core.utils.util.USER_ID
 @Composable
 fun DashboardScreen(navController: NavController) {
     val activity = LocalContext.current as Activity
-    val value = remember { mutableStateOf("") }
+    val value = remember { mutableStateOf(USER_ID) }
     LaunchedEffect(key1 = value.value){
         USER_ID = value.value
     }

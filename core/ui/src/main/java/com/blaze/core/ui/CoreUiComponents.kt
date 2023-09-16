@@ -40,7 +40,11 @@ fun InitSubUiComponents(model: CoreUiViewModel) {
 
     //region toast
     LaunchedEffect(key1 = model.toast.value) {
-        Toast.makeText(context, model.toast.value, Toast.LENGTH_SHORT).show()
+        if (model.toast.value.isNotBlank()) Toast.makeText(
+            context,
+            model.toast.value,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 

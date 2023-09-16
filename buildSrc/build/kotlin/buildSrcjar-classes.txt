@@ -1,1 +1,1 @@
-C:\Users\khang\AndroidStudioProjects\ClassicBeats\buildSrc\build\classes\kotlin\main\ProjectConfig.class
+D:\studio project\ClassicBeat\buildSrc\build\classes\kotlin\main\ProjectConfig.class

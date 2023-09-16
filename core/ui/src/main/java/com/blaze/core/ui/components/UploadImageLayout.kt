@@ -1,6 +1,6 @@
 package com.blaze.core.ui.components
 
-import androidx.compose.foundation.Image
+//import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -50,15 +50,15 @@ fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClic
         ) {
             if (byteArray.value != null) {
 
-                Image(
-                    bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .clip(RoundedCornerShape(10.dp)),
-                    contentScale = ContentScale.Crop,
-
-                    )
+//                Image(
+//                    bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
+//                    contentDescription = null,
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .clip(RoundedCornerShape(10.dp)),
+//                    contentScale = ContentScale.Crop,
+//
+//                    )
 
             }
             Column(
@@ -72,6 +72,5 @@ fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClic
                 Text(text = title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             }
         }
-
     }
 }

@@ -36,6 +36,7 @@ systemuicontroller="0.27.0"
 lottieVersion = "6.1.0"
 
 lazier = "1.0.4"
+coil = "2.4.0"
 
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -84,7 +85,7 @@ lottie = { group = "com.airbnb.android", name = "lottie", version.ref = "lottieV
 
 lazier = { group = "com.github.blazebizz", name = "lazier", version.ref = "lazier" }
 
-
+coil = {group = "io.coil-kt",name = "coil-compose", version.ref= "coil"}
 
 
 [plugins]

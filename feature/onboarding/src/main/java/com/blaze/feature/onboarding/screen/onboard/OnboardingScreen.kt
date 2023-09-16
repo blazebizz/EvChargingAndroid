@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -191,13 +192,13 @@ fun OnBoardingScreen(
             Spacer(modifier = Modifier.weight(1f))
         }
 
-
         Column(
             Modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .weight(1f)
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
+                .padding(8.dp)
         ) {
             OnBoardingSubNavGraph(onBoardingNavController, viewModel)
         }

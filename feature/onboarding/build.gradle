@@ -78,4 +78,5 @@ dependencies {
 
     implementation libs.lazier
     implementation libs.work.runtime.ktx
+    implementation libs.coil
 }

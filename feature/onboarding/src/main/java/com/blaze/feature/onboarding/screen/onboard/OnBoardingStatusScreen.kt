@@ -107,14 +107,16 @@ fun OnBoardingStatusScreen(
         }
 
         3 -> {
-            RejectStatusScreen()
+            RejectStatusScreen(onBack = {
+                navController.popBackStack()
+            }, onModify = {
+                navController.navigate(OnBoardingRoute.OnBoardingScreen.route)
+            })
         }
-
         else -> {
             //todo
         }
     }
-
 }
 
 @Composable
@@ -163,7 +165,8 @@ fun OnBoardedUser(viewModel: OnBoardingViewModel) {
         Modifier
             .statusBarsPadding()
             .verticalScroll(scrollState)
-            .padding(16.dp)) {
+            .padding(16.dp)
+    ) {
 
         Text(
             text = "Basic Details",
@@ -250,8 +253,9 @@ fun PendingStatusScreen(
 }
 
 @Composable
-fun RejectStatusScreen( onBack: () -> Unit = {},
-                        onModify: () -> Unit = {},
+fun RejectStatusScreen(
+    onBack: () -> Unit,
+    onModify: () -> Unit,
 ) {
     Column(
         Modifier
@@ -290,8 +294,7 @@ fun RejectStatusScreen( onBack: () -> Unit = {},
 
         Spacer(Modifier.height(10.dp))
         Text(
-            text = "",
-            Modifier.fillMaxWidth(),
+            text = "", Modifier.fillMaxWidth(),
 //            textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onBackground
 
