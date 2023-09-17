@@ -22,7 +22,7 @@ fun LoadingDialog() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.background, RoundedCornerShape(5.dp))
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
                 .padding(16.dp)
         ) {
         Text(text = "Loading...")

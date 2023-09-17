@@ -78,64 +78,7 @@ fun LoginScreen(navController: NavController, coreUi: CoreUiViewModel) {
                     Text(text = "Mobile Number")
                 },
                 textStyle = TextStyle(
-                    textAlign = TextAlign.Start
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    ,
+                    textAlign = TextAlign.Start,
                     fontWeight = FontWeight.SemiBold
                 ),
                 modifier = Modifier.weight(5f),

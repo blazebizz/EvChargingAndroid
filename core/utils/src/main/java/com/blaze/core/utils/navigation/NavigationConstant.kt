@@ -23,6 +23,8 @@ sealed class OnBoardingRoute(val route: String) {
 
 sealed class DashboardRoute(val route: String) {
     object DashboardScreen : NavigationRoute(route = "DashboardScreen")
+    object SearchScreen : NavigationRoute(route = "SearchScreen")
     object SideNavigationScreen : NavigationRoute(route = "SideNavigationScreen")
+
 }
 

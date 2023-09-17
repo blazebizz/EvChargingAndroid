@@ -31,9 +31,9 @@ fun SideNavigationItem(
 ) {
     Row(
         Modifier
+            .padding(top = 10.dp)
             .clickable { onClick() }
             .fillMaxWidth()
-            .padding(top = 6.dp)
             .height(55.dp)
             .background(
                 MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp)
@@ -44,7 +44,7 @@ fun SideNavigationItem(
             painter = painterResource(id = image),
             contentDescription = null,
             modifier = Modifier
-                .padding(2.dp)
+                .padding(10.dp)
                 .fillMaxHeight()
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(5.dp)),

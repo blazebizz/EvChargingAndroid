@@ -185,7 +185,9 @@ fun OtpScreen(
                     otpViewModel.signInWithPhoneAuthCredential(activity, otpState.value) { task ->
                         mainScope.launch {
                             if (task.isSuccessful) {
+
                                 coreUi.snackbar("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
+                                coreUi.currentUserNumber.value = task.result.user?.phoneNumber?:""
                                 navController.navigate(DashboardRoute.DashboardScreen.route) {
                                     popUpTo(StartUpRoute.MobileOtpScreen.route) {
                                         inclusive = true
@@ -232,9 +234,10 @@ internal fun OtpContent(
             seconds--
         }
     }
+
     Column(
         Modifier
-            .background(MaterialTheme.colorScheme.background)
+            .background(MaterialTheme.colorScheme.primary)
             .fillMaxSize()
             .padding(top = 16.dp)
             .padding(16.dp),
@@ -280,7 +283,7 @@ internal fun OtpContent(
                     Text(text = "$seconds seconds")
                     Spacer(Modifier.weight(1f))
                     Text(text = "Resend",
-                        color = if (seconds == 0) MaterialTheme.colorScheme.primary else Color.LightGray,
+                        color = if (seconds == 0) MaterialTheme.colorScheme.secondary else Color.LightGray,
                         modifier = Modifier.clickable {
                             if (seconds == 0) {
                                 onResendClick.invoke()

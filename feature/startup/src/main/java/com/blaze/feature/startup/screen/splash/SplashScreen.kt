@@ -43,7 +43,7 @@ fun SplashScreen(
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000)
             if (viewModel.firebaseAuth.currentUser != null) {
-                coreUi.toast("Welcome back: ${viewModel.firebaseAuth.currentUser?.phoneNumber}")
+                coreUi.currentUserNumber.value = viewModel.firebaseAuth.currentUser?.phoneNumber?:""
                 navController.navigate(
                     DashboardRoute.DashboardScreen.route,
                     navOptions = NavOptions.Builder() //this will remove this screen after it navigate to next screen

@@ -1,9 +1,12 @@
 package com.blaze.core.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,9 +14,18 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.components.LoadingDialog
+
+
+val DefaultShape = RoundedCornerShape(20.dp)
+
+
+fun Modifier.defaultBackground() = composed {
+    this.background(MaterialTheme.colorScheme.surfaceVariant, DefaultShape)
+}
 
 @Composable
 fun InitSubUiComponents(model: CoreUiViewModel) {
