@@ -39,10 +39,6 @@ fun DashboardContent(
             },
             textOnClick = {
                 navController.navigate(DashboardRoute.SearchScreen.route)
-            },
-            trailingOnClick = {
-                activateSheet.value = !activateSheet.value
             })
-
     }
 }

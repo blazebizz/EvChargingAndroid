@@ -49,7 +49,7 @@ fun DashboardScreen(navController: NavController, coreVM: CoreViewModel) {
     }
 
     BottomSheetScaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(0.dp),
         scaffoldState = sheetState,
         sheetContent = {
             BottomSheetContent(activateBottomSheet,sheetState,coreVM,navController)
@@ -58,12 +58,11 @@ fun DashboardScreen(navController: NavController, coreVM: CoreViewModel) {
     ) {
         Scaffold(
             modifier = Modifier.fillMaxSize(),
-            containerColor = Color.Transparent,
+//            containerColor = Color.Transparent,
         ) {
             DashboardContent(Modifier.padding(it),activateBottomSheet,sheetState,coreVM,navController)
         }
     }
-
 }
 
 
