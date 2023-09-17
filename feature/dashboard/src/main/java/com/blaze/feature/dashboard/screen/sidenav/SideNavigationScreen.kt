@@ -4,7 +4,6 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,8 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,9 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.SideNavigationItem
+import com.blaze.core.ui.defaultBackground
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.util.USER_ID
@@ -51,7 +49,7 @@ fun SideNavigationScreenPreview(){
 fun SideNavigationScreen(
     navController: NavController,
     viewModel: SideNavigationScreenViewModel,
-    coreUi: CoreUiViewModel
+    coreUi: CoreViewModel
 ) {
     val context = LocalContext.current
     val activity = LocalContext.current as Activity
@@ -94,7 +92,7 @@ fun SideNavigationScreen(
             Box(
                 modifier = Modifier
                     .padding(end = 5.dp, top = 5.dp, bottom = 5.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
+                    .defaultBackground()
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -103,7 +101,7 @@ fun SideNavigationScreen(
             Box(
                 modifier = Modifier
                     .padding(5.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
+                    .defaultBackground()
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
             ) {
@@ -112,7 +110,7 @@ fun SideNavigationScreen(
             Box(
                 modifier = Modifier
                     .padding(start = 5.dp, top = 5.dp, bottom = 5.dp)
-                    .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
+                    .defaultBackground()
                     .fillMaxHeight()
                     .weight(1f), contentAlignment = Center
 
@@ -179,12 +177,7 @@ fun SideNavigationScreen(
 
 
         Spacer(modifier = Modifier.weight(1f))
-        Spacer(
-            modifier = Modifier
-                .height(1.dp)
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.onPrimary)
-        )
+
         SideNavigationItem(
             image = R.drawable.baseline_2k, title = "Log Out"
         ) {

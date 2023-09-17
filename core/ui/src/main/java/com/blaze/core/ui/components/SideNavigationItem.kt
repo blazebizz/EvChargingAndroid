@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blaze.core.ui.R
+import com.blaze.core.ui.defaultBackground
 
 @Composable
 fun SideNavigationItem(
@@ -35,9 +36,7 @@ fun SideNavigationItem(
             .clickable { onClick() }
             .fillMaxWidth()
             .height(55.dp)
-            .background(
-                MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp)
-            )
+            .defaultBackground()
 //            .border(1.dp, color = MarbleWhite, RoundedCornerShape(5.dp))
             .padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
         Icon(

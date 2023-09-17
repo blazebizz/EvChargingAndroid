@@ -28,7 +28,7 @@ fun Modifier.defaultBackground() = composed {
 }
 
 @Composable
-fun InitSubUiComponents(model: CoreUiViewModel) {
+fun InitSubUiComponents(model: CoreViewModel) {
     val context = LocalContext.current
     //region Snackbar
     val showSnackBar = remember { mutableStateOf(false) }

@@ -8,21 +8,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.TopBar
 import com.blaze.core.utils.navigation.DashboardRoute
-import com.blaze.core.utils.util.USER_ID
 
 @Composable
-fun DashboardScreen(navController: NavController) {
+fun DashboardScreen(navController: NavController, coreVM: CoreViewModel) {
     val activity = LocalContext.current as Activity
 
     BackHandler {
@@ -41,7 +39,7 @@ fun DashboardScreen(navController: NavController) {
             Box(
                 Modifier.padding(it)
             ) {
-                TopBar(headerIcon = R.drawable.logo_square,
+                TopBar(text = coreVM.searchText.value, headerIcon = R.drawable.logo_square,
                     trailingIcon = R.drawable.search_24,
                     headerOnClick = {
                         navController.navigate(DashboardRoute.SideNavigationScreen.route)
@@ -49,14 +47,9 @@ fun DashboardScreen(navController: NavController) {
                     textOnClick = {
                         navController.navigate(DashboardRoute.SearchScreen.route)
                     })
-
             }
-
-
         }
     }
-
-
 }
 
 @Composable

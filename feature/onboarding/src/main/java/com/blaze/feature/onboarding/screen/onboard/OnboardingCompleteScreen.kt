@@ -22,7 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.utils.navigation.DashboardRoute
@@ -33,7 +33,7 @@ import com.blaze.core.utils.navigation.OnBoardingRoute
 fun OnBoardingCompleteScreen(
     navController: NavController,
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel
+    coreUi: CoreViewModel
 ) {
     CompleteScreen {
         navController.navigate(DashboardRoute.DashboardScreen.route) {

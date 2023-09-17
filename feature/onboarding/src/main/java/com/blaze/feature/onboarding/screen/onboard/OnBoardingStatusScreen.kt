@@ -30,7 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedTextField
@@ -41,13 +41,13 @@ import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun OnBoardingStatusScreen(
-    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreUiViewModel
+    navController: NavController, viewModel: OnBoardingViewModel, coreVm: CoreViewModel
 ) {
     var boardedUserStatus by remember {
         mutableIntStateOf(0)
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData(USER_ID, coreUi.loading)
+        viewModel.fetchOnBoardUserData(USER_ID, coreVm.loading)
     }
 
     LaunchedEffect(key1 = viewModel.fetchedOnBoardUserData.value?.data) {
@@ -85,7 +85,7 @@ fun OnBoardingStatusScreen(
 
     when (boardedUserStatus) {
         0 -> {
-            NewOnBoardingUser {
+            NewOnBoardingUser(coreVm) {
                 navController.navigate(OnBoardingRoute.OnBoardingScreen.route) {
                     popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
                         inclusive = true
@@ -113,14 +113,15 @@ fun OnBoardingStatusScreen(
                 navController.navigate(OnBoardingRoute.OnBoardingScreen.route)
             })
         }
+
         else -> {
-            //todo
+            //to do nothing
         }
     }
 }
 
 @Composable
-fun NewOnBoardingUser(onClick: () -> Unit) {
+fun NewOnBoardingUser(coreVM: CoreViewModel, onClick: () -> Unit) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Spacer(modifier = Modifier.weight(1f))
 
@@ -153,7 +154,7 @@ fun NewOnBoardingUser(onClick: () -> Unit) {
 
         )
         Spacer(modifier = Modifier.weight(1f))
-        Button(text = "Register Now", onClick = onClick)
+        if (!coreVM.loading.value) Button(text = "Register Now", onClick = onClick)
         Spacer(modifier = Modifier.weight(1f))
     }
 }
@@ -244,11 +245,11 @@ fun PendingStatusScreen(
         Spacer(modifier = Modifier.weight(1f))
         Button(text = "Return to Dashboard", onClick = onBack)
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = "Modify Your Application",
-            color = MaterialTheme.colorScheme.onBackground,
-            modifier = Modifier.pressClick {
-                onModify()
-            })
+//        Text(text = "Modify Your Application",
+//            color = MaterialTheme.colorScheme.onBackground,
+//            modifier = Modifier.pressClick {
+//                onModify()
+//            })
     }
 }
 

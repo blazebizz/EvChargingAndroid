@@ -1,4 +1,4 @@
-package com.blaze.feature.dashboard.screen.dashboard
+package com.blaze.core.ui.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,15 +37,17 @@ import com.blaze.core.ui.defaultBackground
 
 @Composable
 fun TopBar(
+    text: String,
     headerIcon: Int  = R.drawable.logo_square,
     headerOnClick: () -> Unit = {},
     trailingIcon: Int,
     trailingOnClick: () -> Unit = {},
-    textOnClick: () -> Unit = {}
+    textOnClick: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .defaultBackground()
             .fillMaxWidth()
@@ -64,7 +66,7 @@ fun TopBar(
 
         Spacer(Modifier.width(12.dp))
         Text(
-            text = "Search here",
+            text = text,
             modifier = Modifier
                 .weight(1f)
                 .bounceClick { textOnClick() },
@@ -92,11 +94,12 @@ fun TopBarEditable(
     headerOnClick: () -> Unit = {},
     trailingIcon: Int,
     trailingOnClick: () -> Unit = {},
-    textOnClick: () -> Unit = {}
+    textOnClick: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
 
     Row(
-        modifier = Modifier
+        modifier = modifier
             .padding(16.dp)
             .defaultBackground()
             .border(1.dp, MaterialTheme.colorScheme.onSurface, DefaultShape)

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -17,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
@@ -31,7 +30,7 @@ import kotlinx.coroutines.launch
 fun SplashScreen(
     navController: NavController,
     viewModel: SplashScreenViewModel,
-    coreUi: CoreUiViewModel
+    coreUi: CoreViewModel
 ) {
     //    //region status color
     val systemUiController = rememberSystemUiController()

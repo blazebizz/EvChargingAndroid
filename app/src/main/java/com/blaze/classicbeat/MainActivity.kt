@@ -36,7 +36,7 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import com.blaze.classicbeat.navigation.SetupNavGraph
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
@@ -98,9 +98,9 @@ class MainActivity : ComponentActivity() {
 fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
     ClassicBeatTheme {
         // A surface container using the 'background' color from the theme
-        val coreUiViewModel = hiltViewModel<CoreUiViewModel>()
+        val coreViewModel = hiltViewModel<CoreViewModel>()
         val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
-        val isInternetAvailable = coreUiViewModel.isInternetAvailable
+        val isInternetAvailable = coreViewModel.isInternetAvailable
         val context = LocalContext.current
 
         internetConnectivityListener(lifecycleScope = lifecycleScope,
@@ -116,14 +116,14 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
             SetupNavGraph(
                 startDestination = StartUpRoute.SplashScreen.route,
                 navController = navGraphController,
-                coreUi = coreUiViewModel,
+                coreUi = coreViewModel,
                 onBoardingViewModel = onBoardingViewModel
             )
 
             //region internet connectivity dialog
-            if (!coreUiViewModel.isInternetAvailable.value) {
+            if (!coreViewModel.isInternetAvailable.value) {
                 Dialog(onDismissRequest = {
-                    coreUiViewModel.toast("Please Connect To Internet And Try Again")
+                    coreViewModel.toast("Please Connect To Internet And Try Again")
                 }) {
                     Column(
                         modifier = Modifier
@@ -156,7 +156,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
             //endregion
 
         }
-        InitSubUiComponents(coreUiViewModel)
+        InitSubUiComponents(coreViewModel)
 
 
     }

@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.feature.startup.screen.login.LoginScreen
 import com.blaze.feature.startup.screen.otp.OtpScreen
@@ -15,7 +15,7 @@ import com.blaze.feature.startup.screen.splash.SplashScreen
 import com.blaze.feature.startup.screen.splash.SplashScreenViewModel
 
 
-fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreUiViewModel) {
+fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreViewModel) {
     composable(route = StartUpRoute.SplashScreen.route) {
         val viewModel = hiltViewModel<SplashScreenViewModel>()
         SplashScreen(navController,viewModel,coreUi)

@@ -37,7 +37,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OtpView
 import com.blaze.core.utils.navigation.DashboardRoute
@@ -58,7 +58,7 @@ fun OtpScreen(
     navController: NavController,
     toSentText: String,
     otpViewModel: OtpScreenViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
 ) {
     val TAG = "OtpScreen"
     val activity = LocalContext.current as Activity

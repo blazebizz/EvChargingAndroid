@@ -3,7 +3,7 @@ package com.blaze.classicbeat.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.feature.dashboard.navigation.dashboardNavGraph
 import com.blaze.feature.onboarding.navigation.onBoardingNavGraph
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
@@ -13,7 +13,7 @@ import com.blaze.feature.startup.navigation.startUpNavGraph
 fun SetupNavGraph(
     startDestination: String,
     navController: NavHostController,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     onBoardingViewModel: OnBoardingViewModel
 ) {
     NavHost(

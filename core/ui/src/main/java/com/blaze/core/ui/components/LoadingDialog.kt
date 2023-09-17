@@ -11,8 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.blaze.core.ui.DefaultShape
+import com.blaze.core.ui.defaultBackground
 
 @Composable
 fun LoadingDialog() {
@@ -22,7 +25,7 @@ fun LoadingDialog() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(5.dp))
+                .background(Color.LightGray, DefaultShape)
                 .padding(16.dp)
         ) {
         Text(text = "Loading...")

@@ -4,16 +4,19 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blaze.core.utils.util.USER_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoreUiViewModel @Inject constructor() : ViewModel() {
+class CoreViewModel @Inject constructor() : ViewModel() {
 
 
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
+    val searchText: MutableState<String> = mutableStateOf(USER_ID)
+
     val loading: MutableState<Boolean> = mutableStateOf(false)
     val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)
     internal val snackbarValue: MutableState<Pair<Boolean, String>> =

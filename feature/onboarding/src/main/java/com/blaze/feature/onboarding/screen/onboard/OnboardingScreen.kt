@@ -43,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.blaze.core.ui.CoreUiViewModel
+import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
 import com.blaze.core.utils.navigation.OnBoardingRoute
@@ -62,7 +62,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
-    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreUiViewModel
+    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreViewModel
 ) {
 
     val context = LocalContext.current
@@ -227,7 +227,7 @@ fun OnBoardingScreen(
 fun nextFunction(
     onBoardingNavController: NavHostController,
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     context: Context,
     onFailure: (String) -> Unit = {},
     navController: NavController
@@ -451,7 +451,7 @@ fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
 
 fun step12(
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     onFailure: (String) -> Unit,
     onSuccess: () -> Unit
 ) {
@@ -476,7 +476,7 @@ fun step12(
 
 fun step3(
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
@@ -497,7 +497,7 @@ fun step3(
 fun step4(
     context: Context,
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
@@ -506,7 +506,7 @@ fun step4(
 
 fun step5(
     viewModel: OnBoardingViewModel,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
@@ -528,7 +528,7 @@ fun step6(
     context: Context,
     viewModel: OnBoardingViewModel,
     onFailure: (String) -> Unit,
-    coreUi: CoreUiViewModel,
+    coreUi: CoreViewModel,
     function: () -> Unit
 ) {
     viewModel.uploadParkingImages(context, USER_ID, function, onFailure, coreUi.loading)
