@@ -12,8 +12,6 @@ import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBar
 import com.blaze.core.utils.navigation.DashboardRoute
-import com.blaze.core.utils.util.ioScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,14 +20,11 @@ fun DashboardContent(
     activateSheet: MutableState<Boolean>,
     sheetState: BottomSheetScaffoldState,
     coreVM: CoreViewModel,
-    navController: NavController
+    navController: NavController,
+    dashboardViewModel: DashboardViewModel
 ) {
     Box(modifier.fillMaxSize()) {
-        DashboardMapContent(Modifier) {
-            ioScope.launch {
-                activateSheet.value = !activateSheet.value
-            }
-        }
+        DashboardMapContent(Modifier,dashboardViewModel)
 
         TopBar(text = coreVM.searchText.value,
             headerIcon = R.drawable.logo_square,

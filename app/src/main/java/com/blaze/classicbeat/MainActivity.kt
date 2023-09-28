@@ -44,6 +44,7 @@ import com.blaze.core.utils.util.RationaleState
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.libraries.places.api.Places
 import com.google.firebase.FirebaseApp
 import com.velox.lazeir.utils.internetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +55,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        FirebaseApp.initializeApp(this)
+        // Initialize the SDK
+        Places.initialize(applicationContext, "MAP_API_KEYS")
         setContent {
             ClassicBeatTheme {
                 val permissionState = rememberMultiplePermissionsState(

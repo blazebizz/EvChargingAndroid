@@ -15,7 +15,7 @@ class CoreViewModel @Inject constructor() : ViewModel() {
 
 
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
-    val searchText: MutableState<String> = mutableStateOf(USER_ID)
+    val searchText: MutableState<String> = mutableStateOf("")
 
     val loading: MutableState<Boolean> = mutableStateOf(false)
     val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)

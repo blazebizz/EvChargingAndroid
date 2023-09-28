@@ -50,6 +50,7 @@ fun TopBar(
         modifier = modifier
             .padding(16.dp)
             .defaultBackground()
+            .border(1.dp,MaterialTheme.colorScheme.onBackground, DefaultShape)
             .fillMaxWidth()
             .height(50.dp)
             .padding(10.dp),
