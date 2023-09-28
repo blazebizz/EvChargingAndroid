@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -104,7 +105,9 @@ fun OnBoardingScreen(
     }
     var offsetX = remember { mutableStateOf(0f) }
 
-
+    LaunchedEffect(key1 = Unit) {
+        Toast.makeText(context, "userId: ${viewModel.userId}", Toast.LENGTH_SHORT).show()
+    }
 
     Column(
         Modifier
@@ -130,8 +133,7 @@ fun OnBoardingScreen(
                         offsetX.value = 0f
                     }
                 }
-            }
-    ) {
+            }) {
         Row(
             Modifier
                 .padding(start = 16.dp, top = 10.dp, bottom = 30.dp)
@@ -257,16 +259,14 @@ fun nextFunction(
                     } else {
                         step12(viewModel, coreUi, onFailure) {
                             toPage3(
-                                viewModel,
-                                onBoardingNavController
+                                viewModel, onBoardingNavController
                             )
                         }
                     }
                 } else {
                     step12(viewModel, coreUi, onFailure) {
                         toPage3(
-                            viewModel,
-                            onBoardingNavController
+                            viewModel, onBoardingNavController
                         )
                     }
                 }
@@ -286,16 +286,14 @@ fun nextFunction(
                     } else {
                         step3(viewModel, coreUi, onFailure) {
                             toPage4(
-                                viewModel,
-                                onBoardingNavController
+                                viewModel, onBoardingNavController
                             )
                         }
                     }
                 } else {
                     step3(viewModel, coreUi, onFailure) {
                         toPage4(
-                            viewModel,
-                            onBoardingNavController
+                            viewModel, onBoardingNavController
                         )
                     }
                 }
@@ -325,8 +323,7 @@ fun nextFunction(
                     } else {
                         step5(viewModel, coreUi, onFailure) {
                             toPage6(
-                                viewModel,
-                                onBoardingNavController
+                                viewModel, onBoardingNavController
                             )
                         }
                     }
@@ -501,7 +498,11 @@ fun step4(
     onFailure: (String) -> Unit,
     function: () -> Unit
 ) {
-    viewModel.uploadDocImage(context, USER_ID, function, onFailure, coreUi.loading)
+    viewModel.uploadDocImage(
+        context,
+//        USER_ID,
+        function, onFailure, coreUi.loading
+    )
 }
 
 fun step5(
@@ -511,7 +512,8 @@ fun step5(
     function: () -> Unit
 ) {
     val data = PartnerOnBoardRequest(
-        userId = USER_ID, onboardData = OnboardData(
+        userId = USER_ID,
+        onboardData = OnboardData(
             bankDetails = BankDetails(
                 bankValue = viewModel.bankName.value,
                 accNo = viewModel.accNumber.value,
@@ -531,7 +533,11 @@ fun step6(
     coreUi: CoreViewModel,
     function: () -> Unit
 ) {
-    viewModel.uploadParkingImages(context, USER_ID, function, onFailure, coreUi.loading)
+    viewModel.uploadParkingImages(
+        context,
+//        USER_ID,
+        function, onFailure, coreUi.loading
+    )
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {

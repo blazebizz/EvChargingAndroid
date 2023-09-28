@@ -5,12 +5,15 @@ import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
 import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.data.onboarding.model.res.FetchPartnerOnBoardDataResponse
 import com.blaze.data.onboarding.model.res.PartnerOnBoardResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.velox.lazeir.utils.handler.NetworkResource
 import kotlinx.coroutines.flow.Flow
 
 
 
 interface OnBoardingRepo {
+
+    fun getAuth(): FirebaseAuth
     suspend fun fetchUserOnBoardData(
         body: FetchPartnerOnBoardDataRequest,
     ): Flow<NetworkResource<FetchPartnerOnBoardDataResponse>>

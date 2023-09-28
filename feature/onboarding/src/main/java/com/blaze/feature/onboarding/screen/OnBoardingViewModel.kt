@@ -24,6 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) : ViewModel() {
 
+    private val auth = repo.getAuth()
+    val userId = auth.currentUser?.uid?:""
 
     val progress1 = mutableFloatStateOf(0f)
     val progress2 = mutableFloatStateOf(0f)
@@ -72,7 +74,9 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 
     val fetchedOnBoardUserData = mutableStateOf<FetchPartnerOnBoardDataResponse?>(null)
 
-    fun fetchOnBoardUserData(userId: String, loading: MutableState<Boolean>) {
+    fun fetchOnBoardUserData(
+//        userId: String,
+                             loading: MutableState<Boolean>) {
         loading.value = true
         fetchedOnBoardUserData.value = null
         val body = FetchPartnerOnBoardDataRequest(userId = userId)
@@ -121,7 +125,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 
     fun uploadDocImage(
         context: Context,
-        userId: String,
+//        userId: String,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
         loading: MutableState<Boolean>
@@ -136,7 +140,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
             mutableList,
             onSuccess,
             onFailure,
-            userId,
+//            userId,
             loading
         )
 
@@ -197,7 +201,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 
     fun uploadParkingImages(
         context: Context,
-        userId: String,
+//        userId: String,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
         loading: MutableState<Boolean>
@@ -214,7 +218,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                 mutableList,
                 onSuccess,
                 onFailure,
-                userId,
+//                userId,
                 loading
             )
 
@@ -251,7 +255,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         mutableList: MutableList<DocImage>,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
-        userId: String,
+//        userId: String,
         loading: MutableState<Boolean>
     ) {
         val imageUri = when (uploadDocList[currentIndex.value]) {
@@ -292,7 +296,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                     mutableList,
                     onSuccess,
                     onFailure,
-                    userId,
+//                    userId,
                     loading
                 )
 
@@ -307,7 +311,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         mutableList: MutableList<String?>,
         onSuccess: () -> Unit,
         onFailure: (String) -> Unit,
-        userId: String,
+//        userId: String,
         loading: MutableState<Boolean>
     ) {
         val imageUri = when (currentIndex.intValue) {
@@ -346,7 +350,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                     mutableList,
                     onSuccess,
                     onFailure,
-                    userId,
+//                    userId,
                     loading
                 )
 

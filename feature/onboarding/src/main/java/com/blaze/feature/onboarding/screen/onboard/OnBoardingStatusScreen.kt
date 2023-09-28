@@ -47,7 +47,9 @@ fun OnBoardingStatusScreen(
         mutableIntStateOf(0)
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData(USER_ID, coreVm.loading)
+        viewModel.fetchOnBoardUserData(
+//            USER_ID,
+            coreVm.loading)
     }
 
     LaunchedEffect(key1 = viewModel.fetchedOnBoardUserData.value?.data) {

@@ -79,4 +79,8 @@ dependencies {
     implementation libs.lazier
     implementation libs.work.runtime.ktx
     implementation libs.coil
+
+    implementation(platform("com.google.firebase:firebase-bom:32.2.2"))
+
+    implementation("com.google.firebase:firebase-auth-ktx")
 }

@@ -34,6 +34,7 @@ import com.blaze.core.ui.components.SideNavigationItem
 import com.blaze.core.ui.defaultBackground
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
+import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.USER_ID
 
 
@@ -160,7 +161,7 @@ fun SideNavigationScreen(
         SideNavigationItem(
             image = R.drawable.users_24, title = "Be a Partner", des = "Join with us"
         ) {
-            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
             navController.navigate(OnBoardingRoute.BoardingStatusScreen.route) {
                 popUpTo(DashboardRoute.SideNavigationScreen.route) {
                     inclusive = true
@@ -183,7 +184,11 @@ fun SideNavigationScreen(
         ) {
             viewModel.firebaseAuth.signOut()
             Toast.makeText(context, "User Log out", Toast.LENGTH_SHORT).show()
-            activity.finishAffinity()
+            navController.navigate(StartUpRoute.SplashScreen.route) {
+                popUpTo(DashboardRoute.SideNavigationScreen.route) {
+                    inclusive = true
+                }
+            }
         }
     }
 }

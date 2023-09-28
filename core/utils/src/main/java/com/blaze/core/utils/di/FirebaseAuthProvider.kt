@@ -1,5 +1,7 @@
 package com.blaze.core.utils.di
 
+import android.content.Context
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
@@ -13,7 +15,8 @@ object FirebaseAuthProvider {
 
     @Provides
     @Singleton
-    fun provideFirebaseAuth(): FirebaseAuth {
+    fun provideFirebaseAuth(context:Context): FirebaseAuth {
+//        FirebaseApp.initializeApp(context)
         return FirebaseAuth.getInstance()
     }
 }

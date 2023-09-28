@@ -8,6 +8,7 @@ import com.blaze.data.onboarding.model.req.FetchPartnerOnBoardDataRequest
 import com.blaze.data.onboarding.model.req.PartnerOnBoardRequest
 import com.blaze.data.onboarding.model.res.FetchPartnerOnBoardDataResponse
 import com.blaze.data.onboarding.model.res.PartnerOnBoardResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.velox.lazeir.utils.handler.NetworkResource
@@ -17,8 +18,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class OnBoardingRepoImpl @Inject constructor(
+    private val auth: FirebaseAuth,
     private val apiService: OnBoardingApiService
 ) : OnBoardingRepo {
+
+    override fun getAuth() = auth
+
     override suspend fun fetchUserOnBoardData(body: FetchPartnerOnBoardDataRequest): Flow<NetworkResource<FetchPartnerOnBoardDataResponse>> {
         return apiService.fetchUserOnBoardData(body).handleNetworkResponse()
     }

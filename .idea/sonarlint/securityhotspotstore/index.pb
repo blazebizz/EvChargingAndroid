@@ -63,8 +63,6 @@ v
 Fcore/ui/src/main/java/com/blaze/core/ui/components/OutlineTextField.kt,4\4\44337c2795670008b76cc7d8c906b690890e750e
 é
 ^feature/onboarding/src/main/java/com/blaze/feature/onboarding/navigation/OnBoardingNavGraph.kt,1\8\187c513a71a81521b5b48d8459404fc6d6e798c2
-j
-:core/ui/src/main/java/com/blaze/core/ui/CoreUiViewModel.kt,0\b\0b1e5f0746bd86f94ccb7284636326487e28849a
 k
 ;core/ui/src/main/java/com/blaze/core/ui/CoreUiComponents.kt,5\d\5da9f6d73aa90ed7754a35a82dd75da7f8efebeb
 s
@@ -97,3 +95,23 @@ hfeature/onboarding/src/main/java/com/blaze/feature/onboarding/screen/onboard/On
 Ufeature/startup/src/main/java/com/blaze/feature/startup/screen/splash/SplashScreen.kt,d\8\d88eb7980643428437f369e324f2d74e3dee97b8
 ñ
 ffeature/onboarding/src/main/java/com/blaze/feature/onboarding/screen/onboard/OnBoardingStatusScreen.kt,a\7\a7e29918facea200a6823ec1f2db7158a8347481
+
+Odata/onboarding/src/main/java/com/blaze/data/onboarding/di/OnBoardingStartUp.kt,1\c\1cd81f858e96dc8eb8c4b7a02e289ef5558790a4
+j
+:app/src/main/java/com/blaze/classicbeat/BaseApplication.kt,b\3\b3ba42381b690035a07a78903749b98dcf586c92
+H
+app/google-services.json,f\d\fd8d34b142d02ec743a8efefefd2c097961666e9
+Å
+Qdata/startup/src/main/java/com/blaze/data/startup/repositories/StartUpRepoImpl.kt,5\d\5d3c3007e903bb7020170032ae1b494ff242059e
+Q
+!data/startup/google-services.json,b\9\b958fee56cfba8ae780c0c8ff4533ada8c4a86d2
+ï
+efeature/startup/src/main/java/com/blaze/feature/startup/screen/forgetpassword/ForgetPasswordScreen.kt,9\e\9e9c967d7b2a3581434be3df6769117198109754
+T
+$feature/startup/google-services.json,a\7\a7ce48f0b7f950fcba17c7b0457878e0b24df143
+x
+Hcore/utils/src/main/java/com/blaze/core/utils/di/FirebaseAuthProvider.kt,4\2\42f83e9018e952e8bee35d606801aa1b5e608031
+O
+core/utils/google-services.json,2\3\230569c9c0b06c1452d84eb55f00c5117832ff4f
+é
+^feature/startup/src/main/java/com/blaze/feature/startup/screen/splash/SplashScreenViewModel.kt,b\4\b418bb2c485305cd8ce72b3ec85c792b95d0b73c

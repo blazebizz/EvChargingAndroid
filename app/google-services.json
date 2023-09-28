@@ -23,25 +23,6 @@
           "other_platform_oauth_client": []
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:56915602709:android:9353a4a4fc2d8e2151cd1c",
-        "android_client_info": {
-          "package_name": "com.blaze.data.startup"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBi98JL4CBuRC9npQXakOzWQAJD5dPzMm4"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
     }
   ],
   "configuration_version": "1"

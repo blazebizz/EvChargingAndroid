@@ -44,6 +44,7 @@ import com.blaze.core.utils.util.RationaleState
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.firebase.FirebaseApp
 import com.velox.lazeir.utils.internetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +53,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+//        FirebaseApp.initializeApp(this)
         setContent {
             ClassicBeatTheme {
                 val permissionState = rememberMultiplePermissionsState(
@@ -96,6 +98,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
+
     ClassicBeatTheme {
         // A surface container using the 'background' color from the theme
         val coreViewModel = hiltViewModel<CoreViewModel>()
@@ -154,7 +157,6 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
                 }
             }
             //endregion
-
         }
         InitSubUiComponents(coreViewModel)
 
