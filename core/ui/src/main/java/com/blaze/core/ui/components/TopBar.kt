@@ -7,10 +7,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -55,14 +57,14 @@ fun TopBar(
 
 //            .border(1.dp,MaterialTheme.colorScheme.onBackground, DefaultShape)
             .fillMaxWidth()
-            .height(50.dp)
+            .defaultMinSize(minHeight = 50.dp)
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {
         Image(painter =painterResource( headerIcon), contentDescription = null,
             Modifier
-                .fillMaxHeight()
+                .size(30.dp)
                 .clickable {
                     headerOnClick()
                 }
@@ -82,7 +84,7 @@ fun TopBar(
             painter = painterResource(trailingIcon),
             contentDescription = "notification",
             Modifier
-                .fillMaxHeight()
+                .size(30.dp)
                 .clickable {
                     trailingOnClick()
                 },
