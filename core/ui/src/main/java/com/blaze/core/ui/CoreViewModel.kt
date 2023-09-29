@@ -1,19 +1,24 @@
 package com.blaze.core.ui
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.blaze.core.utils.util.USER_ID
+import com.blaze.core.utils.data.repo.LocationRepository
+import com.google.android.gms.maps.model.LatLng
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoreViewModel @Inject constructor() : ViewModel() {
+class CoreViewModel @Inject constructor(private val locationRepository: LocationRepository,
+) : ViewModel() {
 
 
+    var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
     val searchText: MutableState<String> = mutableStateOf("")
 
@@ -37,5 +42,21 @@ class CoreViewModel @Inject constructor() : ViewModel() {
             toast.value = message
         }
     }
+
+    // region location
+    val isGpsEnabled = locationRepository.isGpsEnabled
+    val gpsEnabled = locationRepository.gpsEnabled
+    fun openLocationSetting() = locationRepository.openLocationSetting()
+    fun registerGpsStateReceiver() = locationRepository.registerGpsStateReceiver()
+    fun unregisterGpsStateReceiver() = locationRepository.unregisterGpsStateReceiver()
+
+    //getting only single location object
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentLocation(
+        latLng: MutableState<LatLng>
+    ) = locationRepository.getCurrentLocation(latLng)
+
+
+    //endregion
 
 }

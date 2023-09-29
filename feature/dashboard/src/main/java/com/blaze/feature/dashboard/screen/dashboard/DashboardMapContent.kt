@@ -26,7 +26,7 @@ fun DashboardMapContent(modifier: Modifier, dashboardViewModel: DashboardViewMod
                 compassEnabled = false
             )
         }
-        val map = GoogleMap(modifier = Modifier.fillMaxSize(),
+        GoogleMap(modifier = Modifier.fillMaxSize(),
             properties = dashboardViewModel.state.properties,
             uiSettings = uiSettings,
 //            cameraPositionState = CameraPositionState(CameraPosition()), //upon getting the current location set to this

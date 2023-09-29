@@ -1,0 +1,21 @@
+package com.blaze.core.utils.observer
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.location.LocationManager
+import androidx.compose.runtime.MutableState
+
+const val UPDATE_FREQUENCY = 500//250
+const val DELAY_MILLIS = 250L
+class GpsConnectivityObserver(private val state: MutableState<Boolean>) : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+            val locationManager =
+                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            state.value = gpsEnabled
+
+        }
+    }
+}

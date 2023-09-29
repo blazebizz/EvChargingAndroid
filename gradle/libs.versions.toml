@@ -3,6 +3,8 @@ agp = "8.1.0"
 firebaseCore = "21.1.1"
 google-services = "4.4.0"
 kotlin-serialization = "1.8.10"
+kotlinxCoroutinesCore = "1.7.1"
+kotlinxCoroutinesPlayServices = "1.7.2"
 org-jetbrains-kotlin-android = "1.8.10"
 com-android-application = "8.1.0"
 dagger-hilt-android = "2.47"
@@ -21,8 +23,8 @@ material = "1.9.0"
 lifecycle-runtime-ktx = "2.6.2"
 work-runtime-ktx = "2.8.1"
 activity-compose = "1.7.2"
-compose-bom = "2023.09.00"
-compose-navigation = "2.7.2"
+compose-bom = "2023.09.02"
+compose-navigation = "2.7.3"
 retrofit = "2.9.0"
 converter-moshi = "2.9.0"
 okhttp = "5.0.0-alpha.5"
@@ -44,6 +46,7 @@ maps-compose = "1.0.0"
 maps-play-service = "18.1.0"
 maps-place = "3.2.0"
 
+
 [libraries]
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 firebase-core = { module = "com.google.firebase:firebase-core", version.ref = "firebaseCore" }
@@ -54,6 +57,9 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-serialization" }
 kotlin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin-serialization" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesPlayServices" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose" }
@@ -72,7 +78,7 @@ navigation-compose = { module = "androidx.navigation:navigation-compose", versio
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
-androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version = "2.7.1" }
+androidx-navigation-runtime-ktx = { group = "androidx.navigation", name = "navigation-runtime-ktx", version = "2.7.3" }
 
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -99,6 +105,7 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "maps-compose" }
 maps-play-service = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "maps-play-service" }
 maps-place = { group = "com.google.android.libraries.places", name = "places", version.ref = "maps-place" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version = "21.0.1" }
 
 
 

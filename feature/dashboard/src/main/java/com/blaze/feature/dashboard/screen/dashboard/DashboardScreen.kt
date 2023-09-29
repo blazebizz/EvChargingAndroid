@@ -2,6 +2,7 @@ package com.blaze.feature.dashboard.screen.dashboard
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetScaffold
@@ -16,6 +17,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
+import com.blaze.core.ui.R
+import com.blaze.core.ui.components.TopBar
+import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.feature.dashboard.screen.bottomsheet.BottomSheetContent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -28,7 +32,6 @@ fun DashboardScreen(
     val activity = LocalContext.current as Activity
     val sheetState = rememberBottomSheetScaffoldState()
     val activateBottomSheet = rememberSaveable { mutableStateOf(false) }
-
 
     BackHandler {
         activity.finishAffinity()
@@ -46,8 +49,19 @@ fun DashboardScreen(
             modifier = Modifier.fillMaxSize(),
 //            containerColor = Color.Transparent,
         ) {
-            DashboardContent(Modifier.padding(it),activateBottomSheet,sheetState,coreVM,navController,dashboardViewModel)
-        }
+            Box(Modifier.padding(it).fillMaxSize()) {
+                DashboardMapContent(Modifier,dashboardViewModel)
+
+                TopBar(text = coreVM.searchText.value,
+                    headerIcon = R.drawable.logo_square,
+                    trailingIcon = R.drawable.search_24,
+                    headerOnClick = {
+                        navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                    },
+                    textOnClick = {
+                        navController.navigate(DashboardRoute.SearchScreen.route)
+                    })
+            }        }
     }
 }
 

@@ -1,6 +1,7 @@
 package com.blaze.classicbeat
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,8 +21,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
@@ -38,19 +41,24 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.classicbeat.navigation.SetupNavGraph
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
+import com.blaze.core.ui.components.location.LocationUpdatesEffect
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
+import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.Priority
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
-import com.google.firebase.FirebaseApp
 import com.velox.lazeir.utils.internetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @SuppressLint("MissingPermission")
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +66,16 @@ class MainActivity : ComponentActivity() {
         // Initialize the SDK
         Places.initialize(applicationContext, "MAP_API_KEYS")
         setContent {
+            val coreViewModel = hiltViewModel<CoreViewModel>()
+
             ClassicBeatTheme {
+
+                val gettingContinuesLocation = remember { mutableStateOf(true) }
+                // The location request that defines the location updates
+                var locationRequest by remember {
+                    mutableStateOf<LocationRequest?>(null)
+                }
+
                 val permissionState = rememberMultiplePermissionsState(
                     listOf(
                         Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -93,20 +110,50 @@ class MainActivity : ComponentActivity() {
                         askForPermission()
                     }
                 }
-                MainActivityScreen(lifecycleScope)
+
+                // Only register the location updates effect when we have a request
+                if (locationRequest != null) {
+                    LocationUpdatesEffect(locationRequest!!) { result ->
+                        // For each result update the text
+                        for (currentLocation in result.locations) {
+                            coreViewModel.currentLocation.value = LatLng(currentLocation.latitude, currentLocation.longitude)
+                        }
+                    }
+                }
+
+                LaunchedEffect(key1 = gettingContinuesLocation.value) {
+                    locationRequest = if (gettingContinuesLocation.value) {
+                        // Define the accuracy based on your needs and granted permissions
+                        val priority = Priority.PRIORITY_HIGH_ACCURACY
+                        val requester = LocationRequest.Builder(
+                            priority, DELAY_MILLIS
+                        )
+                        requester.setMinUpdateIntervalMillis(2 * DELAY_MILLIS)
+                        requester.build()
+                    } else {
+                        null
+                    }
+                }
+
+                MainActivityScreen(lifecycleScope,coreViewModel)
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+
     }
 }
 
 @Composable
-fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope) {
+fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: CoreViewModel) {
 
     ClassicBeatTheme {
         // A surface container using the 'background' color from the theme
-        val coreViewModel = hiltViewModel<CoreViewModel>()
         val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
         val isInternetAvailable = coreViewModel.isInternetAvailable
+
         val context = LocalContext.current
 
         internetConnectivityListener(lifecycleScope = lifecycleScope,
