@@ -45,7 +45,7 @@ class CoreViewModel @Inject constructor(private val locationRepository: Location
 
     // region location
     val isGpsEnabled = locationRepository.isGpsEnabled
-    val gpsEnabled = locationRepository.gpsEnabled
+    val gpsHardwareEnabled = locationRepository.gpsHardwareEnabled
     fun openLocationSetting() = locationRepository.openLocationSetting()
     fun registerGpsStateReceiver() = locationRepository.registerGpsStateReceiver()
     fun unregisterGpsStateReceiver() = locationRepository.unregisterGpsStateReceiver()

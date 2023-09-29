@@ -23,6 +23,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
@@ -49,8 +50,10 @@ fun TopBar(
     Row(
         modifier = modifier
             .padding(16.dp)
+            .shadow(4.dp, shape = DefaultShape)
             .defaultBackground()
-            .border(1.dp,MaterialTheme.colorScheme.onBackground, DefaultShape)
+
+//            .border(1.dp,MaterialTheme.colorScheme.onBackground, DefaultShape)
             .fillMaxWidth()
             .height(50.dp)
             .padding(10.dp),

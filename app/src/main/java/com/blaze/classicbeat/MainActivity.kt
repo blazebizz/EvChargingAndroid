@@ -3,7 +3,9 @@ package com.blaze.classicbeat
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -68,6 +70,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 
+            LaunchedEffect(Unit ){
+                coreViewModel.registerGpsStateReceiver()
+            }
+
+            BackHandler {
+                coreViewModel.unregisterGpsStateReceiver()
+            }
+
             ClassicBeatTheme {
 
                 val gettingContinuesLocation = remember { mutableStateOf(true) }
@@ -105,6 +115,7 @@ class MainActivity : ComponentActivity() {
                         permissionState.launchMultiplePermissionRequest()
                     }
                 }
+
                 LaunchedEffect(key1 = Unit) {
                     if (!permissionState.allPermissionsGranted) {
                         askForPermission()
@@ -124,7 +135,7 @@ class MainActivity : ComponentActivity() {
                 LaunchedEffect(key1 = gettingContinuesLocation.value) {
                     locationRequest = if (gettingContinuesLocation.value) {
                         // Define the accuracy based on your needs and granted permissions
-                        val priority = Priority.PRIORITY_HIGH_ACCURACY
+                        val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY
                         val requester = LocationRequest.Builder(
                             priority, DELAY_MILLIS
                         )
@@ -132,6 +143,22 @@ class MainActivity : ComponentActivity() {
                         requester.build()
                     } else {
                         null
+                    }
+                }
+
+                val context = LocalContext.current
+
+                LaunchedEffect(key1 = coreViewModel.gpsHardwareEnabled){
+                    coreViewModel.isGpsEnabled.value = coreViewModel.gpsHardwareEnabled
+                }
+
+                LaunchedEffect(key1 = coreViewModel.isGpsEnabled.value){
+                    if (coreViewModel.isGpsEnabled.value){
+                        Toast.makeText(context, "gps  enabled", Toast.LENGTH_SHORT).show()
+                        gettingContinuesLocation.value = true
+                    }else{
+                        Toast.makeText(context, "gps  disabled", Toast.LENGTH_SHORT).show()
+                        gettingContinuesLocation.value = false
                     }
                 }
 

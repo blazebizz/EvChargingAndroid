@@ -28,10 +28,9 @@ class LocationRepository @Inject constructor(
 ) {
 
     private val locationClient = LocationServices.getFusedLocationProviderClient(context)
-    private val locationManager =
-        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val isGpsEnabled = mutableStateOf(false)
-    val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     private val gpsStateReceiver = GpsConnectivityObserver(isGpsEnabled)
     private val isLocationReceiverRegistered = mutableStateOf(false)
 

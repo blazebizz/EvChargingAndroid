@@ -50,7 +50,7 @@ fun DashboardScreen(
 //            containerColor = Color.Transparent,
         ) {
             Box(Modifier.padding(it).fillMaxSize()) {
-                DashboardMapContent(Modifier,dashboardViewModel)
+                DashboardMapContent(Modifier,dashboardViewModel,coreVM)
 
                 TopBar(text = coreVM.searchText.value,
                     headerIcon = R.drawable.logo_square,
