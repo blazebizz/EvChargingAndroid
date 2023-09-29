@@ -52,7 +52,6 @@ class DashboardViewModel @Inject constructor():ViewModel() {
                 }
         }
     }
-
 }
 
 data class AutocompleteResult(
