@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.blaze.core.ui.data.model.response.AutocompleteResult
 import com.blaze.feature.dashboard.utils.MapState
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
@@ -54,7 +55,3 @@ class DashboardViewModel @Inject constructor():ViewModel() {
     }
 }
 
-data class AutocompleteResult(
-    val address: String,
-    val placeId: String
-)

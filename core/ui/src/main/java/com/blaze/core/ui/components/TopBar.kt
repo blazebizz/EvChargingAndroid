@@ -94,6 +94,7 @@ fun TopBar(
 @Composable
 fun TopBarEditable(
     text: MutableState<String>,
+    onValueChange:(String)->Unit={},
     headerIcon: Int =  R.drawable.logo_square,
     headerOnClick: () -> Unit = {},
     trailingIcon: Int,
@@ -126,6 +127,7 @@ fun TopBarEditable(
             value = text.value,
             onValueChange = {
                 text.value = it
+                onValueChange(it)
             },
             singleLine = true,
             modifier = Modifier.weight(1f),

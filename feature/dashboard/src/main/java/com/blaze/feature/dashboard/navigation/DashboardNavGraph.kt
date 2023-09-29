@@ -1,5 +1,6 @@
 package com.blaze.feature.dashboard.navigation
 
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -9,8 +10,10 @@ import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.feature.dashboard.screen.dashboard.DashboardScreen
 import com.blaze.feature.dashboard.screen.dashboard.DashboardViewModel
 import com.blaze.feature.dashboard.screen.search.SearchScreen
+import com.blaze.feature.dashboard.screen.search.SearchViewModel
 import com.blaze.feature.dashboard.screen.sidenav.SideNavigationScreen
 import com.blaze.feature.dashboard.screen.sidenav.SideNavigationScreenViewModel
+import com.google.android.libraries.places.api.Places
 
 
 fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreVM: CoreViewModel) {
@@ -19,7 +22,11 @@ fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreVM: Core
         DashboardScreen(navController, coreVM,dashboardViewModel)
     }
     composable(route = DashboardRoute.SearchScreen.route) {
-        SearchScreen(navController,coreVM)
+        val context = LocalContext.current
+        Places.initialize(context, "AIzaSyAd-v0qgs7woqGSc5Thlo66OOB1wBQROBo")
+        val viewModel= hiltViewModel<SearchViewModel>()
+        viewModel.placesClient = Places.createClient(context)
+        SearchScreen(navController,viewModel,coreVM)
     }
     composable(route = DashboardRoute.SideNavigationScreen.route) {
         val viewModel = hiltViewModel<SideNavigationScreenViewModel>()

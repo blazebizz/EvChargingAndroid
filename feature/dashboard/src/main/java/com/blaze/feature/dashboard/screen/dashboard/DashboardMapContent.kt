@@ -29,21 +29,30 @@ fun DashboardMapContent(
             MapUiSettings(
                 zoomControlsEnabled = false,
                 myLocationButtonEnabled = false,
-                rotationGesturesEnabled = false,
-                compassEnabled = false
+                rotationGesturesEnabled = false, compassEnabled = false
             )
         }
 
-        val cameraPosition =  remember {
-            mutableStateOf( CameraPosition(
-                LatLng(0.0, 0.0), 0f, 0f, 0f
-            ))
+        val cameraPosition = remember {
+            mutableStateOf(
+                CameraPosition(
+                    LatLng(0.0, 0.0), 0f, 0f, 0f
+                )
+            )
+        }
+
+
+
+        LaunchedEffect(key1 = coreVM.selectedLocation.value) {
+            cameraPosition.value = CameraPosition(
+                coreVM.selectedLocation.value, 13f, 0f, 0f
+            )
         }
 
         LaunchedEffect(key1 = Unit) {
             cameraPosition.value = if (coreVM.isGpsEnabled.value) {
                 CameraPosition(
-                    coreVM.currentLocation.value, 15f, 0f, 0f
+                    coreVM.currentLocation.value, 13f, 0f, 0f
                 )
 
             } else {
@@ -53,7 +62,10 @@ fun DashboardMapContent(
             }
         }
 
-        GoogleMap(modifier = Modifier.fillMaxSize(),
+
+
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
             properties = dashboardViewModel.state.properties,
             uiSettings = uiSettings,
             cameraPositionState = CameraPositionState(cameraPosition.value), //upon getting the current location set to this

@@ -66,7 +66,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        FirebaseApp.initializeApp(this)
         // Initialize the SDK
-        Places.initialize(applicationContext, "MAP_API_KEYS")
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 

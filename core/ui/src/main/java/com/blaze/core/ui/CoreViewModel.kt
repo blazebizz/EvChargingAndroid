@@ -19,6 +19,9 @@ class CoreViewModel @Inject constructor(private val locationRepository: Location
 
 
     var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))
+    var selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))
+
+
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
     val searchText: MutableState<String> = mutableStateOf("")
 

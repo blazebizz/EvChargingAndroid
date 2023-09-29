@@ -1,5 +1,6 @@
 package com.blaze.feature.dashboard.screen.search
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,52 +11,91 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBarEditable
-import com.blaze.core.utils.util.USER_ID
+import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.defaultBackground
+import com.blaze.core.utils.util.mainScope
+import kotlinx.coroutines.launch
 
 @Composable
-fun SearchScreen(navController: NavController, coreVM: CoreViewModel) {
-    LaunchedEffect(key1 = coreVM.searchText.value) {
-        USER_ID = coreVM.searchText.value
-    }
+fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreVM: CoreViewModel) {
+
+    val context = LocalContext.current
 
     Column(
-        Modifier
-            .fillMaxSize()
+        Modifier.fillMaxSize()
     ) {
-        Box(modifier = Modifier.background(MaterialTheme.colorScheme.surfaceVariant).statusBarsPadding()) {
-            TopBarEditable(
-                text = coreVM.searchText,
-                trailingIcon = R.drawable.baseline_close_24,
-                trailingOnClick = {
-                    coreVM.searchText.value = ""
-                },
-                headerIcon = R.drawable.arrow_small_left_24,
-                headerOnClick = {
-                    navController.popBackStack()
-                })
+        Box(
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.surfaceVariant)
+                .statusBarsPadding()
+        ) {
+            TopBarEditable(text = coreVM.searchText, onValueChange = {
+                viewModel.searchPlaces(it)
+            }, trailingIcon = R.drawable.baseline_close_24, trailingOnClick = {
+                coreVM.searchText.value = ""
+            }, headerIcon = R.drawable.arrow_small_left_24, headerOnClick = {
+                navController.popBackStack()
+            })
         }
         Spacer(modifier = Modifier.height(12.dp))
+
         Box(
             Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         ) {
-            RecentSearchBox()
+            if (viewModel.locationAutofill.isEmpty()) {
+                RecentSearchBox()
+            } else {
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    items(items = viewModel.locationAutofill) {
+                        Row(
+                            Modifier
+                                .padding(horizontal = 5.dp, vertical = 10.dp)
+                                .background(MaterialTheme.colorScheme.background,)
+                                .pressClick {
+                                    coreVM.searchText.value = it.address
+                                    viewModel.getCoordinates(it) {
+                                        mainScope.launch {
+                                            Toast
+                                                .makeText(context, "lat: ${it.latitude}  lng: ${it.longitude}", Toast.LENGTH_SHORT)
+                                                .show()
+                                        }
+                                        coreVM.selectedLocation.value = it
+                                        navController.popBackStack()
+                                    }
+                                }
+                                .padding(10.dp)
+                        ) {
+                            Icon(Icons.Default.Refresh, contentDescription = null)
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(text = "${it.address}",
+                                modifier = Modifier
+                                    .padding(5.dp)
+                                    .fillMaxWidth()
+                                    )
+                        }
+                    }
+                }
+            }
         }
     }
 }
