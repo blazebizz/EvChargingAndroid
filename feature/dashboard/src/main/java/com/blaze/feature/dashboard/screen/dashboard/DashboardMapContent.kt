@@ -15,6 +15,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.rememberCameraPositionState
 
 
 @Composable
@@ -33,33 +34,17 @@ fun DashboardMapContent(
             )
         }
 
-        val cameraPosition = remember {
-            mutableStateOf(
-                CameraPosition(
-                    LatLng(0.0, 0.0), 0f, 0f, 0f
-                )
-            )
+
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(LatLng(44.837789, -0.57918), 12f)
         }
 
-
-
         LaunchedEffect(key1 = coreVM.selectedLocation.value) {
-            cameraPosition.value = CameraPosition(
-                coreVM.selectedLocation.value, 13f, 0f, 0f
-            )
+            cameraPositionState.position = CameraPosition.fromLatLngZoom(coreVM.selectedLocation.value, 12f)
         }
 
         LaunchedEffect(key1 = Unit) {
-            cameraPosition.value = if (coreVM.isGpsEnabled.value) {
-                CameraPosition(
-                    coreVM.currentLocation.value, 13f, 0f, 0f
-                )
-
-            } else {
-                CameraPosition(
-                    LatLng(0.0, 0.0), 0f, 0f, 0f
-                )
-            }
+            cameraPositionState.position  = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, 12f)
         }
 
 
@@ -68,11 +53,17 @@ fun DashboardMapContent(
             modifier = Modifier.fillMaxSize(),
             properties = dashboardViewModel.state.properties,
             uiSettings = uiSettings,
-            cameraPositionState = CameraPositionState(cameraPosition.value), //upon getting the current location set to this
+            cameraPositionState =cameraPositionState , //upon getting the current location set to this
+            onMapLoaded = {
+
+            },
             onMapLongClick = {
 //                viewModel.onEvent(MapEvent.OnMapLongClick(it))
                 Toast.makeText(context, "${it.latitude}   ${it.longitude}", Toast.LENGTH_SHORT)
                     .show()
+            },
+            onPOIClick = {
+                Toast.makeText(context, "${it.name}  ll: ${it.latLng}", Toast.LENGTH_SHORT).show()
             }) {
 //            viewModel.state.parkingSpots.forEach { spot ->
 //                Marker(position = LatLng(spot.lat, spot.lng),
