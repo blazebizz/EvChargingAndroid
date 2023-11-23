@@ -48,7 +48,6 @@ fun DashboardMapContent(
         }
 
 
-
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = dashboardViewModel.state.properties,

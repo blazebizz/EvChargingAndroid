@@ -1,6 +1,5 @@
 package com.blaze.core.utils.di
 
-import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
