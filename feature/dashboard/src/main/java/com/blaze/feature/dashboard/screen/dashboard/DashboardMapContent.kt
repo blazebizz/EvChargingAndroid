@@ -5,14 +5,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.blaze.core.ui.CoreViewModel
+import com.blaze.core.utils.util.logi
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.CameraPositionState
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.rememberCameraPositionState
@@ -30,29 +29,30 @@ fun DashboardMapContent(
             MapUiSettings(
                 zoomControlsEnabled = false,
                 myLocationButtonEnabled = false,
-                rotationGesturesEnabled = false, compassEnabled = false
+                rotationGesturesEnabled = false,
+                compassEnabled = false
             )
         }
 
 
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(LatLng(44.837789, -0.57918), 12f)
+            position = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, 12f)
         }
 
-        LaunchedEffect(key1 = coreVM.selectedLocation.value) {
-            cameraPositionState.position = CameraPosition.fromLatLngZoom(coreVM.selectedLocation.value, 12f)
+
+        LaunchedEffect(key1 = coreVM.mapLocation.value) {
+            logi("mapLocation changed: lat- ${coreVM.mapLocation.value.latitude}, lng- ${coreVM.mapLocation.value.longitude} ")
+            cameraPositionState.position =
+                CameraPosition.fromLatLngZoom(coreVM.mapLocation.value, 12f)
         }
 
-        LaunchedEffect(key1 = Unit) {
-            cameraPositionState.position  = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, 12f)
-        }
 
 
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             properties = dashboardViewModel.state.properties,
             uiSettings = uiSettings,
-            cameraPositionState =cameraPositionState , //upon getting the current location set to this
+            cameraPositionState = cameraPositionState, //upon getting the current location set to this
             onMapLoaded = {
 
             },

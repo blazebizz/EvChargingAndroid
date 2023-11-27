@@ -14,12 +14,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CoreViewModel @Inject constructor(private val locationRepository: LocationRepository,
+class CoreViewModel @Inject constructor(
+    private val locationRepository: LocationRepository,
 ) : ViewModel() {
 
 
-    var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))
-    var selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))
+    var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(23.0, 79.0))//44.837789, long- -0.57918
+    var mapLocation: MutableState<LatLng> = mutableStateOf(currentLocation.value)
 
 
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")

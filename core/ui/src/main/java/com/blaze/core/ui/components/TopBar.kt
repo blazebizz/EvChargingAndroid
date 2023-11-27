@@ -84,7 +84,7 @@ fun TopBar(
             painter = painterResource(trailingIcon),
             contentDescription = "notification",
             Modifier
-                .size(30.dp)
+                .size(25.dp)
                 .clickable {
                     trailingOnClick()
                 },

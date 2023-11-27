@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,3 +75,7 @@ fun Context.hasLocationPermission(): Boolean {
         this, Manifest.permission.ACCESS_COARSE_LOCATION
     ) == PackageManager.PERMISSION_GRANTED
 }
+
+fun logi(m: String, tag:String = "EvCharging") = Log.i(tag, "log: $m")
+
+fun Context.tst(m: String) = Toast.makeText(this, "$m", Toast.LENGTH_SHORT).show()

@@ -3,7 +3,6 @@ package com.blaze.classicbeat
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -48,15 +47,16 @@ import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
+import com.blaze.core.utils.util.ioScope
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.libraries.places.api.Places
 import com.velox.lazeir.utils.internetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -69,7 +69,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 
-            LaunchedEffect(Unit ){
+            LaunchedEffect(Unit) {
                 coreViewModel.registerGpsStateReceiver()
             }
 
@@ -126,15 +126,18 @@ class MainActivity : ComponentActivity() {
                     LocationUpdatesEffect(locationRequest!!) { result ->
                         // For each result update the text
                         for (currentLocation in result.locations) {
-                            coreViewModel.currentLocation.value = LatLng(currentLocation.latitude, currentLocation.longitude)
+                            coreViewModel.currentLocation.value =
+                                LatLng(currentLocation.latitude, currentLocation.longitude)
                         }
                     }
                 }
 
+
                 LaunchedEffect(key1 = gettingContinuesLocation.value) {
                     locationRequest = if (gettingContinuesLocation.value) {
                         // Define the accuracy based on your needs and granted permissions
-                        val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY
+                        val priority =
+                            Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY
                         val requester = LocationRequest.Builder(
                             priority, DELAY_MILLIS
                         )
@@ -145,31 +148,20 @@ class MainActivity : ComponentActivity() {
                     }
                 }
 
-                val context = LocalContext.current
 
-                LaunchedEffect(key1 = coreViewModel.gpsHardwareEnabled){
+                LaunchedEffect(key1 = coreViewModel.gpsHardwareEnabled) {
                     coreViewModel.isGpsEnabled.value = coreViewModel.gpsHardwareEnabled
                 }
 
-                LaunchedEffect(key1 = coreViewModel.isGpsEnabled.value){
-                    if (coreViewModel.isGpsEnabled.value){
-                        Toast.makeText(context, "gps  enabled", Toast.LENGTH_SHORT).show()
-                        gettingContinuesLocation.value = true
-                    }else{
-                        Toast.makeText(context, "gps  disabled", Toast.LENGTH_SHORT).show()
-                        gettingContinuesLocation.value = false
-                    }
+                LaunchedEffect(key1 = coreViewModel.isGpsEnabled.value) {
+                    gettingContinuesLocation.value = coreViewModel.isGpsEnabled.value
                 }
 
-                MainActivityScreen(lifecycleScope,coreViewModel)
+                MainActivityScreen(lifecycleScope, coreViewModel)
             }
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-
-    }
 }
 
 @Composable

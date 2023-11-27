@@ -1,7 +1,5 @@
 package com.blaze.feature.dashboard.screen.search
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -34,8 +32,9 @@ import com.blaze.core.ui.DefaultShape
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBarEditable
 import com.blaze.core.ui.components.pressClick
-import com.blaze.core.ui.defaultBackground
+import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.mainScope
+import com.blaze.core.utils.util.tst
 import kotlinx.coroutines.launch
 
 @Composable
@@ -73,36 +72,32 @@ fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreV
                     items(items = viewModel.locationAutofill) {
                         Row(
                             Modifier
-                                .padding(start= 16.dp,end=16.dp,top=5.dp)
+                                .padding(start = 16.dp, end = 16.dp, top = 5.dp)
                                 .defaultMinSize(minHeight = 50.dp)
                                 .background(MaterialTheme.colorScheme.background, DefaultShape)
                                 .pressClick {
                                     coreVM.searchText.value = it.address
                                     viewModel.getCoordinates(it) {
-                                        mainScope.launch {
-                                            Log.e("SearchScreen", "SearchScreen: lat: ${it.latitude}  lng: ${it.longitude}", )
-                                            Toast
-                                                .makeText(
-                                                    context,
-                                                    "lat: ${it.latitude}  lng: ${it.longitude}",
-                                                    Toast.LENGTH_SHORT
-                                                )
-                                                .show()
-                                        }
-                                        coreVM.selectedLocation.value = it
+                                        logi("SearchScreen: lat: ${it.latitude}  lng: ${it.longitude}")
+                                        coreVM.mapLocation.value = it
                                         navController.popBackStack()
                                     }
                                 }
                                 .padding(10.dp),
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Icon(Icons.Default.Refresh, contentDescription = null,Modifier.size(30.dp))
+                            Icon(
+                                Icons.Default.Refresh,
+                                contentDescription = null,
+                                Modifier.size(30.dp)
+                            )
                             Spacer(modifier = Modifier.width(10.dp))
-                            Text(text = "${it.address}",
+                            Text(
+                                text = "${it.address}",
                                 modifier = Modifier
                                     .padding(5.dp)
                                     .fillMaxWidth()
-                                    )
+                            )
                         }
                     }
                 }
@@ -120,7 +115,7 @@ fun RecentSearchBox() {
                 .height(50.dp)
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
-            ) {
+        ) {
             Text(text = "Recent")
             Spacer(modifier = Modifier.weight(1f))
             Icon(Icons.Outlined.Info, contentDescription = null)

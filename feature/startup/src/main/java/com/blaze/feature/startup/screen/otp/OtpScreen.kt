@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
@@ -39,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
+import com.blaze.core.ui.components.CustomButtonColor
 import com.blaze.core.ui.components.OtpView
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
@@ -67,6 +69,7 @@ fun OtpScreen(
     val otpState = remember {
         mutableStateOf("")
     }
+    val otpSent = remember { mutableStateOf(false) }
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
 
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
@@ -161,8 +164,8 @@ fun OtpScreen(
             otpViewModel.resendToken.value = token
             mainScope.launch {
                 coreUi.snackbar("Verification SMS Sent")
-
             }
+            otpSent.value = true
         }
     }
 
@@ -178,6 +181,7 @@ fun OtpScreen(
     OtpContent(otpState = otpState,
         sentTo = toSentText,
         navController = navController,
+        otpSent = otpSent,
         onSubmitClick = {
             coreUi.snackbar("Verifying please wait.")
             ioScope.launch {
@@ -187,7 +191,7 @@ fun OtpScreen(
                             if (task.isSuccessful) {
 
                                 coreUi.snackbar("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
-                                coreUi.currentUserNumber.value = task.result.user?.phoneNumber?:""
+                                coreUi.currentUserNumber.value = task.result.user?.phoneNumber ?: ""
                                 navController.navigate(DashboardRoute.DashboardScreen.route) {
                                     popUpTo(StartUpRoute.MobileOtpScreen.route) {
                                         inclusive = true
@@ -208,7 +212,9 @@ fun OtpScreen(
         },
         onResendClick = {
             otpViewModel.reSendVerificationCode(
-                activity, toSentText, callbacks
+                activity = activity,
+                phoneNumber = toSentText,
+                callbacks = callbacks
             )
         })
 }
@@ -216,6 +222,7 @@ fun OtpScreen(
 @Composable
 internal fun OtpContent(
     sentTo: String,
+    otpSent: MutableState<Boolean>,
     otpState: MutableState<String>,
     navController: NavController,
     onSubmitClick: () -> Unit,
@@ -227,13 +234,16 @@ internal fun OtpContent(
     var trigger by rememberSaveable {
         mutableStateOf(false)
     }
-    LaunchedEffect(key1 = trigger) {
-        delay(1000)
-        while (seconds > 0) {
-            delay(1000)
-            seconds--
+    LaunchedEffect(key1 = trigger, key2 = otpSent.value) {
+        if (otpSent.value) {
+//            delay(1000)
+            while (seconds > 0) {
+                delay(1000)
+                seconds--
+            }
         }
     }
+
 
     Column(
         Modifier
@@ -244,17 +254,21 @@ internal fun OtpContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(20.dp))
         Row {
-            Icon(Icons.Default.ArrowBack,
+            Icon(
+                Icons.Default.ArrowBack,
                 contentDescription = "back",
                 modifier = Modifier.clickable {
                     navController.navigate(DashboardRoute.DashboardScreen.route)
-                })
+                },
+                tint = MaterialTheme.colorScheme.background
+            )
             Spacer(Modifier.width(12.dp))
             Text(text = "", fontWeight = FontWeight.Black, fontSize = 22.sp)
             Spacer(Modifier.weight(3f))
         }
-        Spacer(Modifier.weight(3f))
+        Spacer(Modifier.weight(1f))
 //        Text(
 //            text = "Verify OTP",
 //            modifier = Modifier.fillMaxWidth(),
@@ -262,37 +276,72 @@ internal fun OtpContent(
 //            fontWeight = FontWeight.Black
 //        )
 //        Spacer(Modifier.height(12.dp))
-        Text(
-            text = "We have sent an SMS to",
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center
-        )
-        Spacer(Modifier.height(12.dp))
-        Text(text = sentTo, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
-        Spacer(Modifier.height(16.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        ) {
-            Column {
-                OtpView(length = 6, code = otpState)
-                Spacer(Modifier.height(12.dp))
-                Row {
 
-                    Text(text = "$seconds seconds")
-                    Spacer(Modifier.weight(1f))
-                    Text(text = "Resend",
-                        color = if (seconds == 0) MaterialTheme.colorScheme.secondary else Color.LightGray,
-                        modifier = Modifier.clickable {
-                            if (seconds == 0) {
-                                onResendClick.invoke()
-                                trigger = !trigger
-                                seconds = 30
-                            }
-                        })
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.onBackground, RoundedCornerShape(10.dp))
+                .padding(10.dp)
+        ) {
+            Spacer(Modifier.height(12.dp))
+
+            Text(
+                text = "Verify OTP",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                fontWeight = FontWeight.Black,
+                fontSize = 24.sp,
+                color = MaterialTheme.colorScheme.background
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = "We have sent an SMS to",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.background
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = sentTo, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.background
+            )
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Column {
+                    OtpView(length = 6, code = otpState)
+                    Spacer(Modifier.height(12.dp))
+                    Row {
+
+                        Text(
+                            text = "$seconds seconds",
+                            color = MaterialTheme.colorScheme.background
+                        )
+                        Spacer(Modifier.weight(1f))
+                        Text(text = "Resend",
+                            color = if (seconds == 0) MaterialTheme.colorScheme.background else Color.LightGray,
+                            modifier = Modifier.clickable {
+                                if (seconds == 0) {
+                                    onResendClick.invoke()
+                                    trigger = !trigger
+                                    seconds = 30
+                                }
+                            })
+                    }
                 }
             }
+            Spacer(Modifier.height(20.dp))
+
+            Button(
+                text = "Submit", modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick,
+                colors = CustomButtonColor(
+                    bodyColor = MaterialTheme.colorScheme.background,
+                    textColor = MaterialTheme.colorScheme.onBackground
+                )
+            )
         }
 //        Spacer(Modifier.height(12.dp))
 //        Text(
@@ -301,12 +350,8 @@ internal fun OtpContent(
 //            textAlign = TextAlign.Center
 //        )
 
-        Spacer(Modifier.weight(3f))
         Spacer(Modifier.height(20.dp))
 
-        Button(text = "Submit", modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick)
-
-        Spacer(Modifier.weight(4f))
     }
 }
 
