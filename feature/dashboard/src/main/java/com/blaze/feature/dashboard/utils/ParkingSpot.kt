@@ -1,7 +1,8 @@
 package com.blaze.feature.dashboard.utils
 
+import com.google.android.gms.maps.model.LatLng
+
 data class ParkingSpot(
-    val lat: Double,
-    val lng: Double,
+    val LatLng: LatLng,
     val id: Int? = null
 )

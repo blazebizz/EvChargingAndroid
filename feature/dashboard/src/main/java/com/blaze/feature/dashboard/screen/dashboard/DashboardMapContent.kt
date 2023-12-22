@@ -10,10 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.util.logi
+import com.blaze.feature.dashboard.utils.MAP_ZOOM
+import com.blaze.feature.dashboard.utils.ParkingSpot
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.PointOfInterest
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.rememberCameraPositionState
 
 
@@ -22,6 +27,8 @@ fun DashboardMapContent(
     modifier: Modifier,
     dashboardViewModel: DashboardViewModel,
     coreVM: CoreViewModel,
+    onPOIClick: (PointOfInterest) -> Unit = {},
+    onMarkerClick: (Marker) -> Unit,
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         val context = LocalContext.current
@@ -36,14 +43,14 @@ fun DashboardMapContent(
 
 
         val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, 12f)
+            position = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, MAP_ZOOM)
         }
 
 
         LaunchedEffect(key1 = coreVM.mapLocation.value) {
             logi("mapLocation changed: lat- ${coreVM.mapLocation.value.latitude}, lng- ${coreVM.mapLocation.value.longitude} ")
             cameraPositionState.position =
-                CameraPosition.fromLatLngZoom(coreVM.mapLocation.value, 12f)
+                CameraPosition.fromLatLngZoom(coreVM.mapLocation.value, MAP_ZOOM)
         }
 
 
@@ -57,16 +64,20 @@ fun DashboardMapContent(
 
             },
             onMapLongClick = {
+
 //                viewModel.onEvent(MapEvent.OnMapLongClick(it))
                 Toast.makeText(context, "${it.latitude}   ${it.longitude}", Toast.LENGTH_SHORT)
                     .show()
+                dashboardViewModel.state.parkingSpots.add(ParkingSpot(it))
+
             },
             onPOIClick = {
-                Toast.makeText(context, "${it.name}  ll: ${it.latLng}", Toast.LENGTH_SHORT).show()
+                onPOIClick(it)
             }) {
-/*            viewModel.state.parkingSpots.forEach { spot ->
-                Marker(position = LatLng(spot.lat, spot.lng),
-                    title = "Parking Sport ${spot.lat} ${spot.lng}",
+            dashboardViewModel.state.parkingSpots.forEach { spot ->
+                Marker(
+                    position = spot.LatLng,
+                    title = "Parking Sport ${spot.LatLng.latitude} ${spot.LatLng.longitude}",
                     snippet = "Long click to delete",
                     onInfoWindowLongClick = {
 //                        viewModel.onEvent(
@@ -75,13 +86,14 @@ fun DashboardMapContent(
                     },
                     onClick = {
 //                        it.showInfoWindow()
+                        onMarkerClick(it)
                         true
                     },
                     icon = BitmapDescriptorFactory.defaultMarker(
-                        BitmapDescriptorFactory.HUE_ORANGE
+                        BitmapDescriptorFactory.HUE_GREEN
                     )
                 )
-            }*/
+            }
         }
 
 

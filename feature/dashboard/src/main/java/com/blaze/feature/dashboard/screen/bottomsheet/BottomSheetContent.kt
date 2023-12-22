@@ -17,9 +17,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -37,7 +37,7 @@ import com.blaze.core.ui.CoreViewModel
 @Composable
 fun BottomSheetContent(
     activateBottomSheet: MutableState<Boolean>,
-    sheetState: BottomSheetScaffoldState,
+    sheetState: SheetState,
     coreVM: CoreViewModel,
     navController: NavController
 ) {
