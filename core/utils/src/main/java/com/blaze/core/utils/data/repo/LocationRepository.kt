@@ -28,11 +28,15 @@ class LocationRepository @Inject constructor(
 ) {
 
     private val locationClient = LocationServices.getFusedLocationProviderClient(context)
-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val isGpsEnabled = mutableStateOf(false)
-    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     private val gpsStateReceiver = GpsConnectivityObserver(isGpsEnabled)
     private val isLocationReceiverRegistered = mutableStateOf(false)
+
+    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+
+
 
 
     fun openLocationSetting() {
@@ -61,7 +65,7 @@ class LocationRepository @Inject constructor(
         latLng: MutableState<LatLng>
     ) {
         CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
-            val priority = Priority.PRIORITY_HIGH_ACCURACY
+            val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY//Priority.PRIORITY_HIGH_ACCURACY
             if (context.hasLocationPermission()) {
                 val result = locationClient.getCurrentLocation(
                     priority,

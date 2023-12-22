@@ -64,24 +64,24 @@ fun DashboardMapContent(
             onPOIClick = {
                 Toast.makeText(context, "${it.name}  ll: ${it.latLng}", Toast.LENGTH_SHORT).show()
             }) {
-//            viewModel.state.parkingSpots.forEach { spot ->
-//                Marker(position = LatLng(spot.lat, spot.lng),
-//                    title = "Parking Sport ${spot.lat} ${spot.lng}",
-//                    snippet = "Long click to delete",
-//                    onInfoWindowLongClick = {
-////                        viewModel.onEvent(
-////                            MapEvent.OnInfoWindowLongClick(spot)
-////                        )
-//                    },
-//                    onClick = {
-////                        it.showInfoWindow()
-//                        true
-//                    },
-//                    icon = BitmapDescriptorFactory.defaultMarker(
-//                        BitmapDescriptorFactory.HUE_ORANGE
-//                    )
-//                )
-//            }
+/*            viewModel.state.parkingSpots.forEach { spot ->
+                Marker(position = LatLng(spot.lat, spot.lng),
+                    title = "Parking Sport ${spot.lat} ${spot.lng}",
+                    snippet = "Long click to delete",
+                    onInfoWindowLongClick = {
+//                        viewModel.onEvent(
+//                            MapEvent.OnInfoWindowLongClick(spot)
+//                        )
+                    },
+                    onClick = {
+//                        it.showInfoWindow()
+                        true
+                    },
+                    icon = BitmapDescriptorFactory.defaultMarker(
+                        BitmapDescriptorFactory.HUE_ORANGE
+                    )
+                )
+            }*/
         }
 
 

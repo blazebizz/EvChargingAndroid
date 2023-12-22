@@ -133,14 +133,13 @@ class MainActivity : ComponentActivity() {
                 }
 
 
+                //
                 LaunchedEffect(key1 = gettingContinuesLocation.value) {
                     locationRequest = if (gettingContinuesLocation.value) {
                         // Define the accuracy based on your needs and granted permissions
                         val priority =
                             Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY
-                        val requester = LocationRequest.Builder(
-                            priority, DELAY_MILLIS
-                        )
+                        val requester = LocationRequest.Builder(priority, DELAY_MILLIS)
                         requester.setMinUpdateIntervalMillis(2 * DELAY_MILLIS)
                         requester.build()
                     } else {

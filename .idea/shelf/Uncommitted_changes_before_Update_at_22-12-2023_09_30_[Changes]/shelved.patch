@@ -1,0 +1,692 @@
+Index: core/utils/src/main/java/com/blaze/core/utils/navigation/NavigationConstant.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.core.utils.navigation\r\n\r\nsealed class NavigationRoute(val route: String) {\r\n    object Auth : NavigationRoute(route = \"Auth\")\r\n    object OnBoarding : NavigationRoute(route = \"OnBoarding\")\r\n    object Dashboard : NavigationRoute(route = \"Dashboard\")\r\n}\r\n\r\nsealed class StartUpRoute(val route: String) {\r\n    object LoginScreen : NavigationRoute(route = \"LoginScreen\")\r\n    object SplashScreen : NavigationRoute(route = \"SplashScreen\")\r\n    object SignUpScreen : NavigationRoute(route = \"SignUpScreen\")\r\n    object ForgotPasswordScreen : NavigationRoute(route = \"ForgotPasswordScreen\")\r\n    object AdditionalDetailsScreen : NavigationRoute(route = \"AdditionalDetailsScreen\")\r\n    object MobileOtpScreen : NavigationRoute(route = \"MobileOtpScreen\")\r\n}\r\n\r\nsealed class OnBoardingRoute(val route: String) {\r\n    object OnBoardingScreen : NavigationRoute(route = \"OnBoardingScreen\")\r\n    object BoardingCompleteScreen : NavigationRoute(route = \"BoardingCompleteScreen\")\r\n    object BoardingStatusScreen : NavigationRoute(route = \"BoardingStatusScreen\")\r\n}\r\n\r\nsealed class DashboardRoute(val route: String) {\r\n    object DashboardScreen : NavigationRoute(route = \"DashboardScreen\")\r\n    object SearchScreen : NavigationRoute(route = \"SearchScreen\")\r\n    object SideNavigationScreen : NavigationRoute(route = \"SideNavigationScreen\")\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/utils/src/main/java/com/blaze/core/utils/navigation/NavigationConstant.kt b/core/utils/src/main/java/com/blaze/core/utils/navigation/NavigationConstant.kt
+--- a/core/utils/src/main/java/com/blaze/core/utils/navigation/NavigationConstant.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/core/utils/src/main/java/com/blaze/core/utils/navigation/NavigationConstant.kt	(date 1703216513278)
+@@ -9,9 +9,8 @@
+ sealed class StartUpRoute(val route: String) {
+     object LoginScreen : NavigationRoute(route = "LoginScreen")
+     object SplashScreen : NavigationRoute(route = "SplashScreen")
+-    object SignUpScreen : NavigationRoute(route = "SignUpScreen")
+-    object ForgotPasswordScreen : NavigationRoute(route = "ForgotPasswordScreen")
+-    object AdditionalDetailsScreen : NavigationRoute(route = "AdditionalDetailsScreen")
++    object CreateUserScreen : NavigationRoute(route = "CreateUserScreen")
++
+     object MobileOtpScreen : NavigationRoute(route = "MobileOtpScreen")
+ }
+ 
+Index: core/ui/src/main/java/com/blaze/core/ui/CoreViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.core.ui\r\n\r\nimport android.os.Build\r\nimport androidx.annotation.RequiresApi\r\nimport androidx.compose.runtime.MutableState\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.lifecycle.ViewModel\r\nimport androidx.lifecycle.viewModelScope\r\nimport com.blaze.core.utils.data.repo.LocationRepository\r\nimport com.google.android.gms.maps.model.LatLng\r\nimport dagger.hilt.android.lifecycle.HiltViewModel\r\nimport kotlinx.coroutines.delay\r\nimport kotlinx.coroutines.launch\r\nimport javax.inject.Inject\r\n\r\n@HiltViewModel\r\nclass CoreViewModel @Inject constructor(private val locationRepository: LocationRepository,\r\n) : ViewModel() {\r\n\r\n\r\n    var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))\r\n    var selectedLocation: MutableState<LatLng> = mutableStateOf(LatLng(0.0,0.0))\r\n\r\n\r\n    val currentUserNumber: MutableState<String> = mutableStateOf(\"+91-XXXXXXXXXX\")\r\n    val searchText: MutableState<String> = mutableStateOf(\"\")\r\n\r\n    val loading: MutableState<Boolean> = mutableStateOf(false)\r\n    val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)\r\n    internal val snackbarValue: MutableState<Pair<Boolean, String>> =\r\n        mutableStateOf(Pair(false, \"\"))\r\n    internal val toast: MutableState<String> = mutableStateOf(\"\")\r\n\r\n    fun snackbar(message: String) {\r\n        viewModelScope.launch {\r\n            snackbarValue.value = Pair(true, message)\r\n            delay(3000)\r\n            snackbarValue.value = Pair(false, message)\r\n\r\n        }\r\n    }\r\n\r\n    fun toast(message: String) {\r\n        viewModelScope.launch {\r\n            toast.value = message\r\n        }\r\n    }\r\n\r\n    // region location\r\n    val isGpsEnabled = locationRepository.isGpsEnabled\r\n    val gpsHardwareEnabled = locationRepository.gpsHardwareEnabled\r\n    fun openLocationSetting() = locationRepository.openLocationSetting()\r\n    fun registerGpsStateReceiver() = locationRepository.registerGpsStateReceiver()\r\n    fun unregisterGpsStateReceiver() = locationRepository.unregisterGpsStateReceiver()\r\n\r\n    //getting only single location object\r\n    @RequiresApi(Build.VERSION_CODES.O)\r\n    fun getCurrentLocation(\r\n        latLng: MutableState<LatLng>\r\n    ) = locationRepository.getCurrentLocation(latLng)\r\n\r\n\r\n    //endregion\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/ui/src/main/java/com/blaze/core/ui/CoreViewModel.kt b/core/ui/src/main/java/com/blaze/core/ui/CoreViewModel.kt
+--- a/core/ui/src/main/java/com/blaze/core/ui/CoreViewModel.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/core/ui/src/main/java/com/blaze/core/ui/CoreViewModel.kt	(date 1703213600253)
+@@ -40,6 +40,8 @@
+         }
+     }
+ 
++
++
+     fun toast(message: String) {
+         viewModelScope.launch {
+             toast.value = message
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/otp/OtpScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.feature.startup.screen.otp\r\n\r\n\r\nimport android.app.Activity\r\nimport android.util.Log\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.clickable\r\nimport androidx.compose.foundation.layout.Arrangement\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.material.icons.Icons\r\nimport androidx.compose.material.icons.filled.ArrowBack\r\nimport androidx.compose.material3.Icon\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.LaunchedEffect\r\nimport androidx.compose.runtime.MutableState\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableIntStateOf\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.saveable.rememberSaveable\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Alignment\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.graphics.Color\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.unit.sp\r\nimport androidx.navigation.NavController\r\nimport com.blaze.core.ui.CoreViewModel\r\nimport com.blaze.core.ui.components.Button\r\nimport com.blaze.core.ui.components.OtpView\r\nimport com.blaze.core.utils.navigation.DashboardRoute\r\nimport com.blaze.core.utils.navigation.StartUpRoute\r\nimport com.blaze.core.utils.util.ioScope\r\nimport com.blaze.core.utils.util.mainScope\r\nimport com.google.firebase.FirebaseException\r\nimport com.google.firebase.FirebaseTooManyRequestsException\r\nimport com.google.firebase.auth.FirebaseAuthInvalidCredentialsException\r\nimport com.google.firebase.auth.FirebaseAuthMissingActivityForRecaptchaException\r\nimport com.google.firebase.auth.PhoneAuthCredential\r\nimport com.google.firebase.auth.PhoneAuthProvider\r\nimport kotlinx.coroutines.delay\r\nimport kotlinx.coroutines.launch\r\n\r\n@Composable\r\nfun OtpScreen(\r\n    navController: NavController,\r\n    toSentText: String,\r\n    otpViewModel: OtpScreenViewModel,\r\n    coreUi: CoreViewModel,\r\n) {\r\n    val TAG = \"OtpScreen\"\r\n    val activity = LocalContext.current as Activity\r\n    val context = LocalContext.current\r\n\r\n    val otpState = remember {\r\n        mutableStateOf(\"\")\r\n    }\r\n    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {\r\n\r\n        override fun onVerificationCompleted(credential: PhoneAuthCredential) {\r\n            // This callback will be invoked in two situations:\r\n            // 1 - Instant verification. In some cases the phone number can be instantly\r\n            //     verified without needing to send or enter a verification code.\r\n            // 2 - Auto-retrieval. On some devices Google Play services can automatically\r\n            //     detect the incoming verification SMS and perform verification without\r\n            //     user action.\r\n            Log.d(TAG, \"onVerificationCompleted:$credential\")\r\n            otpViewModel.signInWithPhoneAuthCredential(activity, otpState.value) { task ->\r\n                mainScope.launch {\r\n                    if (task.isSuccessful) {\r\n                        coreUi.snackbar(\"Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}\")\r\n//                        Toast.makeText(\r\n//                            context,\r\n//                            \"Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}\",\r\n//                            Toast.LENGTH_SHORT\r\n//                        ).show()\r\n                        navController.navigate(DashboardRoute.DashboardScreen.route) {\r\n                            popUpTo(StartUpRoute.MobileOtpScreen.route) {\r\n                                inclusive = true\r\n                            }\r\n                        }\r\n                    } else {\r\n                        when (task.exception) {\r\n                            is FirebaseAuthInvalidCredentialsException -> {\r\n                                // Invalid request\r\n                                coreUi.snackbar(\"Invalid Otp\")\r\n//                                Toast.makeText(context, \"Invalid Otp\", Toast.LENGTH_SHORT).show()\r\n                            }\r\n\r\n                            is FirebaseTooManyRequestsException -> {\r\n                                // The SMS quota for the project has been exceeded\r\n                                coreUi.snackbar(\"SMS quota exceeded\")\r\n//                                Toast.makeText(context, \"SMS quota exceeded\", Toast.LENGTH_SHORT)\r\n//                                    .show()\r\n                            }\r\n\r\n                            is FirebaseAuthMissingActivityForRecaptchaException -> {\r\n                                // reCAPTCHA verification attempted with null Activity\r\n                                coreUi.snackbar(\"reCAPTCHA verification failed ! You are not a human\")\r\n//                                Toast.makeText(\r\n//                                    context,\r\n//                                    \"reCAPTCHA verification failed ! You are not a human\",\r\n//                                    Toast.LENGTH_SHORT\r\n//                                ).show()\r\n                            }\r\n                        }\r\n                    }\r\n                }\r\n            }\r\n        }\r\n\r\n        override fun onVerificationFailed(e: FirebaseException) {\r\n            // This callback is invoked in an invalid request for verification is made,\r\n            // for instance if the the phone number format is not valid.\r\n            Log.w(TAG, \"onVerificationFailed\", e)\r\n\r\n            when (e) {\r\n                is FirebaseAuthInvalidCredentialsException -> {\r\n                    // Invalid request\r\n                    coreUi.snackbar(\"Invalid OTP\")\r\n//                    Toast.makeText(context, \"Invalid Otp\", Toast.LENGTH_SHORT).show()\r\n                }\r\n\r\n                is FirebaseTooManyRequestsException -> {\r\n                    // The SMS quota for the project has been exceeded\r\n                    coreUi.snackbar(\"SMS quota exceeded\")\r\n//                    Toast.makeText(context, \"SMS quota exceeded\", Toast.LENGTH_SHORT).show()\r\n                }\r\n\r\n                is FirebaseAuthMissingActivityForRecaptchaException -> {\r\n                    // reCAPTCHA verification attempted with null Activity\r\n                    coreUi.snackbar(\"reCAPTCHA verification failed ! You are not a human\")\r\n                }\r\n            }\r\n            // Show a message and update the UI\r\n        }\r\n\r\n        override fun onCodeSent(\r\n            verificationId: String,\r\n            token: PhoneAuthProvider.ForceResendingToken,\r\n        ) {\r\n            // The SMS verification code has been sent to the provided phone number, we\r\n            // now need to ask the user to enter the code and then construct a credential\r\n            // by combining the code with a verification ID.\r\n            Log.d(TAG, \"onCodeSent:$verificationId\")\r\n\r\n            // Save verification ID and resending token so we can use them later\r\n            otpViewModel.storedVerificationId.value = verificationId\r\n            otpViewModel.resendToken.value = token\r\n            mainScope.launch {\r\n                coreUi.snackbar(\"Verification SMS Sent\")\r\n\r\n            }\r\n        }\r\n    }\r\n\r\n\r\n\r\n    LaunchedEffect(key1 = Unit) {\r\n        coreUi.snackbar(\"Sending Verification Code Please Wait.\")\r\n        otpViewModel.sendVerificationCode(\r\n            activity, toSentText, callbacks\r\n        )\r\n    }\r\n\r\n    OtpContent(otpState = otpState,\r\n        sentTo = toSentText,\r\n        navController = navController,\r\n        onSubmitClick = {\r\n            coreUi.snackbar(\"Verifying please wait.\")\r\n            ioScope.launch {\r\n                try {\r\n                    otpViewModel.signInWithPhoneAuthCredential(activity, otpState.value) { task ->\r\n                        mainScope.launch {\r\n                            if (task.isSuccessful) {\r\n\r\n                                coreUi.snackbar(\"Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}\")\r\n                                coreUi.currentUserNumber.value = task.result.user?.phoneNumber?:\"\"\r\n                                navController.navigate(DashboardRoute.DashboardScreen.route) {\r\n                                    popUpTo(StartUpRoute.MobileOtpScreen.route) {\r\n                                        inclusive = true\r\n                                    }\r\n                                }\r\n                            } else {\r\n                                if (task.exception is FirebaseAuthInvalidCredentialsException) {\r\n                                    coreUi.snackbar(\"Invalid OTP\")\r\n                                }\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                } catch (e: Exception) {\r\n                    coreUi.snackbar(\"Unable to verify the user. Please try again later.\")\r\n                }\r\n            }\r\n        },\r\n        onResendClick = {\r\n            otpViewModel.reSendVerificationCode(\r\n                activity, toSentText, callbacks\r\n            )\r\n        })\r\n}\r\n\r\n@Composable\r\ninternal fun OtpContent(\r\n    sentTo: String,\r\n    otpState: MutableState<String>,\r\n    navController: NavController,\r\n    onSubmitClick: () -> Unit,\r\n    onResendClick: () -> Unit,\r\n) {\r\n    var seconds by rememberSaveable {\r\n        mutableIntStateOf(30)\r\n    }\r\n    var trigger by rememberSaveable {\r\n        mutableStateOf(false)\r\n    }\r\n    LaunchedEffect(key1 = trigger) {\r\n        delay(1000)\r\n        while (seconds > 0) {\r\n            delay(1000)\r\n            seconds--\r\n        }\r\n    }\r\n\r\n    Column(\r\n        Modifier\r\n            .background(MaterialTheme.colorScheme.primary)\r\n            .fillMaxSize()\r\n            .padding(top = 16.dp)\r\n            .padding(16.dp),\r\n        horizontalAlignment = Alignment.CenterHorizontally,\r\n        verticalArrangement = Arrangement.Top\r\n    ) {\r\n        Row {\r\n            Icon(Icons.Default.ArrowBack,\r\n                contentDescription = \"back\",\r\n                modifier = Modifier.clickable {\r\n                    navController.navigate(DashboardRoute.DashboardScreen.route)\r\n                })\r\n            Spacer(Modifier.width(12.dp))\r\n            Text(text = \"\", fontWeight = FontWeight.Black, fontSize = 22.sp)\r\n            Spacer(Modifier.weight(3f))\r\n        }\r\n        Spacer(Modifier.weight(3f))\r\n//        Text(\r\n//            text = \"Verify OTP\",\r\n//            modifier = Modifier.fillMaxWidth(),\r\n//            textAlign = TextAlign.Center,\r\n//            fontWeight = FontWeight.Black\r\n//        )\r\n//        Spacer(Modifier.height(12.dp))\r\n        Text(\r\n            text = \"We have sent an SMS to\",\r\n            modifier = Modifier.fillMaxWidth(),\r\n            textAlign = TextAlign.Center\r\n        )\r\n        Spacer(Modifier.height(12.dp))\r\n        Text(text = sentTo, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)\r\n        Spacer(Modifier.height(16.dp))\r\n        Row(\r\n            modifier = Modifier\r\n                .fillMaxWidth()\r\n                .padding(horizontal = 20.dp)\r\n        ) {\r\n            Column {\r\n                OtpView(length = 6, code = otpState)\r\n                Spacer(Modifier.height(12.dp))\r\n                Row {\r\n\r\n                    Text(text = \"$seconds seconds\")\r\n                    Spacer(Modifier.weight(1f))\r\n                    Text(text = \"Resend\",\r\n                        color = if (seconds == 0) MaterialTheme.colorScheme.secondary else Color.LightGray,\r\n                        modifier = Modifier.clickable {\r\n                            if (seconds == 0) {\r\n                                onResendClick.invoke()\r\n                                trigger = !trigger\r\n                                seconds = 30\r\n                            }\r\n                        })\r\n                }\r\n            }\r\n        }\r\n//        Spacer(Modifier.height(12.dp))\r\n//        Text(\r\n//            text = \"Change Number.\",\r\n//            modifier = Modifier.fillMaxWidth(),\r\n//            textAlign = TextAlign.Center\r\n//        )\r\n\r\n        Spacer(Modifier.weight(3f))\r\n        Spacer(Modifier.height(20.dp))\r\n\r\n        Button(text = \"Submit\", modifier = Modifier.fillMaxWidth(), onClick = onSubmitClick)\r\n\r\n        Spacer(Modifier.weight(4f))\r\n    }\r\n}\r\n\r\n\r\n// filo
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/otp/OtpScreen.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/otp/OtpScreen.kt
+--- a/feature/startup/src/main/java/com/blaze/feature/startup/screen/otp/OtpScreen.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/feature/startup/src/main/java/com/blaze/feature/startup/screen/otp/OtpScreen.kt	(date 1703216514681)
+@@ -43,6 +43,7 @@
+ import com.blaze.core.utils.navigation.DashboardRoute
+ import com.blaze.core.utils.navigation.StartUpRoute
+ import com.blaze.core.utils.util.ioScope
++import com.blaze.core.utils.util.log
+ import com.blaze.core.utils.util.mainScope
+ import com.google.firebase.FirebaseException
+ import com.google.firebase.FirebaseTooManyRequestsException
+@@ -102,18 +103,12 @@
+                             is FirebaseTooManyRequestsException -> {
+                                 // The SMS quota for the project has been exceeded
+                                 coreUi.snackbar("SMS quota exceeded")
+-//                                Toast.makeText(context, "SMS quota exceeded", Toast.LENGTH_SHORT)
+-//                                    .show()
++
+                             }
+ 
+                             is FirebaseAuthMissingActivityForRecaptchaException -> {
+                                 // reCAPTCHA verification attempted with null Activity
+                                 coreUi.snackbar("reCAPTCHA verification failed ! You are not a human")
+-//                                Toast.makeText(
+-//                                    context,
+-//                                    "reCAPTCHA verification failed ! You are not a human",
+-//                                    Toast.LENGTH_SHORT
+-//                                ).show()
+                             }
+                         }
+                     }
+@@ -136,7 +131,6 @@
+                 is FirebaseTooManyRequestsException -> {
+                     // The SMS quota for the project has been exceeded
+                     coreUi.snackbar("SMS quota exceeded")
+-//                    Toast.makeText(context, "SMS quota exceeded", Toast.LENGTH_SHORT).show()
+                 }
+ 
+                 is FirebaseAuthMissingActivityForRecaptchaException -> {
+@@ -187,6 +181,9 @@
+                             if (task.isSuccessful) {
+ 
+                                 coreUi.snackbar("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
++
++                                log("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
++
+                                 coreUi.currentUserNumber.value = task.result.user?.phoneNumber?:""
+                                 navController.navigate(DashboardRoute.DashboardScreen.route) {
+                                     popUpTo(StartUpRoute.MobileOtpScreen.route) {
+@@ -311,4 +308,3 @@
+ }
+ 
+ 
+-// filo
+\ No newline at end of file
+Index: feature/startup/src/main/java/com/blaze/feature/startup/navigation/StartUpNavGraph.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.feature.startup.navigation\r\n\r\nimport androidx.hilt.navigation.compose.hiltViewModel\r\nimport androidx.navigation.NavController\r\nimport androidx.navigation.NavGraphBuilder\r\nimport androidx.navigation.NavType\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.navArgument\r\nimport com.blaze.core.ui.CoreViewModel\r\nimport com.blaze.core.utils.navigation.StartUpRoute\r\nimport com.blaze.feature.startup.screen.login.LoginScreen\r\nimport com.blaze.feature.startup.screen.otp.OtpScreen\r\nimport com.blaze.feature.startup.screen.otp.OtpScreenViewModel\r\nimport com.blaze.feature.startup.screen.splash.SplashScreen\r\nimport com.blaze.feature.startup.screen.splash.SplashScreenViewModel\r\n\r\n\r\nfun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreViewModel) {\r\n    composable(route = StartUpRoute.SplashScreen.route) {\r\n        val viewModel = hiltViewModel<SplashScreenViewModel>()\r\n        SplashScreen(navController,viewModel,coreUi)\r\n    }\r\n\r\n    composable(route = StartUpRoute.LoginScreen.route) {\r\n        LoginScreen(navController,coreUi)\r\n    }\r\n\r\n    composable(route = \"${StartUpRoute.MobileOtpScreen.route}/{toSentText}\", arguments = listOf(\r\n        navArgument(\"toSentText\") { type = NavType.StringType })\r\n    ) {\r\n\r\n        val otpViewModel = hiltViewModel<OtpScreenViewModel>()\r\n\r\n        val toSentText = it.arguments!!.getString(\"toSentText\")\r\n        toSentText?.let { it1 -> OtpScreen(navController, it1,otpViewModel,coreUi) }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/navigation/StartUpNavGraph.kt b/feature/startup/src/main/java/com/blaze/feature/startup/navigation/StartUpNavGraph.kt
+--- a/feature/startup/src/main/java/com/blaze/feature/startup/navigation/StartUpNavGraph.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/feature/startup/src/main/java/com/blaze/feature/startup/navigation/StartUpNavGraph.kt	(date 1703216513311)
+@@ -8,6 +8,8 @@
+ import androidx.navigation.navArgument
+ import com.blaze.core.ui.CoreViewModel
+ import com.blaze.core.utils.navigation.StartUpRoute
++import com.blaze.feature.startup.screen.createuser.CreateUserScreen
++import com.blaze.feature.startup.screen.createuser.CreateUserViewModel
+ import com.blaze.feature.startup.screen.login.LoginScreen
+ import com.blaze.feature.startup.screen.otp.OtpScreen
+ import com.blaze.feature.startup.screen.otp.OtpScreenViewModel
+@@ -15,14 +17,14 @@
+ import com.blaze.feature.startup.screen.splash.SplashScreenViewModel
+ 
+ 
+-fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreUi: CoreViewModel) {
++fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreVm: CoreViewModel) {
+     composable(route = StartUpRoute.SplashScreen.route) {
+         val viewModel = hiltViewModel<SplashScreenViewModel>()
+-        SplashScreen(navController,viewModel,coreUi)
++        SplashScreen(navController,viewModel,coreVm)
+     }
+ 
+     composable(route = StartUpRoute.LoginScreen.route) {
+-        LoginScreen(navController,coreUi)
++        LoginScreen(navController,coreVm)
+     }
+ 
+     composable(route = "${StartUpRoute.MobileOtpScreen.route}/{toSentText}", arguments = listOf(
+@@ -31,7 +33,20 @@
+ 
+         val otpViewModel = hiltViewModel<OtpScreenViewModel>()
+ 
+-        val toSentText = it.arguments!!.getString("toSentText")
+-        toSentText?.let { it1 -> OtpScreen(navController, it1,otpViewModel,coreUi) }
++        val toSentText = it.arguments?.getString("toSentText")
++        toSentText?.let { it1 -> OtpScreen(navController, it1,otpViewModel,coreVm) }
++    }
++
++    composable(route = "${StartUpRoute.CreateUserScreen.route}/{stdCode}/{mobileNumber}/{displayName}",
++        arguments = listOf(
++            navArgument("mobileNumber"){type = NavType.StringType}
++        )
++        ){
++        val viewModel = hiltViewModel<CreateUserViewModel>()
++        val stdCode = it.arguments?.getString("stdCode")
++        val displayName = it.arguments?.getString("displayName")
++        val mobileNumber = it.arguments?.getString("mobileNumber")
++
++        CreateUserScreen(navController,coreVm,viewModel,stdCode,displayName,mobileNumber)
+     }
+ }
+\ No newline at end of file
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/login/LoginScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.feature.startup.screen.login\r\n\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.layout.width\r\nimport androidx.compose.foundation.text.KeyboardActions\r\nimport androidx.compose.foundation.text.KeyboardOptions\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.OutlinedTextField\r\nimport androidx.compose.material3.OutlinedTextFieldDefaults\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.text.TextStyle\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.input.ImeAction\r\nimport androidx.compose.ui.text.input.KeyboardType\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.navigation.NavController\r\nimport com.blaze.core.ui.CoreViewModel\r\nimport com.blaze.core.ui.components.Button\r\nimport com.blaze.core.ui.components.CustomButtonColors\r\nimport com.blaze.core.utils.navigation.StartUpRoute\r\n\r\n\r\n@Composable\r\nfun LoginScreen(navController: NavController, coreUi: CoreViewModel) {\r\n    val mobileNumber = remember { mutableStateOf(\"\") }\r\n    val stdCode = remember { mutableStateOf(\"+91\") }\r\n    Column(\r\n        Modifier\r\n            .background(MaterialTheme.colorScheme.primary)\r\n            .fillMaxSize()\r\n            .padding(16.dp)\r\n    ) {\r\n        Spacer(modifier = Modifier.weight(1f))\r\n        Row(Modifier.fillMaxWidth()) {\r\n            OutlinedTextField(value = stdCode.value,\r\n                onValueChange = {\r\n                    stdCode.value = it\r\n                },\r\n                label = {\r\n                    Text(text = \"STD\", color = MaterialTheme.colorScheme.onPrimary)\r\n                },\r\n                textStyle = TextStyle(\r\n                    textAlign = TextAlign.Center,\r\n                    fontWeight = FontWeight.SemiBold\r\n                ),\r\n                modifier = Modifier.weight(2f),\r\n                keyboardOptions = KeyboardOptions.Default.copy(\r\n                    imeAction = ImeAction.Next, keyboardType = KeyboardType.Number\r\n                ),\r\n                colors = OutlinedTextFieldDefaults.colors(\r\n                    focusedTextColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    focusedLabelColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    focusedBorderColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    unfocusedBorderColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    unfocusedTextColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    cursorColor =  MaterialTheme.colorScheme.onPrimary\r\n                )\r\n            )\r\n            Spacer(modifier = Modifier.width(8.dp))\r\n\r\n            OutlinedTextField(value = mobileNumber.value,\r\n                onValueChange = {\r\n                    mobileNumber.value = it\r\n                },\r\n                label = {\r\n                    Text(text = \"Mobile Number\")\r\n                },\r\n                textStyle = TextStyle(\r\n                    textAlign = TextAlign.Start,\r\n                    fontWeight = FontWeight.SemiBold\r\n                ),\r\n                modifier = Modifier.weight(5f),\r\n                keyboardOptions = KeyboardOptions.Default.copy(\r\n                    keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done\r\n                ),\r\n                keyboardActions = KeyboardActions(onDone = {\r\n                    if (mobileNumber.value.length == 10 && stdCode.value.isNotEmpty()) {\r\n                        navController.navigate(\"${StartUpRoute.MobileOtpScreen.route}/${stdCode.value}${mobileNumber.value}\")\r\n                    } else {\r\n                        coreUi.snackbar(\"Invalid Mobile Number and Country Code\")\r\n                    }\r\n                }),\r\n                colors = OutlinedTextFieldDefaults.colors(\r\n                    focusedTextColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    focusedLabelColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    focusedBorderColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    unfocusedBorderColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    unfocusedTextColor =  MaterialTheme.colorScheme.onPrimary,\r\n                    cursorColor =  MaterialTheme.colorScheme.onPrimary\r\n                )\r\n            )\r\n        }\r\n\r\n        Spacer(Modifier.height(16.dp))\r\n        Button(\r\n            text = \"Continue\", colors = CustomButtonColors.colors(\r\n                textColor = MaterialTheme.colorScheme.onBackground,\r\n                bodyColor = MaterialTheme.colorScheme.background\r\n            ), modifier = Modifier.fillMaxWidth()\r\n        ) {\r\n            if (mobileNumber.value.length == 10 && stdCode.value.isNotEmpty()) {\r\n                navController.navigate(\"${StartUpRoute.MobileOtpScreen.route}/${stdCode.value}${mobileNumber.value}\")\r\n            } else {\r\n                coreUi.snackbar(\"Invalid Mobile Number and Country Code\")\r\n            }\r\n        }\r\n        Spacer(Modifier.height(16.dp))\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/login/LoginScreen.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/login/LoginScreen.kt
+--- a/feature/startup/src/main/java/com/blaze/feature/startup/screen/login/LoginScreen.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/feature/startup/src/main/java/com/blaze/feature/startup/screen/login/LoginScreen.kt	(date 1703212949011)
+@@ -42,7 +42,9 @@
+             .fillMaxSize()
+             .padding(16.dp)
+     ) {
++
+         Spacer(modifier = Modifier.weight(1f))
++
+         Row(Modifier.fillMaxWidth()) {
+             OutlinedTextField(value = stdCode.value,
+                 onValueChange = {
+@@ -68,6 +70,7 @@
+                     cursorColor =  MaterialTheme.colorScheme.onPrimary
+                 )
+             )
++
+             Spacer(modifier = Modifier.width(8.dp))
+ 
+             OutlinedTextField(value = mobileNumber.value,
+Index: core/utils/src/main/java/com/blaze/core/utils/data/repo/LocationRepository.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.core.utils.data.repo\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.content.IntentFilter\r\nimport android.location.LocationManager\r\nimport android.os.Build\r\nimport android.provider.Settings\r\nimport androidx.annotation.RequiresApi\r\nimport androidx.compose.runtime.MutableState\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport com.blaze.core.utils.observer.GpsConnectivityObserver\r\nimport com.blaze.core.utils.util.hasLocationPermission\r\nimport com.google.android.gms.location.LocationServices\r\nimport com.google.android.gms.location.Priority\r\nimport com.google.android.gms.maps.model.LatLng\r\nimport com.google.android.gms.tasks.CancellationTokenSource\r\nimport dagger.hilt.android.qualifiers.ApplicationContext\r\nimport kotlinx.coroutines.*\r\nimport kotlinx.coroutines.tasks.await\r\nimport javax.inject.Inject\r\nimport javax.inject.Singleton\r\n\r\n@Singleton\r\nclass LocationRepository @Inject constructor(\r\n    @ApplicationContext private val context: Context\r\n) {\r\n\r\n    private val locationClient = LocationServices.getFusedLocationProviderClient(context)\r\n    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager\r\n    val isGpsEnabled = mutableStateOf(false)\r\n    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)\r\n    private val gpsStateReceiver = GpsConnectivityObserver(isGpsEnabled)\r\n    private val isLocationReceiverRegistered = mutableStateOf(false)\r\n\r\n\r\n    fun openLocationSetting() {\r\n        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)\r\n        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)\r\n        context.startActivity(intent)\r\n    }\r\n\r\n    fun registerGpsStateReceiver() {\r\n        val intentFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)\r\n        context.registerReceiver(gpsStateReceiver, intentFilter)\r\n        isLocationReceiverRegistered.value = true\r\n\r\n    }\r\n\r\n    fun unregisterGpsStateReceiver() {\r\n        if (isLocationReceiverRegistered.value) {\r\n            context.unregisterReceiver(gpsStateReceiver)\r\n            isLocationReceiverRegistered.value = false\r\n        }\r\n    }\r\n\r\n    @RequiresApi(Build.VERSION_CODES.O)\r\n    @SuppressLint(\"MissingPermission\")\r\n    fun getCurrentLocation(\r\n        latLng: MutableState<LatLng>\r\n    ) {\r\n        CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {\r\n            val priority = Priority.PRIORITY_HIGH_ACCURACY\r\n            if (context.hasLocationPermission()) {\r\n                val result = locationClient.getCurrentLocation(\r\n                    priority,\r\n                    CancellationTokenSource().token,\r\n                ).await()\r\n                result?.let { fetchedLocation ->\r\n                    latLng.value = LatLng(fetchedLocation.latitude,fetchedLocation.longitude)\r\n                }\r\n            }\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/utils/src/main/java/com/blaze/core/utils/data/repo/LocationRepository.kt b/core/utils/src/main/java/com/blaze/core/utils/data/repo/LocationRepository.kt
+--- a/core/utils/src/main/java/com/blaze/core/utils/data/repo/LocationRepository.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/core/utils/src/main/java/com/blaze/core/utils/data/repo/LocationRepository.kt	(date 1703216805367)
+@@ -28,12 +28,16 @@
+ ) {
+ 
+     private val locationClient = LocationServices.getFusedLocationProviderClient(context)
+-    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+     val isGpsEnabled = mutableStateOf(false)
+-    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+     private val gpsStateReceiver = GpsConnectivityObserver(isGpsEnabled)
+     private val isLocationReceiverRegistered = mutableStateOf(false)
+ 
++    private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
++    val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
++
++
++
++
+ 
+     fun openLocationSetting() {
+         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+@@ -61,7 +65,7 @@
+         latLng: MutableState<LatLng>
+     ) {
+         CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+-            val priority = Priority.PRIORITY_HIGH_ACCURACY
++            val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY//Priority.PRIORITY_HIGH_ACCURACY
+             if (context.hasLocationPermission()) {
+                 val result = locationClient.getCurrentLocation(
+                     priority,
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/forgetpassword/ForgetPasswordScreen.kt
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/forgetpassword/ForgetPasswordScreen.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/forgetpassword/ForgetPasswordScreen.kt
+deleted file mode 100644
+--- a/feature/startup/src/main/java/com/blaze/feature/startup/screen/forgetpassword/ForgetPasswordScreen.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ /dev/null	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
+@@ -1,39 +0,0 @@
+-package com.blaze.feature.startup.screen.forgetpassword
+-
+-import androidx.compose.foundation.layout.Column
+-import androidx.compose.foundation.layout.Spacer
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.fillMaxWidth
+-import androidx.compose.foundation.layout.height
+-import androidx.compose.material3.Button
+-import androidx.compose.material3.OutlinedTextField
+-import androidx.compose.material3.Text
+-import androidx.compose.runtime.Composable
+-import androidx.compose.ui.Modifier
+-import androidx.compose.ui.text.style.TextAlign
+-import androidx.compose.ui.unit.dp
+-import androidx.navigation.NavController
+-
+-@Composable
+-fun ForgetPasswordScreen(navController: NavController) {
+-    Column(Modifier.fillMaxSize()) {
+-        Spacer(modifier = Modifier.weight(1f))
+-
+-        OutlinedTextField(value = "", onValueChange = {
+-
+-        })
+-        Spacer(modifier = Modifier.height(12.dp))
+-        Text(
+-            text = "We will send a recovery link to the email address for resetting your password.",
+-            modifier = Modifier.fillMaxWidth(),
+-            textAlign = TextAlign.Center
+-        )
+-
+-        Spacer(modifier = Modifier.weight(1f))
+-        Button(onClick = { /*TODO*/ }) {
+-            Text(text = "Forgot Password")
+-        }
+-        Spacer(modifier = Modifier.weight(1f))
+-
+-    }
+-}
+\ No newline at end of file
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/signup/SignUpScreen.kt
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/signup/SignUpScreen.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/signup/SignUpScreen.kt
+deleted file mode 100644
+--- a/feature/startup/src/main/java/com/blaze/feature/startup/screen/signup/SignUpScreen.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ /dev/null	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
+@@ -1,75 +0,0 @@
+-package com.blaze.feature.startup.screen.signup
+-
+-import androidx.compose.foundation.layout.Arrangement
+-import androidx.compose.foundation.layout.Column
+-import androidx.compose.foundation.layout.Row
+-import androidx.compose.foundation.layout.Spacer
+-import androidx.compose.foundation.layout.fillMaxSize
+-import androidx.compose.foundation.layout.fillMaxWidth
+-import androidx.compose.foundation.layout.height
+-import androidx.compose.foundation.layout.padding
+-import androidx.compose.material3.Button
+-import androidx.compose.material3.OutlinedTextField
+-import androidx.compose.material3.Text
+-import androidx.compose.runtime.Composable
+-import androidx.compose.ui.Modifier
+-import androidx.compose.ui.unit.dp
+-import androidx.navigation.NavController
+-import com.blaze.core.utils.navigation.StartUpRoute
+-
+-@Composable
+-fun SignUpScreen(navController: NavController) {
+-    Column(
+-        Modifier
+-            .fillMaxSize()
+-            .padding(16.dp)
+-    ) {
+-        Spacer(Modifier.height(16.dp))
+-
+-        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+-            Row(
+-                Modifier.fillMaxWidth(),
+-                horizontalArrangement = Arrangement.Center
+-            ) {
+-//                Image(painter = painterResource(id = R.drawable.ic_launcher_foreground), contentDescription ="google" )
+-                Text(text = "Sign up with Google")
+-            }
+-        }
+-
+-        Spacer(Modifier.height(10.dp))
+-        Row {
+-            Spacer(
+-                Modifier
+-                    .height(1.dp)
+-                    .weight(1f)
+-            )
+-            Text(text = " or ")
+-            Spacer(
+-                Modifier
+-                    .height(1.dp)
+-                    .weight(1f)
+-            )
+-        }
+-        Spacer(Modifier.height(10.dp))
+-
+-        Text(text = "Email")
+-        OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
+-        Spacer(Modifier.height(16.dp))
+-
+-        Text(text = "Password")
+-        OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
+-        Spacer(Modifier.height(16.dp))
+-
+-        Text(text = "Password")
+-        OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.fillMaxWidth())
+-        Spacer(Modifier.height(16.dp))
+-        Button(onClick = {
+-                         navController.navigate(StartUpRoute.AdditionalDetailsScreen.route)
+-
+-                         }, modifier = Modifier.fillMaxWidth()) {
+-            Text(text = "Sign Up")
+-        }
+-
+-
+-    }
+-}
+\ No newline at end of file
+Index: buildSrc/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>1\r\n0
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/buildSrc/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab b/buildSrc/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab
+--- a/buildSrc/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/buildSrc/build/kotlin/compileKotlin/cacheable/caches-jvm/lookups/counters.tab	(date 1696326162955)
+@@ -1,2 +1,2 @@
+-1
++2
+ 0
+\ No newline at end of file
+Index: core/utils/src/main/java/com/blaze/core/utils/util/Util.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.core.utils.util\r\n\r\nimport android.Manifest\r\nimport android.content.ContentResolver\r\nimport android.content.Context\r\nimport android.content.pm.PackageManager\r\nimport android.graphics.Bitmap\r\nimport android.graphics.BitmapFactory\r\nimport android.net.Uri\r\nimport androidx.core.content.ContextCompat\r\nimport kotlinx.coroutines.CoroutineScope\r\nimport kotlinx.coroutines.Dispatchers\r\nimport java.io.File\r\nimport java.io.FileOutputStream\r\nimport java.io.InputStream\r\n\r\nval ioScope = CoroutineScope(Dispatchers.IO)\r\nval mainScope = CoroutineScope(Dispatchers.Main)\r\n\r\n\r\nfun getBitmapFromUri(contentResolver: ContentResolver, uri: Uri): Bitmap? {\r\n    var inputStream: InputStream? = null\r\n    try {\r\n        inputStream = contentResolver.openInputStream(uri)\r\n        if (inputStream != null) {\r\n            return BitmapFactory.decodeStream(inputStream)\r\n        }\r\n    } catch (e: Exception) {\r\n        e.printStackTrace()\r\n    } finally {\r\n        inputStream?.close()\r\n    }\r\n    return null\r\n}\r\n\r\nfun saveBitmapToFile(bitmap: Bitmap, context: Context): Uri? {\r\n    val imagesFolder = File(context.cacheDir, \"images\")\r\n    if (!imagesFolder.exists()) {\r\n        imagesFolder.mkdirs()\r\n    }\r\n    val imageFile = File(imagesFolder, \"image.jpg\")\r\n\r\n    val fos = FileOutputStream(imageFile)\r\n    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos)\r\n    fos.flush()\r\n    fos.close()\r\n\r\n    return Uri.fromFile(imageFile)\r\n}\r\n\r\nfun uriToBitmap(contentResolver: ContentResolver, imageUri: Uri): Bitmap? {\r\n    var inputStream: InputStream? = null\r\n    try {\r\n        inputStream = contentResolver.openInputStream(imageUri)\r\n        if (inputStream != null) {\r\n            return BitmapFactory.decodeStream(inputStream)\r\n        }\r\n    } catch (e: Exception) {\r\n        e.printStackTrace()\r\n    } finally {\r\n        inputStream?.close()\r\n    }\r\n    return null\r\n}\r\n\r\nfun ByteArray.toBitmap(): Bitmap = BitmapFactory.decodeByteArray(this, 0, this.size)\r\n\r\n\r\nfun Context.hasLocationPermission(): Boolean {\r\n    return ContextCompat.checkSelfPermission(\r\n        this, Manifest.permission.ACCESS_FINE_LOCATION\r\n    ) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(\r\n        this, Manifest.permission.ACCESS_COARSE_LOCATION\r\n    ) == PackageManager.PERMISSION_GRANTED\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/utils/src/main/java/com/blaze/core/utils/util/Util.kt b/core/utils/src/main/java/com/blaze/core/utils/util/Util.kt
+--- a/core/utils/src/main/java/com/blaze/core/utils/util/Util.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/core/utils/src/main/java/com/blaze/core/utils/util/Util.kt	(date 1703213600253)
+@@ -7,6 +7,7 @@
+ import android.graphics.Bitmap
+ import android.graphics.BitmapFactory
+ import android.net.Uri
++import android.util.Log
+ import androidx.core.content.ContextCompat
+ import kotlinx.coroutines.CoroutineScope
+ import kotlinx.coroutines.Dispatchers
+@@ -73,3 +74,8 @@
+         this, Manifest.permission.ACCESS_COARSE_LOCATION
+     ) == PackageManager.PERMISSION_GRANTED
+ }
++
++
++fun log(msg:String){
++    Log.i("Classic Beat Log", "log: $msg")
++}
+\ No newline at end of file
+Index: buildSrc/build/kotlin/buildSrcjar-classes.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>D:\\studio project\\EvChargingAndroid\\buildSrc\\build\\classes\\kotlin\\main\\ProjectConfig.class
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/buildSrc/build/kotlin/buildSrcjar-classes.txt b/buildSrc/build/kotlin/buildSrcjar-classes.txt
+--- a/buildSrc/build/kotlin/buildSrcjar-classes.txt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/buildSrc/build/kotlin/buildSrcjar-classes.txt	(date 1696326163082)
+@@ -1,1 +1,1 @@
+-D:\studio project\EvChargingAndroid\buildSrc\build\classes\kotlin\main\ProjectConfig.class
+\ No newline at end of file
++C:\Users\khang\AndroidStudioProjects\ClassicBeats\buildSrc\build\classes\kotlin\main\ProjectConfig.class
+\ No newline at end of file
+Index: core/utils/src/main/java/com/blaze/core/utils/observer/GpsConnectivityObserver.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.core.utils.observer\r\n\r\nimport android.content.BroadcastReceiver\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.location.LocationManager\r\nimport androidx.compose.runtime.MutableState\r\n\r\nconst val UPDATE_FREQUENCY = 500//250\r\nconst val DELAY_MILLIS = 1000L\r\nclass GpsConnectivityObserver(private val state: MutableState<Boolean>) : BroadcastReceiver() {\r\n    override fun onReceive(context: Context, intent: Intent) {\r\n        if (intent.action == LocationManager.PROVIDERS_CHANGED_ACTION) {\r\n            val locationManager =\r\n                context.getSystemService(Context.LOCATION_SERVICE) as LocationManager\r\n            val gpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)\r\n            state.value = gpsEnabled\r\n\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/core/utils/src/main/java/com/blaze/core/utils/observer/GpsConnectivityObserver.kt b/core/utils/src/main/java/com/blaze/core/utils/observer/GpsConnectivityObserver.kt
+--- a/core/utils/src/main/java/com/blaze/core/utils/observer/GpsConnectivityObserver.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/core/utils/src/main/java/com/blaze/core/utils/observer/GpsConnectivityObserver.kt	(date 1696012939958)
+@@ -8,6 +8,10 @@
+ 
+ const val UPDATE_FREQUENCY = 500//250
+ const val DELAY_MILLIS = 1000L
++
++/**
++ * This class tells when the GPS is turned on or off
++* */
+ class GpsConnectivityObserver(private val state: MutableState<Boolean>) : BroadcastReceiver() {
+     override fun onReceive(context: Context, intent: Intent) {
+         if (intent.action == LocationManager.PROVIDERS_CHANGED_ACTION) {
+Index: app/src/main/java/com/blaze/classicbeat/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.blaze.classicbeat\r\n\r\nimport android.Manifest\r\nimport android.annotation.SuppressLint\r\nimport android.os.Bundle\r\nimport android.widget.Toast\r\nimport androidx.activity.ComponentActivity\r\nimport androidx.activity.compose.BackHandler\r\nimport androidx.activity.compose.setContent\r\nimport androidx.compose.foundation.Image\r\nimport androidx.compose.foundation.background\r\nimport androidx.compose.foundation.layout.Column\r\nimport androidx.compose.foundation.layout.Row\r\nimport androidx.compose.foundation.layout.Spacer\r\nimport androidx.compose.foundation.layout.fillMaxSize\r\nimport androidx.compose.foundation.layout.fillMaxWidth\r\nimport androidx.compose.foundation.layout.height\r\nimport androidx.compose.foundation.layout.padding\r\nimport androidx.compose.foundation.shape.CircleShape\r\nimport androidx.compose.foundation.shape.RoundedCornerShape\r\nimport androidx.compose.material3.MaterialTheme\r\nimport androidx.compose.material3.Surface\r\nimport androidx.compose.material3.Text\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.runtime.LaunchedEffect\r\nimport androidx.compose.runtime.getValue\r\nimport androidx.compose.runtime.mutableStateOf\r\nimport androidx.compose.runtime.remember\r\nimport androidx.compose.runtime.setValue\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.compose.ui.draw.clip\r\nimport androidx.compose.ui.graphics.Color.Companion.White\r\nimport androidx.compose.ui.platform.LocalContext\r\nimport androidx.compose.ui.res.painterResource\r\nimport androidx.compose.ui.text.font.FontWeight\r\nimport androidx.compose.ui.text.style.TextAlign\r\nimport androidx.compose.ui.unit.dp\r\nimport androidx.compose.ui.window.Dialog\r\nimport androidx.hilt.navigation.compose.hiltViewModel\r\nimport androidx.lifecycle.LifecycleCoroutineScope\r\nimport androidx.lifecycle.lifecycleScope\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.blaze.classicbeat.navigation.SetupNavGraph\r\nimport com.blaze.core.ui.CoreViewModel\r\nimport com.blaze.core.ui.InitSubUiComponents\r\nimport com.blaze.core.ui.components.location.LocationUpdatesEffect\r\nimport com.blaze.core.ui.ui.theme.ClassicBeatTheme\r\nimport com.blaze.core.utils.navigation.StartUpRoute\r\nimport com.blaze.core.utils.observer.DELAY_MILLIS\r\nimport com.blaze.core.utils.util.RationaleState\r\nimport com.blaze.feature.onboarding.screen.OnBoardingViewModel\r\nimport com.google.accompanist.permissions.ExperimentalPermissionsApi\r\nimport com.google.accompanist.permissions.rememberMultiplePermissionsState\r\nimport com.google.android.gms.location.LocationRequest\r\nimport com.google.android.gms.location.Priority\r\nimport com.google.android.gms.maps.model.LatLng\r\nimport com.google.android.libraries.places.api.Places\r\nimport com.velox.lazeir.utils.internetConnectivityListener\r\nimport dagger.hilt.android.AndroidEntryPoint\r\n\r\n@AndroidEntryPoint\r\nclass MainActivity : ComponentActivity() {\r\n    @SuppressLint(\"MissingPermission\")\r\n    @OptIn(ExperimentalPermissionsApi::class)\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n//        FirebaseApp.initializeApp(this)\r\n        // Initialize the SDK\r\n        setContent {\r\n            val coreViewModel = hiltViewModel<CoreViewModel>()\r\n\r\n            LaunchedEffect(Unit ){\r\n                coreViewModel.registerGpsStateReceiver()\r\n            }\r\n\r\n            BackHandler {\r\n                coreViewModel.unregisterGpsStateReceiver()\r\n            }\r\n\r\n            ClassicBeatTheme {\r\n\r\n                val gettingContinuesLocation = remember { mutableStateOf(true) }\r\n                // The location request that defines the location updates\r\n                var locationRequest by remember {\r\n                    mutableStateOf<LocationRequest?>(null)\r\n                }\r\n\r\n                val permissionState = rememberMultiplePermissionsState(\r\n                    listOf(\r\n                        Manifest.permission.ACCESS_COARSE_LOCATION,\r\n                        Manifest.permission.ACCESS_FINE_LOCATION,\r\n                        Manifest.permission.READ_EXTERNAL_STORAGE,\r\n                        Manifest.permission.CAMERA\r\n                    ),\r\n                )\r\n\r\n                // Keeps track of the rationale dialog state, needed when the user requires further rationale\r\n                val rationaleState = remember {\r\n                    mutableStateOf<RationaleState?>(null)\r\n                }\r\n\r\n                fun askForPermission() {\r\n                    if (permissionState.shouldShowRationale) {\r\n                        rationaleState.value = RationaleState(\r\n                            \"Request Precise Location\",\r\n                            \"In order to use this feature please grant access by accepting \" + \"the location permission dialog.\" + \"\\n\\nWould you like to continue?\",\r\n                        ) { proceed ->\r\n                            if (proceed) {\r\n                                permissionState.launchMultiplePermissionRequest()\r\n                            }\r\n                            rationaleState.value = null\r\n                        }\r\n                    } else {\r\n                        permissionState.launchMultiplePermissionRequest()\r\n                    }\r\n                }\r\n\r\n                LaunchedEffect(key1 = Unit) {\r\n                    if (!permissionState.allPermissionsGranted) {\r\n                        askForPermission()\r\n                    }\r\n                }\r\n\r\n                // Only register the location updates effect when we have a request\r\n                if (locationRequest != null) {\r\n                    LocationUpdatesEffect(locationRequest!!) { result ->\r\n                        // For each result update the text\r\n                        for (currentLocation in result.locations) {\r\n                            coreViewModel.currentLocation.value = LatLng(currentLocation.latitude, currentLocation.longitude)\r\n                        }\r\n                    }\r\n                }\r\n\r\n                LaunchedEffect(key1 = gettingContinuesLocation.value) {\r\n                    locationRequest = if (gettingContinuesLocation.value) {\r\n                        // Define the accuracy based on your needs and granted permissions\r\n                        val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY\r\n                        val requester = LocationRequest.Builder(\r\n                            priority, DELAY_MILLIS\r\n                        )\r\n                        requester.setMinUpdateIntervalMillis(2 * DELAY_MILLIS)\r\n                        requester.build()\r\n                    } else {\r\n                        null\r\n                    }\r\n                }\r\n\r\n                val context = LocalContext.current\r\n\r\n                LaunchedEffect(key1 = coreViewModel.gpsHardwareEnabled){\r\n                    coreViewModel.isGpsEnabled.value = coreViewModel.gpsHardwareEnabled\r\n                }\r\n\r\n                LaunchedEffect(key1 = coreViewModel.isGpsEnabled.value){\r\n                    if (coreViewModel.isGpsEnabled.value){\r\n                        Toast.makeText(context, \"gps  enabled\", Toast.LENGTH_SHORT).show()\r\n                        gettingContinuesLocation.value = true\r\n                    }else{\r\n                        Toast.makeText(context, \"gps  disabled\", Toast.LENGTH_SHORT).show()\r\n                        gettingContinuesLocation.value = false\r\n                    }\r\n                }\r\n\r\n                MainActivityScreen(lifecycleScope,coreViewModel)\r\n            }\r\n        }\r\n    }\r\n\r\n    override fun onStop() {\r\n        super.onStop()\r\n\r\n    }\r\n}\r\n\r\n@Composable\r\nfun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: CoreViewModel) {\r\n\r\n    ClassicBeatTheme {\r\n        // A surface container using the 'background' color from the theme\r\n        val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()\r\n        val isInternetAvailable = coreViewModel.isInternetAvailable\r\n\r\n        val context = LocalContext.current\r\n\r\n        internetConnectivityListener(lifecycleScope = lifecycleScope,\r\n            applicationContext = context,\r\n            onAvailable = { isInternetAvailable.value = true },\r\n            onUnAvailable = { isInternetAvailable.value = false },\r\n            onLosing = { isInternetAvailable.value = false },\r\n            onLost = { isInternetAvailable.value = false })\r\n        Surface(\r\n            modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background\r\n        ) {\r\n            val navGraphController = rememberNavController()\r\n            SetupNavGraph(\r\n                startDestination = StartUpRoute.SplashScreen.route,\r\n                navController = navGraphController,\r\n                coreUi = coreViewModel,\r\n                onBoardingViewModel = onBoardingViewModel\r\n            )\r\n\r\n            //region internet connectivity dialog\r\n            if (!coreViewModel.isInternetAvailable.value) {\r\n                Dialog(onDismissRequest = {\r\n                    coreViewModel.toast(\"Please Connect To Internet And Try Again\")\r\n                }) {\r\n                    Column(\r\n                        modifier = Modifier\r\n                            .fillMaxWidth()\r\n                            .background(color = White, RoundedCornerShape(16.dp))\r\n                            .padding(16.dp)\r\n                    ) {\r\n                        Row(Modifier.height(40.dp)) {\r\n                            Text(text = \"ZAPE\", fontWeight = FontWeight.Black)\r\n                            Spacer(modifier = Modifier.weight(1f))\r\n                            Image(\r\n                                painter = painterResource(id = com.blaze.core.ui.R.drawable.logo_square),\r\n                                contentDescription = null,\r\n                                modifier = Modifier\r\n                                    .height(30.dp)\r\n                                    .clip(CircleShape)\r\n                            )\r\n                        }\r\n\r\n                        Spacer(modifier = Modifier.height(10.dp))\r\n                        Text(\r\n                            text = \"Internet Connection Lost,\\nPlease Connect And Try Again!\",\r\n                            modifier = Modifier.fillMaxWidth(),\r\n                            textAlign = TextAlign.Center\r\n                        )\r\n                        Spacer(modifier = Modifier.height(10.dp))\r\n                    }\r\n                }\r\n            }\r\n            //endregion\r\n        }\r\n        InitSubUiComponents(coreViewModel)\r\n\r\n\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/blaze/classicbeat/MainActivity.kt b/app/src/main/java/com/blaze/classicbeat/MainActivity.kt
+--- a/app/src/main/java/com/blaze/classicbeat/MainActivity.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/app/src/main/java/com/blaze/classicbeat/MainActivity.kt	(date 1696012939974)
+@@ -131,13 +131,12 @@
+                     }
+                 }
+ 
++                //
+                 LaunchedEffect(key1 = gettingContinuesLocation.value) {
+                     locationRequest = if (gettingContinuesLocation.value) {
+                         // Define the accuracy based on your needs and granted permissions
+                         val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY //Priority.PRIORITY_HIGH_ACCURACY
+-                        val requester = LocationRequest.Builder(
+-                            priority, DELAY_MILLIS
+-                        )
++                        val requester = LocationRequest.Builder(priority, DELAY_MILLIS)
+                         requester.setMinUpdateIntervalMillis(2 * DELAY_MILLIS)
+                         requester.build()
+                     } else {
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n//    id 'com.android.application'\r\n//    id 'org.jetbrains.kotlin.android'\r\n    alias(libs.plugins.com.android.application)\r\n    alias(libs.plugins.org.jetbrains.kotlin.android)\r\n    id 'kotlin-kapt'\r\n    id 'dagger.hilt.android.plugin'\r\n    id 'com.google.gms.google-services'\r\n\r\n    id 'com.google.devtools.ksp'\r\n    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'\r\n}\r\n\r\nandroid {\r\n    namespace 'com.blaze.classicbeat'\r\n    compileSdk 34\r\n\r\n    defaultConfig {\r\n        applicationId \"com.blaze.classicbeat\"\r\n        minSdk 24\r\n        targetSdk 33\r\n        versionCode 1\r\n        versionName \"1.0\"\r\n\r\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\r\n        vectorDrawables {\r\n            useSupportLibrary true\r\n        }\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            minifyEnabled false\r\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility JavaVersion.VERSION_17\r\n        targetCompatibility JavaVersion.VERSION_17\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = '17'\r\n    }\r\n    buildFeatures {\r\n        compose true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion '1.4.3'\r\n    }\r\n    packaging {\r\n        resources {\r\n            excludes += '/META-INF/{AL2.0,LGPL2.1}'\r\n        }\r\n    }\r\n}\r\n\r\ndependencies {\r\n    implementation project(\":core:ui\")\r\n    implementation project(\":core:utils\")\r\n    implementation project(\":feature:startup\")\r\n    implementation project(\":feature:dashboard\")\r\n    implementation project(\":feature:onboarding\")\r\n\r\n    implementation libs.core.ktx\r\n    implementation libs.appcompat\r\n    implementation libs.material\r\n    implementation libs.lifecycle.runtime.ktx\r\n    implementation libs.activity.compose\r\n    implementation platform(libs.compose.bom)\r\n    implementation libs.ui\r\n    implementation libs.ui.graphics\r\n    implementation libs.ui.tooling.preview\r\n    implementation libs.material3\r\n    implementation platform(libs.compose.bom)\r\n//    implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'\r\n    testImplementation libs.junit\r\n    androidTestImplementation libs.androidx.test.ext.junit\r\n    androidTestImplementation libs.espresso.core\r\n\r\n    androidTestImplementation platform(libs.compose.bom)\r\n    androidTestImplementation libs.ui.test.junit4\r\n    androidTestImplementation platform(libs.compose.bom)\r\n    debugImplementation libs.ui.tooling\r\n    debugImplementation libs.ui.test.manifest\r\n\r\n    implementation libs.navigation.compose\r\n\r\n    // Dagger Hilt\r\n    implementation libs.hilt.android\r\n    kapt libs.hilt.compiler\r\n    implementation libs.hilt.navigation.compose\r\n\r\n    //permission\r\n    implementation libs.accompanist.permissions\r\n\r\n    implementation libs.lazier\r\n    implementation libs.work.runtime.ktx\r\n    implementation libs.lifecycle.runtime.ktx\r\n\r\n    implementation libs.systemuicontroller\r\n    implementation libs.firebase.core\r\n\r\n    implementation libs.maps.place\r\n\r\n    implementation libs.kotlinx.coroutines.core\r\n    implementation libs.kotlinx.coroutines.android\r\n    implementation libs.kotlinx.coroutines.play.services\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle b/app/build.gradle
+--- a/app/build.gradle	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/app/build.gradle	(date 1696328382359)
+@@ -13,14 +13,14 @@
+ 
+ android {
+     namespace 'com.blaze.classicbeat'
+-    compileSdk 34
++    compileSdk ProjectConfig.compileSdk
+ 
+     defaultConfig {
+         applicationId "com.blaze.classicbeat"
+-        minSdk 24
+-        targetSdk 33
+-        versionCode 1
+-        versionName "1.0"
++        minSdk ProjectConfig.minSdk
++        targetSdk ProjectConfig.targetSdk
++        versionCode ProjectConfig.versionCode
++        versionName ProjectConfig.versionName
+ 
+         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+         vectorDrawables {
+Index: buildSrc/src/main/java/ProjectConfig.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>object ProjectConfig {\r\n    const val compileSdk = 33\r\n    const val minSdk = 24\r\n    const val targetSdk = 33\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/buildSrc/src/main/java/ProjectConfig.kt b/buildSrc/src/main/java/ProjectConfig.kt
+--- a/buildSrc/src/main/java/ProjectConfig.kt	(revision 5fcb9f274a21e59f09678cd56b890b7a3658d11b)
++++ b/buildSrc/src/main/java/ProjectConfig.kt	(date 1696326143113)
+@@ -2,4 +2,6 @@
+     const val compileSdk = 33
+     const val minSdk = 24
+     const val targetSdk = 33
++    const val versionCode  = 1
++    const val versionName = "1.0"
+ }
+\ No newline at end of file
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserScreen.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserScreen.kt
+new file mode 100644
+--- /dev/null	(date 1703217508812)
++++ b/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserScreen.kt	(date 1703217508812)
+@@ -0,0 +1,145 @@
++package com.blaze.feature.startup.screen.createuser
++
++import androidx.compose.foundation.background
++import androidx.compose.foundation.layout.Column
++import androidx.compose.foundation.layout.Row
++import androidx.compose.foundation.layout.Spacer
++import androidx.compose.foundation.layout.fillMaxSize
++import androidx.compose.foundation.layout.fillMaxWidth
++import androidx.compose.foundation.layout.height
++import androidx.compose.foundation.layout.padding
++import androidx.compose.foundation.layout.width
++import androidx.compose.foundation.text.KeyboardActions
++import androidx.compose.foundation.text.KeyboardOptions
++import androidx.compose.material3.MaterialTheme
++import androidx.compose.material3.OutlinedTextField
++import androidx.compose.material3.OutlinedTextFieldDefaults
++import androidx.compose.material3.Text
++import androidx.compose.runtime.Composable
++import androidx.compose.runtime.mutableStateOf
++import androidx.compose.runtime.saveable.rememberSaveable
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.text.TextStyle
++import androidx.compose.ui.text.font.FontWeight
++import androidx.compose.ui.text.input.ImeAction
++import androidx.compose.ui.text.input.KeyboardType
++import androidx.compose.ui.text.style.TextAlign
++import androidx.compose.ui.tooling.preview.Preview
++import androidx.compose.ui.unit.dp
++import androidx.navigation.NavController
++import com.blaze.core.ui.CoreViewModel
++import com.blaze.core.ui.components.Button
++import com.blaze.core.ui.components.CustomButtonColors
++
++@Composable
++fun CreateUserScreen(
++    navController: NavController,
++    coreVm: CoreViewModel,
++    viewModel: CreateUserViewModel,
++    stdCode: String?,
++    displayName: String?,
++    mobileNumber: String?
++) {
++
++}
++
++
++@Composable
++@Preview(showBackground = true)
++fun PreviewCreateUserScreen() {
++    val mobileNumber = "99999"
++    val stdCode = ""
++    val userName = rememberSaveable {
++        mutableStateOf("")
++    }
++    Column(
++        Modifier
++            .background(MaterialTheme.colorScheme.primary)
++            .fillMaxSize()
++            .padding(16.dp)
++    ) {
++
++        Spacer(modifier = Modifier.weight(1f))
++        OutlinedTextField(
++            value = userName.value, onValueChange = {
++                userName.value = it
++            },
++
++            label = {
++                Text(text = "Full Name")
++            }, textStyle = TextStyle(
++                textAlign = TextAlign.Start, fontWeight = FontWeight.SemiBold
++            ), modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions.Default.copy(
++                keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
++            ), keyboardActions = KeyboardActions(onDone = {
++
++            }), colors = OutlinedTextFieldDefaults.colors(
++                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
++                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                cursorColor = MaterialTheme.colorScheme.onPrimary
++            )
++        )
++        Spacer(Modifier.height(8.dp))
++        Row(Modifier.fillMaxWidth()) {
++            OutlinedTextField(value = stdCode, onValueChange = {
++
++            }, enabled = false, label = {
++                Text(text = "STD", color = MaterialTheme.colorScheme.onPrimary)
++            }, textStyle = TextStyle(
++                textAlign = TextAlign.Center, fontWeight = FontWeight.SemiBold
++            ), modifier = Modifier.weight(2f), keyboardOptions = KeyboardOptions.Default.copy(
++                imeAction = ImeAction.Next, keyboardType = KeyboardType.Number
++            ), colors = OutlinedTextFieldDefaults.colors(
++                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
++                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                cursorColor = MaterialTheme.colorScheme.onPrimary,
++                disabledBorderColor = MaterialTheme.colorScheme.onPrimary,
++                disabledLabelColor = MaterialTheme.colorScheme.onPrimary,
++                disabledTextColor = MaterialTheme.colorScheme.onPrimary
++            )
++            )
++
++            Spacer(modifier = Modifier.width(8.dp))
++
++            OutlinedTextField(value = mobileNumber, onValueChange = {
++
++            }, enabled = false, label = {
++                Text(text = "Mobile Number")
++            }, textStyle = TextStyle(
++                textAlign = TextAlign.Start, fontWeight = FontWeight.SemiBold
++            ), modifier = Modifier.weight(5f), keyboardOptions = KeyboardOptions.Default.copy(
++                keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
++            ), keyboardActions = KeyboardActions(onDone = {
++
++            }), colors = OutlinedTextFieldDefaults.colors(
++                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                focusedLabelColor = MaterialTheme.colorScheme.onPrimary,
++                focusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedBorderColor = MaterialTheme.colorScheme.onPrimary,
++                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
++                cursorColor = MaterialTheme.colorScheme.onPrimary,
++                disabledBorderColor = MaterialTheme.colorScheme.onPrimary,
++                disabledLabelColor = MaterialTheme.colorScheme.onPrimary,
++                disabledTextColor = MaterialTheme.colorScheme.onPrimary
++            )
++            )
++        }
++
++        Spacer(modifier = Modifier.weight(4f))
++        Button(
++            text = "Continue", colors = CustomButtonColors.colors(
++                textColor = MaterialTheme.colorScheme.onBackground,
++                bodyColor = MaterialTheme.colorScheme.background
++            ), modifier = Modifier.fillMaxWidth()
++        ) {
++            //todo
++        }
++        Spacer(Modifier.height(16.dp))
++    }
++}
+\ No newline at end of file
+Index: feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserViewModel.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserViewModel.kt b/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserViewModel.kt
+new file mode 100644
+--- /dev/null	(date 1703216513361)
++++ b/feature/startup/src/main/java/com/blaze/feature/startup/screen/createuser/CreateUserViewModel.kt	(date 1703216513361)
+@@ -0,0 +1,12 @@
++package com.blaze.feature.startup.screen.createuser
++
++import androidx.lifecycle.ViewModel
++import dagger.hilt.android.lifecycle.HiltViewModel
++import javax.inject.Inject
++
++@HiltViewModel
++class CreateUserViewModel @Inject constructor(
++
++) : ViewModel() {
++    val re = "asd"
++}
+\ No newline at end of file

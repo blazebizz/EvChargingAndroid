@@ -9,9 +9,8 @@ sealed class NavigationRoute(val route: String) {
 sealed class StartUpRoute(val route: String) {
     object LoginScreen : NavigationRoute(route = "LoginScreen")
     object SplashScreen : NavigationRoute(route = "SplashScreen")
-    object SignUpScreen : NavigationRoute(route = "SignUpScreen")
-    object ForgotPasswordScreen : NavigationRoute(route = "ForgotPasswordScreen")
-    object AdditionalDetailsScreen : NavigationRoute(route = "AdditionalDetailsScreen")
+    object CreateUserScreen : NavigationRoute(route = "CreateUserScreen")
+
     object MobileOtpScreen : NavigationRoute(route = "MobileOtpScreen")
 }
 
