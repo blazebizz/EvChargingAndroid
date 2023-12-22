@@ -22,6 +22,7 @@ class DashboardViewModel @Inject constructor():ViewModel() {
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
     lateinit var geoCoder: Geocoder
+    val onFirstLoad = mutableStateOf(true)
 
     val locationAutofill = mutableStateListOf<AutocompleteResult>()
 
