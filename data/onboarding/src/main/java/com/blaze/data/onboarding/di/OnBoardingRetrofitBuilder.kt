@@ -1,6 +1,6 @@
 package com.blaze.data.onboarding.di
 
-import com.blaze.core.utils.util.BASE_URL
+import com.blaze.core.utils.util.BASE_URL_V1
 import com.blaze.data.onboarding.apiservice.OnBoardingApiService
 import dagger.Module
 import dagger.Provides
@@ -19,7 +19,7 @@ object OnBoardingRetrofitBuilder {
     @Provides
     @Singleton
     fun provideStartUpRetrofitBuilder(client: OkHttpClient): OnBoardingApiService {
-        return Retrofit.Builder().baseUrl(BASE_URL)
+        return Retrofit.Builder().baseUrl(BASE_URL_V1)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create()).client(client).build()
             .create(OnBoardingApiService::class.java)

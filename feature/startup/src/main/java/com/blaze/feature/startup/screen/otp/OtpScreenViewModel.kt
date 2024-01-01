@@ -5,13 +5,18 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.blaze.core.utils.util.handleFlowInt
 import com.blaze.core.utils.util.ioScope
+import com.blaze.core.utils.util.mainScope
+import com.blaze.data.startup.model.req.GenerateTokenRequest
+import com.blaze.data.startup.model.res.GenerateTokenResponse
 import com.blaze.data.startup.repositories.StartUpRepo
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
+import com.velox.lazeir.utils.outlet.handleFlow
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -54,20 +59,20 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential, context: Activity) {
         ioScope.launch {
             repo.getAuth().signInWithCredential(credential).addOnCompleteListener(context) { task ->
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithCredential:success")
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    Log.d(TAG, "signInWithCredential:success")
 
-                        val user = task.result?.user
-                    } else {
-                        // Sign in failed, display a message and update the UI
-                        Log.w(TAG, "signInWithCredential:failure", task.exception)
-                        if (task.exception is FirebaseAuthInvalidCredentialsException) {
-                            // The verification code entered was invalid
-                        }
-                        // Update UI
+                    val user = task.result?.user
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
                     }
+                    // Update UI
                 }
+            }
         }
     }
 
@@ -87,6 +92,34 @@ class OtpScreenViewModel @Inject constructor(private val repo: StartUpRepo) : Vi
             credential = PhoneAuthProvider.getCredential(storedVerificationId.value, otp)
         ) {
             onComplete(it)
+        }
+    }
+
+    fun generateToken(
+        body: GenerateTokenRequest,
+        onSuccess: (res: GenerateTokenResponse) -> Unit,
+        onFailure: (String, Int) -> Unit = { _, _ -> },
+        loading: MutableState<Boolean>
+    ) {
+        ioScope.launch {
+            loading.value = true
+            repo.generateToken(body).handleFlowInt(onLoading = {
+                loading.value = it
+            }, onFailure = { msg, obj, _ ->
+                Log.e(TAG, "generateToken: $obj")
+
+                var message: String = msg
+                var status = -1
+
+                message = obj.getString("message")
+                status = obj.getInt("status")
+
+                onFailure(message, status)
+            }, onSuccess = {
+                mainScope.launch {
+                    onSuccess(it)
+                }
+            })
         }
     }
 }

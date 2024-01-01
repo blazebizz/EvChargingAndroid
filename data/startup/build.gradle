@@ -8,18 +8,31 @@ plugins {
 
 android {
     namespace 'com.blaze.data.startup'
-    compileSdk 34
+
+
+    compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk 24
+        minSdk ProjectConfig.minSdk
+        targetSdk ProjectConfig.targetSdk
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
     }
 
+    buildFeatures{
+        buildConfig = true
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug{
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+
         }
     }
     compileOptions {
@@ -57,4 +70,7 @@ dependencies {
     implementation libs.converter.moshi
     implementation libs.converter.gson
     implementation libs.converter.scalars
+
+    implementation libs.lazier
+    implementation libs.work.runtime.ktx
 }

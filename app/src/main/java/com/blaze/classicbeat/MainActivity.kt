@@ -43,6 +43,7 @@ import com.blaze.classicbeat.navigation.SetupNavGraph
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
+import com.blaze.core.ui.crashHandler
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
@@ -54,9 +55,8 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import com.velox.lazeir.utils.internetConnectivityListener
+import com.velox.lazeir.utils.InternetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        FirebaseApp.initializeApp(this)
         // Initialize the SDK
+//        crashHandler()
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 
@@ -133,7 +134,6 @@ class MainActivity : ComponentActivity() {
                 }
 
 
-                //
                 LaunchedEffect(key1 = gettingContinuesLocation.value) {
                     locationRequest = if (gettingContinuesLocation.value) {
                         // Define the accuracy based on your needs and granted permissions
@@ -160,7 +160,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
 }
 
 @Composable
@@ -173,8 +172,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
 
         val context = LocalContext.current
 
-        internetConnectivityListener(lifecycleScope = lifecycleScope,
-            applicationContext = context,
+        InternetConnectivityListener(lifecycleScope = lifecycleScope,
             onAvailable = { isInternetAvailable.value = true },
             onUnAvailable = { isInternetAvailable.value = false },
             onLosing = { isInternetAvailable.value = false },

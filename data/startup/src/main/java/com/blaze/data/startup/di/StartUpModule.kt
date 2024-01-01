@@ -1,11 +1,9 @@
 package com.blaze.data.startup.di
 
+import com.blaze.data.startup.apiservice.StartUpApiService
 import com.blaze.data.startup.repositories.StartUpRepo
 import com.blaze.data.startup.repositories.StartUpRepoImpl
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.PhoneAuthCredential
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,8 +17,7 @@ object StartUpModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseStartUpRepository(auth: FirebaseAuth):StartUpRepo{
-//        val auth: FirebaseAuth = FirebaseAuth.getInstance()
-        return StartUpRepoImpl(auth = auth)
+    fun provideFirebaseStartUpRepository(auth: FirebaseAuth, apiService: StartUpApiService):StartUpRepo{
+        return StartUpRepoImpl(auth,apiService)
     }
 }

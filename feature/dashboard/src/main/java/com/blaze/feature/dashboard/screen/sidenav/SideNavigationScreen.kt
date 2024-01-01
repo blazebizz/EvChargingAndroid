@@ -71,7 +71,7 @@ fun SideNavigationScreen(
 
         Row(Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.Bottom) {
             Column {
-                Text(text = "Your Name", fontSize = 26.sp, fontWeight = FontWeight.Bold)
+                Text(text = coreUi.currentUserName.value, fontSize = 26.sp, fontWeight = FontWeight.Bold)
                 Text(text = coreUi.currentUserNumber.value)
             }
             Spacer(modifier = Modifier.weight(1f))

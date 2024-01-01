@@ -7,16 +7,18 @@ plugins {
 
 android {
     namespace 'com.blaze.core.ui'
-    compileSdk 34
+    compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk 24
+        minSdk ProjectConfig.minSdk
+        targetSdk ProjectConfig.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
         vectorDrawables {
             useSupportLibrary true
         }
+
     }
 
     buildTypes {
@@ -60,11 +62,13 @@ dependencies {
     implementation libs.material3
     implementation libs.play.services.location
     implementation libs.maps.play.service
+    implementation platform(libs.compose.bom)
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
     androidTestImplementation platform(libs.compose.bom)
     androidTestImplementation libs.ui.test.junit4
+    androidTestImplementation platform(libs.compose.bom)
     debugImplementation libs.ui.tooling
     debugImplementation libs.ui.test.manifest
 

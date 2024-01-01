@@ -47,6 +47,7 @@ import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.mainScope
+import com.blaze.data.startup.model.req.GenerateTokenRequest
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
@@ -85,6 +86,7 @@ fun OtpScreen(
                 mainScope.launch {
                     if (task.isSuccessful) {
                         coreVm.snackbar("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
+
 
                         navController.navigate(DashboardRoute.DashboardScreen.route) {
                             popUpTo(StartUpRoute.MobileOtpScreen.route) {
@@ -182,12 +184,34 @@ fun OtpScreen(
 
                                 logi("Logged In with ${task.result.user?.phoneNumber} name: ${task.result.user?.displayName}")
 
-                                coreVm.currentUserNumber.value = task.result.user?.phoneNumber ?: ""
-                                navController.navigate(DashboardRoute.DashboardScreen.route) {
-                                    popUpTo(StartUpRoute.MobileOtpScreen.route) {
-                                        inclusive = true
-                                    }
-                                }
+                                otpViewModel.generateToken(
+                                    body= GenerateTokenRequest(
+                                        userId = task.result.user?.uid
+                                    ),
+                                    onSuccess = {
+                                        coreVm.currentUserNumber.value =it.data?.mobileNo ?: ""
+                                        coreVm.currentUserName.value = it.data?.name ?: ""
+                                        coreVm.currentUserType.value = it.data?.userType ?: ""
+                                        navController.navigate(DashboardRoute.DashboardScreen.route) {
+                                            popUpTo(StartUpRoute.MobileOtpScreen.route) {
+                                                inclusive = true
+                                            }
+                                        }
+                                    },
+                                    onFailure = {msg,status->
+
+                                        if (msg == "Invalid User ID"){
+                                            navController.navigate("${StartUpRoute.CreateUserScreen.route}/${toSentText.dropLast(10)}/${toSentText.takeLast(10)}/${task.result.user?.uid?:""}") {
+                                                popUpTo(StartUpRoute.MobileOtpScreen.route) {
+                                                    inclusive = true
+                                                }
+                                            }
+                                        }
+                                    },
+                                    loading = coreVm.loading
+                                )
+
+
                             } else {
                                 if (task.exception is FirebaseAuthInvalidCredentialsException) {
                                     coreVm.snackbar("Invalid OTP")

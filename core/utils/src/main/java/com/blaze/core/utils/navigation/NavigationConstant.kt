@@ -10,7 +10,6 @@ sealed class StartUpRoute(val route: String) {
     object LoginScreen : NavigationRoute(route = "LoginScreen")
     object SplashScreen : NavigationRoute(route = "SplashScreen")
     object CreateUserScreen : NavigationRoute(route = "CreateUserScreen")
-
     object MobileOtpScreen : NavigationRoute(route = "MobileOtpScreen")
 }
 
@@ -24,6 +23,5 @@ sealed class DashboardRoute(val route: String) {
     object DashboardScreen : NavigationRoute(route = "DashboardScreen")
     object SearchScreen : NavigationRoute(route = "SearchScreen")
     object SideNavigationScreen : NavigationRoute(route = "SideNavigationScreen")
-
 }
 

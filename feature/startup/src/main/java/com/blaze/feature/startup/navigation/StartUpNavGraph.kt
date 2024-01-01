@@ -37,16 +37,16 @@ fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreVm: CoreVi
         toSentText?.let { it1 -> OtpScreen(navController, it1,otpViewModel,coreVm) }
     }
 
-    composable(route = "${StartUpRoute.CreateUserScreen.route}/{stdCode}/{mobileNumber}/{displayName}",
+    composable(route = "${StartUpRoute.CreateUserScreen.route}/{stdCode}/{mobileNumber}/{uid}",
         arguments = listOf(
             navArgument("mobileNumber"){type = NavType.StringType}
         )
         ){
         val viewModel = hiltViewModel<CreateUserViewModel>()
+        val uid = it.arguments?.getString("uid")
         val stdCode = it.arguments?.getString("stdCode")
-        val displayName = it.arguments?.getString("displayName")
         val mobileNumber = it.arguments?.getString("mobileNumber")
 
-        CreateUserScreen(navController,coreVm,viewModel,stdCode,displayName,mobileNumber)
+        CreateUserScreen(navController,coreVm,viewModel,stdCode,mobileNumber,uid)
     }
 }

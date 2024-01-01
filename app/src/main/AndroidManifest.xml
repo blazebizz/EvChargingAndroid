@@ -25,7 +25,7 @@
         android:roundIcon="@drawable/logo_square"
         android:supportsRtl="true"
         android:theme="@style/Theme.ClassicBeat"
-        tools:targetApi="31">
+        tools:targetApi="34">
 
         <activity
             android:name=".MainActivity"
@@ -40,9 +40,12 @@
         </activity>
 
         <!--apikey-->
+<!--        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAd-v0qgs7woqGSc5Thlo66OOB1wBQROBo" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAd-v0qgs7woqGSc5Thlo66OOB1wBQROBo" />
+            android:value="AIzaSyDpDlb1VscVxh6JZFhgORFpS71b4MvDwoE" />
     </application>
 
 </manifest>

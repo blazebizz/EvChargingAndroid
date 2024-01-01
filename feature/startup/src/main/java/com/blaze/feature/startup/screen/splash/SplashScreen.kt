@@ -1,5 +1,6 @@
 package com.blaze.feature.startup.screen.splash
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
+import com.blaze.data.startup.model.req.GenerateTokenRequest
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +32,7 @@ import kotlinx.coroutines.launch
 fun SplashScreen(
     navController: NavController,
     viewModel: SplashScreenViewModel,
-    coreUi: CoreViewModel
+    coreVm: CoreViewModel
 ) {
     //    //region status color
     val systemUiController = rememberSystemUiController()
@@ -42,13 +44,38 @@ fun SplashScreen(
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000)
             if (viewModel.firebaseAuth.currentUser != null) {
-                coreUi.currentUserNumber.value = viewModel.firebaseAuth.currentUser?.phoneNumber?:""
-                navController.navigate(
-                    DashboardRoute.DashboardScreen.route,
-                    navOptions = NavOptions.Builder() //this will remove this screen after it navigate to next screen
-                        .setPopUpTo(navController.graph.startDestinationId, inclusive = true)
-                        .build()
+                viewModel.generateToken(
+                    body= GenerateTokenRequest(
+                        userId = viewModel.firebaseAuth.currentUser?.uid
+                    ),
+                    onSuccess = {
+                        coreVm.currentUserNumber.value = viewModel.firebaseAuth.currentUser?.phoneNumber ?: ""
+                        coreVm.currentUserType.value = it.data?.userType?:""
+                        coreVm.currentUserName.value = it.data?.name?:""
+
+                         navController.navigate(
+                            DashboardRoute.DashboardScreen.route,
+                            navOptions = NavOptions.Builder() //this will remove this screen after it navigate to next screen
+                                .setPopUpTo(navController.graph.startDestinationId, inclusive = true)
+                                .build()
+                        )
+                    },
+                    onFailure = {msg,obj->
+                        if (msg == "Invalid User ID"){
+                            val toSentText = viewModel.firebaseAuth.currentUser?.phoneNumber?:""
+                            navController.navigate("${StartUpRoute.CreateUserScreen.route}/${toSentText.dropLast(10)}/${toSentText.takeLast(10)}/${viewModel.firebaseAuth.currentUser?.uid?:""}") {
+                                popUpTo(StartUpRoute.SplashScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+                        }else{
+                            coreVm.snackbar(msg)
+                        }
+                    },
+                    loading = coreVm.loading
                 )
+
+
             } else {
                 navController.navigate(
                     StartUpRoute.LoginScreen.route,
@@ -74,7 +101,9 @@ fun Slplashh() {
         Spacer(modifier = Modifier.weight(1f))
         Image(
             painter = painterResource(id = R.drawable.logo), contentDescription = "",
-            Modifier.fillMaxWidth(0.5f).align(CenterHorizontally),
+            Modifier
+                .fillMaxWidth(0.5f)
+                .align(CenterHorizontally),
         )
         Spacer(modifier = Modifier.weight(2f))
 

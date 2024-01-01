@@ -1,6 +1,6 @@
 package com.blaze.data.onboarding.repositories
 
-import android.net.Uri
+import com.blaze.core.utils.util.globalError
 import com.blaze.core.utils.util.ioScope
 import com.blaze.core.utils.util.mainScope
 import com.blaze.data.onboarding.apiservice.OnBoardingApiService
@@ -14,6 +14,7 @@ import com.google.firebase.storage.ktx.storage
 import com.velox.lazeir.utils.handler.NetworkResource
 import com.velox.lazeir.utils.outlet.handleNetworkResponse
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +26,12 @@ class OnBoardingRepoImpl @Inject constructor(
     override fun getAuth() = auth
 
     override suspend fun fetchUserOnBoardData(body: FetchPartnerOnBoardDataRequest): Flow<NetworkResource<FetchPartnerOnBoardDataResponse>> {
-        return apiService.fetchUserOnBoardData(body).handleNetworkResponse()
+        return try {
+            apiService.fetchUserOnBoardData(body).handleNetworkResponse()
+        } catch (e: Exception) {
+            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+        }
+
     }
 
     override fun uploadImage(
@@ -64,7 +70,12 @@ class OnBoardingRepoImpl @Inject constructor(
     }
 
     override suspend fun onBoard(body: PartnerOnBoardRequest): Flow<NetworkResource<PartnerOnBoardResponse>> {
-       return apiService.onBoardUser(body).handleNetworkResponse()
+
+        return try {
+            apiService.onBoardUser(body).handleNetworkResponse()
+        } catch (e: Exception) {
+            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+        }
     }
 
 

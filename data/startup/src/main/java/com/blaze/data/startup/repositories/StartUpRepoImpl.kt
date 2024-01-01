@@ -1,18 +1,29 @@
 package com.blaze.data.startup.repositories
 
 import android.app.Activity
+import com.blaze.core.utils.util.globalError
+import com.blaze.core.utils.util.handleNetworkResponseInternal
+import com.blaze.data.startup.apiservice.StartUpApiService
+import com.blaze.data.startup.model.req.CreateUserRequest
+import com.blaze.data.startup.model.req.GenerateTokenRequest
+import com.blaze.data.startup.model.res.CreateUserResponse
+import com.blaze.data.startup.model.res.GenerateTokenResponse
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
+import com.velox.lazeir.utils.handler.NetworkResource
+import com.velox.lazeir.utils.outlet.handleNetworkResponse
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class StartUpRepoImpl @Inject constructor(
     private val auth: FirebaseAuth,
+    private val apiService: StartUpApiService,
 ) : StartUpRepo {
 
     override fun getAuth() = auth
@@ -67,4 +78,22 @@ class StartUpRepoImpl @Inject constructor(
             }
     }
     // [END resend_verification]
+
+   override suspend fun generateToken(body: GenerateTokenRequest): Flow<NetworkResource<GenerateTokenResponse>> {
+       return try {
+           apiService.generateToken(body).handleNetworkResponseInternal()
+       }catch (e:Exception){
+           flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+       }
+    }
+
+    override suspend fun createUser(body: CreateUserRequest): Flow<NetworkResource<CreateUserResponse>> {
+        return try {
+            apiService.createUser(body).handleNetworkResponseInternal()
+        }catch (e:Exception){
+            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+        }
+    }
+
+
 }

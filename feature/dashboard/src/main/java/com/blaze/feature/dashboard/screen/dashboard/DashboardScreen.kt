@@ -177,7 +177,7 @@ fun EnableGpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
                 Row(horizontalArrangement = Arrangement.SpaceEvenly) {
 
                     Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "NO", modifier = Modifier.clickable { state.value = !state.value })
+                    Text(text = "No", modifier = Modifier.clickable { state.value = !state.value })
                     Spacer(modifier = Modifier.weight(1f))
                     Text(text = "Yes", modifier = Modifier.clickable {
                         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)

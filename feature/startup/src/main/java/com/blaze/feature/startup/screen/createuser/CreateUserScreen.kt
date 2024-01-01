@@ -24,12 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColors
+import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.navigation.StartUpRoute
+import com.blaze.data.startup.model.req.CreateUserRequest
 
 @Composable
 fun CreateUserScreen(
@@ -37,18 +39,9 @@ fun CreateUserScreen(
     coreVm: CoreViewModel,
     viewModel: CreateUserViewModel,
     stdCode: String?,
-    displayName: String?,
-    mobileNumber: String?
+    mobileNumber: String?,
+    uid: String?
 ) {
-
-}
-
-
-@Composable
-@Preview(showBackground = true)
-fun PreviewCreateUserScreen() {
-    val mobileNumber = "99999"
-    val stdCode = ""
     val userName = rememberSaveable {
         mutableStateOf("")
     }
@@ -61,7 +54,7 @@ fun PreviewCreateUserScreen() {
 
         Spacer(modifier = Modifier.weight(1f))
         OutlinedTextField(
-            value = userName.value, onValueChange = {
+            value = userName.value?:"", onValueChange = {
                 userName.value = it
             },
 
@@ -70,7 +63,7 @@ fun PreviewCreateUserScreen() {
             }, textStyle = TextStyle(
                 textAlign = TextAlign.Start, fontWeight = FontWeight.SemiBold
             ), modifier = Modifier.fillMaxWidth(), keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Phone, imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Text, imeAction = ImeAction.Done
             ), keyboardActions = KeyboardActions(onDone = {
 
             }), colors = OutlinedTextFieldDefaults.colors(
@@ -84,7 +77,7 @@ fun PreviewCreateUserScreen() {
         )
         Spacer(Modifier.height(8.dp))
         Row(Modifier.fillMaxWidth()) {
-            OutlinedTextField(value = stdCode, onValueChange = {
+            OutlinedTextField(value = stdCode?:"", onValueChange = {
 
             }, enabled = false, label = {
                 Text(text = "STD", color = MaterialTheme.colorScheme.onPrimary)
@@ -107,7 +100,7 @@ fun PreviewCreateUserScreen() {
 
             Spacer(modifier = Modifier.width(8.dp))
 
-            OutlinedTextField(value = mobileNumber, onValueChange = {
+            OutlinedTextField(value = mobileNumber?:"", onValueChange = {
 
             }, enabled = false, label = {
                 Text(text = "Mobile Number")
@@ -138,7 +131,33 @@ fun PreviewCreateUserScreen() {
                 bodyColor = MaterialTheme.colorScheme.background
             ), modifier = Modifier.fillMaxWidth()
         ) {
-            //todo
+            if (uid!=null){
+                viewModel.createUser(
+                    body = CreateUserRequest(
+                        name = userName.value,
+                        mobileno = "$stdCode$mobileNumber",
+                        userID = uid
+                    ),
+                    loading = coreVm.loading,
+                    onFailure = {
+                        coreVm.snackbar("Unable to proceed at this moment due to internal server error, please try after sometimes!")
+                    },
+                    onSuccess = {
+                        coreVm.snackbar("Your profile has been created successfully, Thank you")
+                        coreVm.currentUserType.value = it.data?.userType?:""
+                        coreVm.currentUserName.value = it.data?.name?:""
+                        coreVm.currentUserNumber.value = it.data?.mobileNo?:""
+                        navController.navigate(DashboardRoute.DashboardScreen.route) {
+                            popUpTo(StartUpRoute.CreateUserScreen.route) {
+                                inclusive = true
+                            }
+                        }
+                    }
+                )
+            }else{
+                coreVm.snackbar("Unable to proceed at this moment please try after sometimes")
+            }
+
         }
         Spacer(Modifier.height(16.dp))
     }
