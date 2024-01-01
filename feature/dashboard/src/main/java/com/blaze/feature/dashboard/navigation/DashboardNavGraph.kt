@@ -7,6 +7,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.feature.dashboard.BuildConfig
 import com.blaze.feature.dashboard.screen.dashboard.DashboardScreen
 import com.blaze.feature.dashboard.screen.dashboard.DashboardViewModel
 import com.blaze.feature.dashboard.screen.search.SearchScreen
@@ -23,7 +24,7 @@ fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreVM: Core
     }
     composable(route = DashboardRoute.SearchScreen.route) {
         val context = LocalContext.current
-        Places.initialize(context, "AIzaSyAd-v0qgs7woqGSc5Thlo66OOB1wBQROBo")
+        Places.initialize(context, BuildConfig.MAPS_API_KEY)
         val viewModel= hiltViewModel<SearchViewModel>()
         viewModel.placesClient = Places.createClient(context)
         SearchScreen(navController,viewModel,coreVM)

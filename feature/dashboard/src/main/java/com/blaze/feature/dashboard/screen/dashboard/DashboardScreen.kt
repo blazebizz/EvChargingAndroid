@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -32,6 +33,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -43,6 +45,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBar
@@ -66,10 +72,14 @@ fun DashboardScreen(
     val scope = rememberCoroutineScope()
     val activateBottomSheet = remember { mutableStateOf(false) }
 
+    LaunchedEffect(key1 = coreVM.isGpsEnabled.value){
+        showGpsDialog.value = !coreVM.isGpsEnabled.value
+    }
     LaunchedEffect(key1 = Unit) {
         if (!coreVM.isGpsEnabled.value) {
             showGpsDialog.value = true
         } else {
+            showGpsDialog.value = false
             if (dashboardViewModel.onFirstLoad.value) {
                 coreVM.mapLocation.value = coreVM.currentLocation.value
                 dashboardViewModel.onFirstLoad.value = !dashboardViewModel.onFirstLoad.value
@@ -148,7 +158,9 @@ fun DashboardScreen(
 @Composable
 fun EnableGpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
     if (state.value)
-        Dialog(onDismissRequest = { state.value = !state.value }) {
+        Dialog(onDismissRequest = {
+
+        }) {
             val context = LocalContext.current
             val openLocationSettings =
                 rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -172,18 +184,34 @@ fun EnableGpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
                     .padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                val errorLottie =
+                    rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.working))
+                val progress by animateLottieCompositionAsState(
+                    composition = errorLottie.value,
+                    restartOnPlay = true,
+                    iterations = Int.MAX_VALUE
+                )
+
+                LottieAnimation(
+                    composition = errorLottie.value,
+                    progress = progress,
+                    modifier = Modifier.size(200.dp)
+                )
+
                 Text(text = "Please Enable GPS for better experience !")
                 Spacer(modifier = Modifier.height(12.dp))
                 Row(horizontalArrangement = Arrangement.SpaceEvenly) {
 
-                    Spacer(modifier = Modifier.weight(1f))
-                    Text(text = "No", modifier = Modifier.clickable { state.value = !state.value })
+//                    Spacer(modifier = Modifier.weight(1f))
+//                    Text(text = "No", modifier = Modifier.clickable {
+//
+//                    })
                     Spacer(modifier = Modifier.weight(1f))
                     Text(text = "Yes", modifier = Modifier.clickable {
                         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                         openLocationSettings.launch(intent)
                     })
-                    Spacer(modifier = Modifier.weight(1f))
+//                    Spacer(modifier = Modifier.weight(1f))
 
                 }
             }

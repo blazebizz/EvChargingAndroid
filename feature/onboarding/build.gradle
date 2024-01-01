@@ -35,9 +35,10 @@ android {
     }
     buildFeatures {
         compose true
+        buildConfig true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.4.3'
+        kotlinCompilerExtensionVersion ProjectConfig.compilerExtensionVersion
     }
     packaging {
         resources {
