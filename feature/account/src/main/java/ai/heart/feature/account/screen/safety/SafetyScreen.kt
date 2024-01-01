@@ -34,6 +34,8 @@ import com.blaze.core.utils.navigation.AccountRoute
 fun SafetyScreen(
     navController: NavController, coreVM: CoreViewModel, viewModel: SafetyScreenViewModel
 ) {
+
+
     Column(
         Modifier
             .statusBarsPadding()
@@ -94,4 +96,6 @@ fun SafetyScreen(
         }
 
     }
+
+
 }

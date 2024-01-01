@@ -3,7 +3,7 @@
 
     <application android:theme="@style/Theme.ClassicBeat">
         <activity
-            android:name=".ErrorActivity"
+            android:name="com.blaze.classicbeat.ErrorActivity"
             android:exported="false"
             android:label="@string/title_activity_error"
             android:theme="@style/Theme.ClassicBeat" />

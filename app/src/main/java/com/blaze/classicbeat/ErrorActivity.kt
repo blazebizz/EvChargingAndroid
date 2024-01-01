@@ -1,4 +1,4 @@
-package com.blaze.core.ui
+package com.blaze.classicbeat
 
 import android.app.Activity
 import android.content.Intent
@@ -35,12 +35,12 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.blaze.core.ui.R
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import kotlinx.coroutines.delay
 import java.io.PrintWriter
 import java.io.StringWriter
 import kotlin.system.exitProcess
-
 
 
 class ErrorActivity : ComponentActivity() {
@@ -56,11 +56,26 @@ class ErrorActivity : ComponentActivity() {
             } catch (e: Exception) {
                 //do nothing
             }
+
+            LaunchedEffect(key1 = Unit) {
+                delay(15 * 1000)
+
+                //auto restart application
+                finish()
+
+                // Start a new instance of the main activity
+                val intent = Intent(this@ErrorActivity, MainActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+
+                // Kill the current process to ensure a complete restart
+                Process.killProcess(Process.myPid())
+
+            }
             ClassicBeatTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
 
                     Column(
@@ -85,7 +100,7 @@ class ErrorActivity : ComponentActivity() {
                         LottieAnimation(
                             composition = errorLottie.value,
                             progress = progress,
-                            modifier = Modifier.size(200.dp)
+                            modifier = Modifier.size(300.dp)
                         )
                         Box(
                             modifier = Modifier
@@ -94,10 +109,10 @@ class ErrorActivity : ComponentActivity() {
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "Sorry For Inconvenience, Something Went Wrong, Please Try Again Later",
+                                text = "Sorry For Inconvenience, We Are Looking Into It, Please Restart The Application ! \n Thank You For Understanding.",
                                 textAlign = TextAlign.Center,
-                                color = Color.Black,
-                                fontWeight = FontWeight(500),
+                                color = MaterialTheme.colorScheme.onBackground,
+                                fontWeight = FontWeight.SemiBold,
 
                                 )
                         }
@@ -107,15 +122,25 @@ class ErrorActivity : ComponentActivity() {
                         Button(
                             modifier = Modifier
                                 .height(50.dp)
-                                .width(120.dp),
-                            onClick = { this@ErrorActivity.finishAffinity() },
-                            colors = ButtonDefaults.buttonColors(
-                                Color.Green, Color.White
+                                .width(120.dp), onClick = {
+
+                                //restart the application
+                                finish()
+
+                                // Start a new instance of the main activity
+                                val intent = Intent(this@ErrorActivity, MainActivity::class.java)
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                startActivity(intent)
+
+                                // Kill the current process to ensure a complete restart
+                                Process.killProcess(Process.myPid())
+
+                            }, colors = ButtonDefaults.buttonColors(
+                                MaterialTheme.colorScheme.primaryContainer, Color.White
                             )
                         ) {
                             Text(
-                                text = "OK",
-                                fontWeight = FontWeight.SemiBold
+                                text = "OK", fontWeight = FontWeight.SemiBold
                             )
                         }
                     }
