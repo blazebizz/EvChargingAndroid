@@ -74,6 +74,7 @@ dependencies {
     implementation project(":feature:startup")
     implementation project(":feature:dashboard")
     implementation project(":feature:onboarding")
+    implementation project(":feature:account")
 
     implementation libs.core.ktx
     implementation libs.appcompat

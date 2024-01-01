@@ -1,20 +1,22 @@
 package com.blaze.feature.startup.screen.splash
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import com.blaze.core.ui.CoreViewModel
@@ -34,45 +36,53 @@ fun SplashScreen(
     viewModel: SplashScreenViewModel,
     coreVm: CoreViewModel
 ) {
-    //    //region status color
+    //region status color
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colorScheme.primary)
     systemUiController.setStatusBarColor(color = MaterialTheme.colorScheme.primary)
-//    //endregion
-    val context = LocalContext.current
+    //endregion
     LaunchedEffect(key1 = true) {
         CoroutineScope(Dispatchers.Main).launch {
             delay(5000)
             if (viewModel.firebaseAuth.currentUser != null) {
                 viewModel.generateToken(
-                    body= GenerateTokenRequest(
+                    body = GenerateTokenRequest(
                         userId = viewModel.firebaseAuth.currentUser?.uid
                     ),
                     onSuccess = {
-                        coreVm.currentUserNumber.value = viewModel.firebaseAuth.currentUser?.phoneNumber ?: ""
-                        coreVm.currentUserType.value = it.data?.userType?:""
-                        coreVm.currentUserName.value = it.data?.name?:""
+                        coreVm.currentUserNumber.value =
+                            viewModel.firebaseAuth.currentUser?.phoneNumber ?: ""
+                        coreVm.currentUserType.value = it.data?.userType ?: ""
+                        coreVm.currentUserName.value = it.data?.name ?: ""
 
-                         navController.navigate(
+                        navController.navigate(
                             DashboardRoute.DashboardScreen.route,
                             navOptions = NavOptions.Builder() //this will remove this screen after it navigate to next screen
-                                .setPopUpTo(navController.graph.startDestinationId, inclusive = true)
+                                .setPopUpTo(
+                                    navController.graph.startDestinationId,
+                                    inclusive = true
+                                )
                                 .build()
                         )
                     },
-                    onFailure = {msg,obj->
-                        if (msg == "Invalid User ID"){
-                            val toSentText = viewModel.firebaseAuth.currentUser?.phoneNumber?:""
-                            navController.navigate("${StartUpRoute.CreateUserScreen.route}/${toSentText.dropLast(10)}/${toSentText.takeLast(10)}/${viewModel.firebaseAuth.currentUser?.uid?:""}") {
+                    onFailure = { msg, obj ->
+                        if (msg == "Invalid User ID") {
+                            val toSentText = viewModel.firebaseAuth.currentUser?.phoneNumber ?: ""
+                            navController.navigate(
+                                "${StartUpRoute.CreateUserScreen.route}/${
+                                    toSentText.dropLast(
+                                        10
+                                    )
+                                }/${toSentText.takeLast(10)}/${viewModel.firebaseAuth.currentUser?.uid ?: ""}"
+                            ) {
                                 popUpTo(StartUpRoute.SplashScreen.route) {
                                     inclusive = true
                                 }
                             }
-                        }else{
+                        } else {
                             coreVm.snackbar(msg)
                         }
                     },
-                    loading = coreVm.loading
                 )
 
 
@@ -87,12 +97,6 @@ fun SplashScreen(
         }
     }
 
-    Slplashh()
-}
-
-@Composable
-@Preview
-fun Slplashh() {
     Column(
         Modifier
             .background(MaterialTheme.colorScheme.primary)
@@ -106,6 +110,16 @@ fun Slplashh() {
                 .align(CenterHorizontally),
         )
         Spacer(modifier = Modifier.weight(2f))
+        Row(
+            Modifier
+                .padding(16.dp)
+                .fillMaxWidth()) {
+            Spacer(modifier = Modifier.weight(2f))
+            if (viewModel.splashLoading.value) CircularProgressIndicator(
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.size(40.dp)
+            )
+        }
 
 //            Text(
 //                text = "Power Up Your Drive with",
@@ -121,5 +135,5 @@ fun Slplashh() {
 //            )
 //            Spacer(modifier = Modifier.weight(6f))
     }
-
 }
+

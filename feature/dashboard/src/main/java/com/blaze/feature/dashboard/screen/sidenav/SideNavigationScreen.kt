@@ -1,6 +1,5 @@
 package com.blaze.feature.dashboard.screen.sidenav
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
@@ -32,10 +31,11 @@ import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.SideNavigationItem
 import com.blaze.core.ui.defaultBackground
+import com.blaze.core.ui.utils.navigateCleanNavScreen
+import com.blaze.core.utils.navigation.AccountRoute
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.navigation.StartUpRoute
-import com.blaze.core.utils.util.USER_ID
 
 
 /*@Composable
@@ -53,13 +53,13 @@ fun SideNavigationScreen(
     coreUi: CoreViewModel
 ) {
     val context = LocalContext.current
-    val activity = LocalContext.current as Activity
     BackHandler {
-        navController.navigate(DashboardRoute.DashboardScreen.route) {
-            popUpTo(DashboardRoute.SideNavigationScreen.route) {
-                inclusive = true
-            }
-        }
+        navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
+//        navController.navigate(DashboardRoute.DashboardScreen.route) {
+//            popUpTo(DashboardRoute.SideNavigationScreen.route) {
+//                inclusive = true
+//            }
+//        }
     }
 
     Column(
@@ -120,13 +120,25 @@ fun SideNavigationScreen(
             }
         }
 
+//        SideNavigationItem(
+//            image = R.drawable.baseline_account_circle_24,
+//            title = "My Account",
+//
+//            ) {
+//
+//        }
         SideNavigationItem(
-            image = R.drawable.baseline_account_circle_24,
-            title = "My Account",
-
-            ) {
-
+            image = R.drawable.hourglass_end_24,
+            title = "Safety",
+        ) {
+            navController.navigateCleanNavScreen(AccountRoute.SafetyScreen.route)
+//            navController.navigate(AccountRoute.SafetyScreen.route) {
+//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
+//                    inclusive = true
+//                }
+//            }
         }
+
         SideNavigationItem(
             image = R.drawable.garage_car_24,
             title = "My Vehicles",
@@ -134,15 +146,16 @@ fun SideNavigationScreen(
             ) {
 
         }
-        SideNavigationItem(
-            image = R.drawable.chart_network_24,
-            title = "My Preference",
-            des = "Set search filter options"
-        ) {
+//        SideNavigationItem(
+//            image = R.drawable.chart_network_24,
+//            title = "My Preference",
+//            des = "Set search filter options"
+//        ) {
+//
+//        }
 
-        }
 
-        SideNavigationItem(
+  SideNavigationItem(
             image = R.drawable.hourglass_end_24,
             title = "My Bookings",
         ) {
@@ -162,12 +175,43 @@ fun SideNavigationScreen(
             image = R.drawable.users_24, title = "Be a Partner", des = "Join with us"
         ) {
 //            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
-            navController.navigate(OnBoardingRoute.BoardingStatusScreen.route) {
-                popUpTo(DashboardRoute.SideNavigationScreen.route) {
-                    inclusive = true
-                }
-            }
+            navController.navigateCleanNavScreen(OnBoardingRoute.BoardingStatusScreen.route)
+//            navController.navigate(OnBoardingRoute.BoardingStatusScreen.route) {
+//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
+//                    inclusive = true
+//                }
+//            }
         }
+
+        SideNavigationItem(
+            image = R.drawable.sparkles_24,
+            title = "Payment",
+        ) {
+
+        }
+
+        SideNavigationItem(
+            image = R.drawable.sparkles_24,
+            title = "Refer and Earn",
+        ) {
+
+        }
+
+        SideNavigationItem(
+            image = R.drawable.sparkles_24,
+            title = "Feedback",
+        ) {
+
+        }
+
+        SideNavigationItem(
+            image = R.drawable.sparkles_24,
+            title = "Notification",
+        ) {
+
+        }
+
+
 
         SideNavigationItem(
             image = R.drawable.sparkles_24,
@@ -177,6 +221,7 @@ fun SideNavigationScreen(
         }
 
 
+
         Spacer(modifier = Modifier.weight(1f))
 
         SideNavigationItem(
@@ -184,11 +229,12 @@ fun SideNavigationScreen(
         ) {
             viewModel.firebaseAuth.signOut()
             Toast.makeText(context, "User Log out", Toast.LENGTH_SHORT).show()
-            navController.navigate(StartUpRoute.SplashScreen.route) {
-                popUpTo(DashboardRoute.SideNavigationScreen.route) {
-                    inclusive = true
-                }
-            }
+            navController.navigateCleanNavScreen(StartUpRoute.SplashScreen.route)
+//            navController.navigate(StartUpRoute.SplashScreen.route) {
+//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
+//                    inclusive = true
+//                }
+//            }
         }
     }
 }

@@ -43,12 +43,10 @@ import com.blaze.classicbeat.navigation.SetupNavGraph
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
-import com.blaze.core.ui.crashHandler
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
-import com.blaze.core.utils.util.ioScope
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -184,7 +182,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
             SetupNavGraph(
                 startDestination = StartUpRoute.SplashScreen.route,
                 navController = navGraphController,
-                coreUi = coreViewModel,
+                coreVm = coreViewModel,
                 onBoardingViewModel = onBoardingViewModel
             )
 

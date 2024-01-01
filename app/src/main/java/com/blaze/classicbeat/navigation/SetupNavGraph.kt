@@ -1,5 +1,6 @@
 package com.blaze.classicbeat.navigation
 
+import ai.heart.feature.account.navigation.accountNavGraph
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -13,14 +14,15 @@ import com.blaze.feature.startup.navigation.startUpNavGraph
 fun SetupNavGraph(
     startDestination: String,
     navController: NavHostController,
-    coreUi: CoreViewModel,
+    coreVm: CoreViewModel,
     onBoardingViewModel: OnBoardingViewModel
 ) {
     NavHost(
         navController = navController, startDestination = startDestination
     ) {
-        startUpNavGraph(navController,coreUi)
-        dashboardNavGraph(navController,coreUi)
-        onBoardingNavGraph(navController,coreUi,onBoardingViewModel)
+        startUpNavGraph(navController,coreVm)
+        dashboardNavGraph(navController,coreVm)
+        onBoardingNavGraph(navController,coreVm,onBoardingViewModel)
+        accountNavGraph(navController,coreVm)
     }
 }

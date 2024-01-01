@@ -25,7 +25,7 @@ class CoreViewModel @Inject constructor(
 
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
     val currentUserName: MutableState<String> = mutableStateOf("Guest User")
-    val currentUserType: MutableState<String> = mutableStateOf("Guest User")
+    val currentUserType: MutableState<String> = mutableStateOf("Customer")
     val searchText: MutableState<String> = mutableStateOf("")
 
     val loading: MutableState<Boolean> = mutableStateOf(false)
@@ -42,8 +42,6 @@ class CoreViewModel @Inject constructor(
 
         }
     }
-
-
 
     fun toast(message: String) {
         viewModelScope.launch {
