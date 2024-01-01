@@ -43,6 +43,7 @@ import com.blaze.classicbeat.navigation.SetupNavGraph
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
+import com.blaze.core.ui.crashHandler
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
@@ -64,7 +65,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        FirebaseApp.initializeApp(this)
         // Initialize the SDK
-//        crashHandler()
+        crashHandler()
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 

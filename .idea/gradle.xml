@@ -26,10 +26,12 @@
             <option value="$PROJECT_DIR$/core/ui" />
             <option value="$PROJECT_DIR$/core/utils" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/account" />
             <option value="$PROJECT_DIR$/data/dashboard" />
             <option value="$PROJECT_DIR$/data/onboarding" />
             <option value="$PROJECT_DIR$/data/startup" />
             <option value="$PROJECT_DIR$/feature" />
+            <option value="$PROJECT_DIR$/feature/account" />
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
             <option value="$PROJECT_DIR$/feature/startup" />
