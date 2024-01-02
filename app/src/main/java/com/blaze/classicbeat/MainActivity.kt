@@ -175,6 +175,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
             onUnAvailable = { isInternetAvailable.value = false },
             onLosing = { isInternetAvailable.value = false },
             onLost = { isInternetAvailable.value = false })
+
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
@@ -222,8 +223,6 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
             //endregion
         }
         InitSubUiComponents(coreViewModel)
-
-
     }
 }
 

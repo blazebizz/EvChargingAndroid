@@ -201,7 +201,7 @@ fun SideNavigationScreen(
             image = R.drawable.sparkles_24,
             title = "Feedback",
         ) {
-
+            navController.navigateCleanNavScreen(AccountRoute.FeedbackScreen.route)
         }
 
         SideNavigationItem(
@@ -219,7 +219,6 @@ fun SideNavigationScreen(
         ) {
 
         }
-
 
 
         Spacer(modifier = Modifier.weight(1f))

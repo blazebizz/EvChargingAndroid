@@ -2,6 +2,8 @@ package ai.heart.feature.account.navigation
 
 import ai.heart.feature.account.screen.add_contact.AddContactScreen
 import ai.heart.feature.account.screen.add_contact.AddContactViewModel
+import ai.heart.feature.account.screen.feedback.FeedbackScreen
+import ai.heart.feature.account.screen.feedback.FeedbackViewModel
 import ai.heart.feature.account.screen.safety.SafetyScreen
 import ai.heart.feature.account.screen.safety.SafetyScreenViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,5 +23,10 @@ fun NavGraphBuilder.accountNavGraph(navController: NavController, coreVM: CoreVi
     composable(route = AccountRoute.AddContactScreen.route) {
         val viewModel = hiltViewModel<AddContactViewModel>()
         AddContactScreen(navController, viewModel, coreVM)
+    }
+
+    composable(route = AccountRoute.FeedbackScreen.route) {
+        val viewModel = hiltViewModel<FeedbackViewModel>()
+        FeedbackScreen(navController, viewModel, coreVM)
     }
 }
