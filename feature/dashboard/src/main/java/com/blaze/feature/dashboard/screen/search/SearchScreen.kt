@@ -40,8 +40,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreVM: CoreViewModel) {
 
-    val context = LocalContext.current
-
     Column(
         Modifier.fillMaxSize()
     ) {
@@ -51,7 +49,11 @@ fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreV
                 .statusBarsPadding()
         ) {
             TopBarEditable(text = coreVM.searchText, onValueChange = {
-                viewModel.searchPlaces(it)
+
+                    // Set the locationText to the entered text
+                    coreVM.searchText.value = it
+                    viewModel.searchPlaces(it)
+
             }, trailingIcon = R.drawable.baseline_close_24, trailingOnClick = {
                 coreVM.searchText.value = ""
             }, headerIcon = R.drawable.arrow_small_left_24, headerOnClick = {

@@ -19,7 +19,10 @@ import com.google.android.libraries.places.api.Places
 
 fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreVM: CoreViewModel) {
     composable(route = DashboardRoute.DashboardScreen.route) {
+        val context = LocalContext.current
+        Places.initialize(context, BuildConfig.MAPS_API_KEY)
         val dashboardViewModel = hiltViewModel<DashboardViewModel>()
+        dashboardViewModel.placesClient = Places.createClient(context)
         DashboardScreen(navController, coreVM,dashboardViewModel)
     }
     composable(route = DashboardRoute.SearchScreen.route) {

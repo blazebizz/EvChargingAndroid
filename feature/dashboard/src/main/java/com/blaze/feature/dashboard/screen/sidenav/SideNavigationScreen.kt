@@ -134,14 +134,15 @@ fun SideNavigationScreen(
         SideNavigationItem(
             image = R.drawable.hourglass_end_24,
             title = "Safety",
+            des= "Your safety precursion & Emergency contact details",
         ) {
             navController.navigateCleanNavScreen(AccountRoute.SafetyScreen.route)
         }
 
         SideNavigationItem(
             image = R.drawable.garage_car_24,
-            title = "My Vehicles",
-
+            title = "My Vehicle",
+            des = "Save your vehicle details for better experience"
             ) {
 
         }
@@ -156,7 +157,7 @@ fun SideNavigationScreen(
 
   SideNavigationItem(
             image = R.drawable.hourglass_end_24,
-            title = "My Bookings",
+            title = "My Booking",
         ) {
 
         }
@@ -169,9 +170,9 @@ fun SideNavigationScreen(
         }
 
 
-
         SideNavigationItem(
-            image = R.drawable.users_24, title = "Be a Partner", des = "Join with us"
+            image = R.drawable.users_24, title = "Become a Partner",
+//            des = "Join with us"
         ) {
 //            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
             navController.navigateCleanNavScreen(OnBoardingRoute.BoardingStatusScreen.route)

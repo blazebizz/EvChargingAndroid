@@ -75,35 +75,5 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             it.printStackTrace()
         }
     }
-
-
-//    @SuppressLint("MissingPermission")
-//    fun getCurrentLocation() {
-//        locationState = LocationState.LocationLoading
-//        fusedLocationClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, null)
-//            .addOnSuccessListener { location ->
-//                locationState =
-//                    if (location == null && locationState !is LocationState.LocationAvailable) {
-//                        LocationState.Error
-//                    } else {
-//                        selectedLatLong = LatLng(location.latitude, location.longitude)
-//                        LocationState.LocationAvailable(
-//                            LatLng(
-//                                location.latitude,
-//                                location.longitude
-//                            )
-//                        )
-//                    }
-//            }
-//    }
-
-    var text by mutableStateOf("")
-
-    fun getAddress(latLng: LatLng) {
-        viewModelScope.launch {
-            val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
-            text = address?.get(0)?.getAddressLine(0).toString()
-        }
-    }
 }
 

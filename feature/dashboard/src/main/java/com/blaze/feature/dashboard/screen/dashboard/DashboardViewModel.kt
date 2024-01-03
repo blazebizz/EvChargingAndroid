@@ -9,6 +9,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.blaze.core.ui.data.model.response.AutocompleteResult
@@ -21,11 +22,15 @@ import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.Task
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.util.Locale
 import javax.inject.Inject
 
 class DashboardViewModel @Inject constructor():ViewModel() {
@@ -33,10 +38,8 @@ class DashboardViewModel @Inject constructor():ViewModel() {
 
     lateinit var fusedLocationClient: FusedLocationProviderClient
     lateinit var placesClient: PlacesClient
-    lateinit var geoCoder: Geocoder
     val onFirstLoad = mutableStateOf(true)
-
-    val locationAutofill = mutableStateListOf<AutocompleteResult>()
+    val locationAutofill = SnapshotStateList<AutocompleteResult>()
 
     private var job: Job? = null
 
@@ -99,6 +102,28 @@ class DashboardViewModel @Inject constructor():ViewModel() {
                 } catch (sendEx: IntentSender.SendIntentException) {
                     // Ignore the error.
                 }
+            }
+        }
+    }
+
+    fun getAddress(context:Context,latLng: LatLng,onGetAddress:(String)->Unit={}) {
+        viewModelScope.launch {
+            val geoCoder =  Geocoder(context, Locale.ENGLISH)
+            val address = geoCoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
+            onGetAddress(address?.get(0)?.getAddressLine(0).toString())
+        }
+    }
+
+    fun getCoordinates(result: AutocompleteResult,onSuccess: (latLng: LatLng) -> Unit) {
+        viewModelScope.launch {
+            val placeFields = listOf(Place.Field.LAT_LNG)
+            val request = FetchPlaceRequest.newInstance(result.placeId, placeFields)
+            placesClient.fetchPlace(request).addOnSuccessListener {
+                if (it != null) {
+                    onSuccess( it.place.latLng!!)
+                }
+            }.addOnFailureListener {
+                it.printStackTrace()
             }
         }
     }
