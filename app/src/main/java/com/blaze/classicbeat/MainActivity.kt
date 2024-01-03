@@ -44,6 +44,7 @@ import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
+import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
@@ -181,7 +182,8 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
         ) {
             val navGraphController = rememberNavController()
             SetupNavGraph(
-                startDestination = StartUpRoute.SplashScreen.route,
+//                startDestination = StartUpRoute.SplashScreen.route,
+                startDestination = DashboardRoute.DashboardScreen.route,
                 navController = navGraphController,
                 coreVm = coreViewModel,
                 onBoardingViewModel = onBoardingViewModel
@@ -225,4 +227,6 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
         InitSubUiComponents(coreViewModel)
     }
 }
+
+//In activity
 

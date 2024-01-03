@@ -65,7 +65,7 @@ fun TopBar(
         Image(painter =painterResource( headerIcon), contentDescription = null,
             Modifier
                 .size(30.dp)
-                .clickable {
+                .bounceClick {
                     headerOnClick()
                 }
                 .clip(CircleShape))

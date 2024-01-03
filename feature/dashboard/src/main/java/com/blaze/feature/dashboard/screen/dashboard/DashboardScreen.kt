@@ -1,6 +1,8 @@
 package com.blaze.feature.dashboard.screen.dashboard
 
 import android.app.Activity
+import android.content.Context
+import android.util.TypedValue
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,8 +33,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -45,29 +48,36 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBar
+import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.util.logi
+import com.blaze.core.utils.util.requestLocationEnable
 import com.blaze.feature.dashboard.screen.bottomsheet.BottomSheetContent
+import kotlinx.coroutines.delay
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun DashboardScreen(
     navController: NavController, coreVM: CoreViewModel, dashboardViewModel: DashboardViewModel
 ) {
     val activity = LocalContext.current as Activity
-    val showGpsDialog = rememberSaveable { mutableStateOf(false) }
     val modalSheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     val activateBottomSheet = remember { mutableStateOf(false) }
 
+
     LaunchedEffect(key1 = coreVM.isGpsEnabled.value) {
-        showGpsDialog.value = !coreVM.isGpsEnabled.value
+        if (!coreVM.isGpsEnabled.value) {
+            requestLocationEnable(activity)
+            delay(10000)
+        }
     }
+
+
     LaunchedEffect(key1 = Unit) {
         if (!coreVM.isGpsEnabled.value) {
-            showGpsDialog.value = true
+            requestLocationEnable(activity)
         } else {
-            showGpsDialog.value = false
             if (dashboardViewModel.onFirstLoad.value) {
                 coreVM.mapLocation.value = coreVM.currentLocation.value
                 dashboardViewModel.onFirstLoad.value = !dashboardViewModel.onFirstLoad.value
@@ -83,47 +93,55 @@ fun DashboardScreen(
         modifier = Modifier.fillMaxSize(),
 //            containerColor = Color.Transparent,
     ) {
-        Box(
+        Column(
             Modifier
-                .padding(it)
                 .fillMaxSize()
-        ) {
+                .padding(it)) {
 
-            DashboardMapContent(Modifier, dashboardViewModel, coreVM, onMarkerClick = {
-                activateBottomSheet.value = true
-                activateBottomSheet.value = true
-            })
 
-            TopBar(text = coreVM.searchText.value,
-                headerIcon = R.drawable.logo_square,
-                trailingIcon = R.drawable.search_24,
-                headerOnClick = {
-                    navController.navigate(DashboardRoute.SideNavigationScreen.route)
-                },
-                textOnClick = {
-                    navController.navigate(DashboardRoute.SearchScreen.route)
+            Box(
+                Modifier
+                    .padding()
+                    .fillMaxWidth()
+                    .fillMaxHeight()
+            ) {
+
+                DashboardMapContent(Modifier, dashboardViewModel, coreVM, onMarkerClick = {
+                    activateBottomSheet.value = true
                 })
 
-            Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
-                tint = MaterialTheme.colorScheme.onBackground,
-                contentDescription = null,
-                modifier = Modifier
-                    .clickable {
-                        logi("mapLocation to currentLocation")
-                        if (coreVM.isGpsEnabled.value) {
-                            coreVM.mapLocation.value = coreVM.currentLocation.value
-                        } else {
-                            showGpsDialog.value = true
+                TopBar(text = coreVM.searchText.value,
+                    headerIcon = R.drawable.logo_square,
+                    trailingIcon = R.drawable.baseline_search_24,
+                    headerOnClick = {
+                        navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                    },
+                    textOnClick = {
+                        navController.navigate(DashboardRoute.SearchScreen.route)
+                    })
+
+                Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
+                    tint = MaterialTheme.colorScheme.onBackground,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .bounceClick {
+                            logi("mapLocation to currentLocation")
+                            if (coreVM.isGpsEnabled.value) {
+                                coreVM.mapLocation.value = coreVM.currentLocation.value
+                            } else {
+                                requestLocationEnable(activity)
+                            }
                         }
-                    }
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 24.dp, bottom = 24.dp)
-                    .background(MaterialTheme.colorScheme.background, CircleShape)
-                    .padding(12.dp))
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 24.dp, bottom = 24.dp)
+                        .background(MaterialTheme.colorScheme.background, CircleShape)
+                        .padding(12.dp))
 
-
-            GpsDialog(showGpsDialog, coreVM)
+            }
         }
+
+
+
         if (activateBottomSheet.value) {
             ModalBottomSheet(
                 onDismissRequest = {
@@ -132,10 +150,16 @@ fun DashboardScreen(
             ) {
                 BottomSheetContent(activateBottomSheet, modalSheetState, coreVM, navController)
             }
+
         }
     }
 }
 
+
+@Composable
+fun Wait() {
+
+}
 
 @Composable
 fun GpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
@@ -200,3 +224,10 @@ fun GpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
 }
 
 
+fun Int.dpToPx(context: Context): Float {
+    return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        context.resources.displayMetrics
+    )
+}

@@ -32,6 +32,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
+import com.blaze.core.ui.components.pressClick
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +48,7 @@ fun BottomSheetContent(
     SheetContent()
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SheetContent() {
     val scrollState = rememberScrollState()
@@ -76,8 +81,7 @@ fun SheetContent() {
             }
         }
 
-        Text(text = "Book Slot")
-        TimeSlotLayout(Modifier.fillMaxWidth())
+
     }
 }
 

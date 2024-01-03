@@ -15,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,6 +33,7 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.SideNavigationItem
+import com.blaze.core.ui.components.pressClick
 import com.blaze.core.ui.defaultBackground
 import com.blaze.core.ui.utils.navigateCleanNavScreen
 import com.blaze.core.utils.navigation.AccountRoute
@@ -55,11 +59,7 @@ fun SideNavigationScreen(
     val context = LocalContext.current
     BackHandler {
         navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
-//        navController.navigate(DashboardRoute.DashboardScreen.route) {
-//            popUpTo(DashboardRoute.SideNavigationScreen.route) {
-//                inclusive = true
-//            }
-//        }
+
     }
 
     Column(
@@ -70,18 +70,22 @@ fun SideNavigationScreen(
     ) {
 
         Row(Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.Bottom) {
+            Image(
+                painter = painterResource(id = R.drawable.logo_square),
+                contentDescription = null,
+                Modifier
+                    .padding(end = 16.dp)
+                    .size(50.dp)
+                    .clip(CircleShape)
+            )
             Column {
                 Text(text = coreUi.currentUserName.value, fontSize = 26.sp, fontWeight = FontWeight.Bold)
                 Text(text = coreUi.currentUserNumber.value)
             }
             Spacer(modifier = Modifier.weight(1f))
-            Image(
-                painter = painterResource(id = R.drawable.logo_square),
-                contentDescription = null,
-                Modifier
-                    .size(50.dp)
-                    .clip(CircleShape)
-            )
+          Icon(Icons.Default.Close, contentDescription = null,modifier=Modifier.pressClick {
+              navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
+          })
         }
 
         Row(
@@ -132,11 +136,6 @@ fun SideNavigationScreen(
             title = "Safety",
         ) {
             navController.navigateCleanNavScreen(AccountRoute.SafetyScreen.route)
-//            navController.navigate(AccountRoute.SafetyScreen.route) {
-//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
-//                    inclusive = true
-//                }
-//            }
         }
 
         SideNavigationItem(
@@ -176,11 +175,6 @@ fun SideNavigationScreen(
         ) {
 //            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
             navController.navigateCleanNavScreen(OnBoardingRoute.BoardingStatusScreen.route)
-//            navController.navigate(OnBoardingRoute.BoardingStatusScreen.route) {
-//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
-//                    inclusive = true
-//                }
-//            }
         }
 
         SideNavigationItem(
@@ -220,7 +214,6 @@ fun SideNavigationScreen(
 
         }
 
-
         Spacer(modifier = Modifier.weight(1f))
 
         SideNavigationItem(
@@ -229,11 +222,6 @@ fun SideNavigationScreen(
             viewModel.firebaseAuth.signOut()
             Toast.makeText(context, "User Log out", Toast.LENGTH_SHORT).show()
             navController.navigateCleanNavScreen(StartUpRoute.SplashScreen.route)
-//            navController.navigate(StartUpRoute.SplashScreen.route) {
-//                popUpTo(DashboardRoute.SideNavigationScreen.route) {
-//                    inclusive = true
-//                }
-//            }
         }
     }
 }

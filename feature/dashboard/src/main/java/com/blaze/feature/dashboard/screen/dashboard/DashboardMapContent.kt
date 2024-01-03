@@ -37,7 +37,11 @@ fun DashboardMapContent(
                 zoomControlsEnabled = false,
                 myLocationButtonEnabled = false,
                 rotationGesturesEnabled = false,
-                compassEnabled = false
+                compassEnabled = false,
+                tiltGesturesEnabled = false,
+                mapToolbarEnabled = false,
+                zoomGesturesEnabled = false,
+                scrollGesturesEnabled = true,
             )
         }
 
@@ -84,6 +88,7 @@ fun DashboardMapContent(
 //                            MapEvent.OnInfoWindowLongClick(spot)
 //                        )
                     },
+
                     onClick = {
 //                        it.showInfoWindow()
                         onMarkerClick(it)

@@ -78,6 +78,7 @@ class ErrorActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
 
+
                     Column(
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
@@ -143,7 +144,11 @@ class ErrorActivity : ComponentActivity() {
                                 text = "OK", fontWeight = FontWeight.SemiBold
                             )
                         }
+
+                        Text(text =stackTrace.value )
+
                     }
+
                 }
             }
         }
