@@ -51,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieAnimation
@@ -60,6 +61,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.DefaultShape
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.TopBar
 import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.ui.components.pressClick
@@ -83,22 +85,24 @@ fun DashboardScreen(
 
     LaunchedEffect(key1 = coreVM.isGpsEnabled.value) {
         if (!coreVM.isGpsEnabled.value) {
-            requestLocationEnable(activity)
+            requestLocationEnable(activity, onLocationPresent = {
+                coreVM.mapLocation.value = coreVM.currentLocation.value
+            })
             delay(10000)
         }
     }
 
-
-    LaunchedEffect(key1 = Unit) {
-        if (!coreVM.isGpsEnabled.value) {
-            requestLocationEnable(activity)
-        } else {
-            if (viewModel.onFirstLoad.value) {
-                coreVM.mapLocation.value = coreVM.currentLocation.value
-                viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
-            }
-        }
-    }
+//
+//    LaunchedEffect(key1 = Unit) {
+//        if (!coreVM.isGpsEnabled.value) {
+//            requestLocationEnable(activity)
+//        } else {
+//            if (viewModel.onFirstLoad.value) {
+//                coreVM.mapLocation.value = coreVM.currentLocation.value
+//                viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
+//            }
+//        }
+//    }
 
 
     BackHandler {
@@ -141,7 +145,7 @@ fun DashboardScreen(
                 Column(
                     Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(start = 24.dp, end = 24.dp, bottom = 24.dp)
+                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .wrapContentHeight()
                         .background(Color.Transparent)
                 ) {
@@ -153,6 +157,7 @@ fun DashboardScreen(
                                 logi("mapLocation to currentLocation")
                                 if (coreVM.isGpsEnabled.value) {
                                     coreVM.mapLocation.value = coreVM.currentLocation.value
+                                    coreVM.userLocationSelected.value = true
                                 } else {
                                     requestLocationEnable(activity)
                                 }
@@ -209,6 +214,7 @@ fun DashboardScreen(
                                     .bounceClick {
                                         coreVM.searchText.value = ""
                                         viewModel.locationAutofill.clear()
+                                        coreVM.userLocationSelected.value = false
                                     },
                             )
                             Spacer(Modifier.width(12.dp))
@@ -229,6 +235,7 @@ fun DashboardScreen(
                                                 viewModel.getCoordinates(it) { latLng ->
                                                     logi("SearchScreen: lat: ${latLng.latitude}  lng: ${latLng.longitude}")
                                                     coreVM.mapLocation.value = latLng
+                                                    coreVM.userLocationSelected.value = true
                                                     viewModel.locationAutofill.clear()
                                                 }
                                             }
@@ -250,27 +257,44 @@ fun DashboardScreen(
                                 }
                             }
                         } else {
-                            Text(
-                                "Explore",
-                                color = MaterialTheme.colorScheme.onBackground,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
+                            if (!coreVM.userLocationSelected.value){
+                                Text(
+                                    "Explore",
+                                    color = MaterialTheme.colorScheme.onBackground,
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                Row(
+                                    Modifier.fillMaxWidth(),
+                                ) {
+                                    VicheleItem(img = R.drawable.scooty_img, title = "Scooter") {
+                                        coreVM.toast("scooter")
+                                    }
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                    VicheleItem(img = R.drawable.bike_img, title = "Bike") {
+                                        coreVM.toast("bike")
+                                    }
+                                    Spacer(modifier = Modifier.width(20.dp))
+                                    VicheleItem(img = R.drawable.car_img, title = "Car") {
+                                        coreVM.toast("Car")
+                                    }
+                                }
 
-                            Row(
-                                Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceEvenly
-                            ) {
-                                VicheleItem(img = R.drawable.scooty_img, title = "Scooter") {
-                                    coreVM.toast("scooter")
-                                }
-                                VicheleItem(img = R.drawable.bike_img, title = "Bike") {
-                                    coreVM.toast("bike")
-                                }
-                                VicheleItem(img = R.drawable.car_img, title = "Car") {
-                                    coreVM.toast("Car")
+                            }else{
+                                Column(Modifier.fillMaxSize()) {
+                                    Spacer(modifier = Modifier.weight(1f))
+                                    Text(text = "Search Filter", modifier = Modifier.pressClick {
+                                        coreVM.toast("filter search by preference")
+                                    }.align(Alignment.End),
+//                                        .padding(bottom = 10.dp)
+                                        fontSize = 12.sp
+                                    )
+                                    Button(text = "Search & Book Instantly", modifier = Modifier.fillMaxWidth()) {
+                                        
+                                    }
                                 }
                             }
+
                         }
                     }
                 }
@@ -297,18 +321,6 @@ fun GpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
     if (state.value) Dialog(onDismissRequest = {
 
     }) {
-//        val context = LocalContext.current
-//        val openLocationSettings =
-//            rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-//                state.value = !state.value
-//                if (coreVM.isGpsEnabled.value) {
-//                    mainScope.launch {
-//                        Toast.makeText(context, "Thank You, Please Enjoy!", Toast.LENGTH_SHORT).show()
-//                        delay(2000)
-//                        coreVM.mapLocation.value = coreVM.currentLocation.value
-//                    }
-//                }
-//            }
 
         Column(
             Modifier

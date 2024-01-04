@@ -27,6 +27,7 @@ class CoreViewModel @Inject constructor(
     val currentUserName: MutableState<String> = mutableStateOf("Guest User")
     val currentUserType: MutableState<String> = mutableStateOf("Customer")
     val searchText: MutableState<String> = mutableStateOf("")
+    val userLocationSelected: MutableState<Boolean> = mutableStateOf(false)
 
     val loading: MutableState<Boolean> = mutableStateOf(false)
     val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)

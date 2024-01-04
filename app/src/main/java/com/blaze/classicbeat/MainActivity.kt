@@ -182,8 +182,8 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
         ) {
             val navGraphController = rememberNavController()
             SetupNavGraph(
-                startDestination = StartUpRoute.SplashScreen.route,
-//                startDestination = DashboardRoute.DashboardScreen.route,
+//                startDestination = StartUpRoute.SplashScreen.route,
+                startDestination = DashboardRoute.DashboardScreen.route,
                 navController = navGraphController,
                 coreVm = coreViewModel,
                 onBoardingViewModel = onBoardingViewModel

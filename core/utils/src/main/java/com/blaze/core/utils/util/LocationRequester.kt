@@ -9,7 +9,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 
-fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {}) {
+fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {},onLocationPresent:()->Unit={}) {
     activity?.let { act ->
         val locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY, 1000
@@ -24,6 +24,9 @@ fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {}) {
 
         task.addOnSuccessListener {
             result(it.locationSettingsStates?.isLocationPresent == true)
+
+            onLocationPresent()
+
         }.addOnFailureListener { exception ->
             if (exception is ResolvableApiException) {
                 try {

@@ -1,5 +1,6 @@
 package com.blaze.feature.dashboard.screen.dashboard
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.mainScope
+import com.blaze.core.utils.util.requestLocationEnable
 import com.blaze.feature.dashboard.utils.MAP_ZOOM
 import com.blaze.feature.dashboard.utils.ParkingSpot
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -40,11 +42,13 @@ import kotlinx.coroutines.launch
 @Composable
 fun MapContent(
     modifier: Modifier,
-    dashboardViewModel: DashboardViewModel,
+    viewModel: DashboardViewModel,
     coreVM: CoreViewModel,
     onPOIClick: (PointOfInterest) -> Unit = {},
     onMarkerClick: (Marker) -> Unit,
 ) {
+
+    val activity= LocalContext.current as Activity
     Box(modifier = modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, MAP_ZOOM)
@@ -72,16 +76,28 @@ fun MapContent(
 
         LaunchedEffect(cameraPositionState.isMoving) {
             if (!cameraPositionState.isMoving) {
-                dashboardViewModel.getAddress(context, cameraPositionState.position.target) {
+                viewModel.getAddress(context, cameraPositionState.position.target) {
                     logi(it)
-                    coreVM.searchText.value = it
+
+                    if (viewModel.onFirstLoad.value) {
+                        if (coreVM.isGpsEnabled.value) {
+                            coreVM.mapLocation.value = coreVM.currentLocation.value
+                        }
+                        viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
+                    }else{
+                        coreVM.searchText.value = it
+                        coreVM.userLocationSelected.value = true
+                    }
+
+
+
                 }
             }
         }
 
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
-            properties = dashboardViewModel.state.properties,
+            properties = viewModel.state.properties,
             uiSettings = uiSettings,
             cameraPositionState = cameraPositionState, //upon getting the current location set to this
             onMapLoaded = {},
@@ -89,7 +105,7 @@ fun MapContent(
 //                viewModel.onEvent(MapEvent.OnMapLongClick(it))
                 Toast.makeText(context, "${it.latitude}   ${it.longitude}", Toast.LENGTH_SHORT)
                     .show()
-                dashboardViewModel.state.parkingSpots.add(ParkingSpot(it))
+                viewModel.state.parkingSpots.add(ParkingSpot(it))
             },
             onPOIClick = {
                 onPOIClick(it)
@@ -100,7 +116,7 @@ fun MapContent(
                 }
             }
         ) {
-            dashboardViewModel.state.parkingSpots.forEach { spot ->
+            viewModel.state.parkingSpots.forEach { spot ->
                 Marker(
                     position = spot.LatLng,
                     title = "Parking Sport ${spot.LatLng.latitude} ${spot.LatLng.longitude}",

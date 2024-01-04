@@ -144,11 +144,8 @@ class ErrorActivity : ComponentActivity() {
                                 text = "OK", fontWeight = FontWeight.SemiBold
                             )
                         }
-
                         Text(text =stackTrace.value )
-
                     }
-
                 }
             }
         }
