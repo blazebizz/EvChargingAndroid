@@ -1,6 +1,7 @@
 package com.blaze.core.utils.util
 
 import android.app.Activity
+import android.content.Context
 import android.content.IntentSender
 import android.widget.Toast
 import com.google.android.gms.common.api.ResolvableApiException
@@ -9,7 +10,8 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.Priority
 
-fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {},onLocationPresent:()->Unit={}) {
+fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {}) {
+
     activity?.let { act ->
         val locationRequest = LocationRequest.Builder(
             Priority.PRIORITY_HIGH_ACCURACY, 1000
@@ -23,10 +25,7 @@ fun requestLocationEnable(activity: Activity?, result: (Boolean) -> Unit = {},on
         val task = client.checkLocationSettings(builder.build())
 
         task.addOnSuccessListener {
-            result(it.locationSettingsStates?.isLocationPresent == true)
-
-            onLocationPresent()
-
+                        result(it.locationSettingsStates?.isLocationPresent == true)
         }.addOnFailureListener { exception ->
             if (exception is ResolvableApiException) {
                 try {

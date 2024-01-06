@@ -18,6 +18,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.components.LoadingDialog
+import kotlinx.coroutines.delay
 
 
 val DefaultShape = RoundedCornerShape(20.dp)
@@ -53,22 +54,15 @@ fun InitSubUiComponents(model: CoreViewModel) {
     //region toast
     LaunchedEffect(key1 = model.toast.value) {
         if (model.toast.value.isNotBlank()) Toast.makeText(
-            context,
-            model.toast.value,
-            Toast.LENGTH_SHORT
+            context, model.toast.value, Toast.LENGTH_SHORT
         ).show()
+        delay(2000)
     }
-
 
     //endregion
 
 
     //region loading
-
-//    LaunchedEffect(key1 = model.loading.value) {
-//
-//    }
-
     if (model.loading.value) LoadingDialog()
     //endregion
 

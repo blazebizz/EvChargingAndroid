@@ -5,6 +5,7 @@ import android.content.IntentSender
 import android.location.Geocoder
 import android.util.Log
 import androidx.activity.result.IntentSenderRequest
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,9 @@ class DashboardViewModel @Inject constructor():ViewModel() {
     lateinit var placesClient: PlacesClient
     val onFirstLoad = mutableStateOf(true)
     val locationAutofill = SnapshotStateList<AutocompleteResult>()
+    val userLocationSelected: MutableState<Boolean> = mutableStateOf(false)
+
+    val selectLocationFromMap = mutableStateOf(false)
 
     private var job: Job? = null
 

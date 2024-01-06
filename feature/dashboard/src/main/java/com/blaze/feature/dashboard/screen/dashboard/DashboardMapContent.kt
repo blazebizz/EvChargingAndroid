@@ -48,7 +48,6 @@ fun MapContent(
     onMarkerClick: (Marker) -> Unit,
 ) {
 
-    val activity= LocalContext.current as Activity
     Box(modifier = modifier.fillMaxSize()) {
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(coreVM.currentLocation.value, MAP_ZOOM)
@@ -75,7 +74,7 @@ fun MapContent(
         }
 
         LaunchedEffect(cameraPositionState.isMoving) {
-            if (!cameraPositionState.isMoving) {
+            if (!cameraPositionState.isMoving && viewModel.selectLocationFromMap.value) {
                 viewModel.getAddress(context, cameraPositionState.position.target) {
                     logi(it)
 
@@ -86,7 +85,7 @@ fun MapContent(
                         viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
                     }else{
                         coreVM.searchText.value = it
-                        coreVM.userLocationSelected.value = true
+                        viewModel.userLocationSelected.value = true
                     }
 
 
@@ -138,23 +137,27 @@ fun MapContent(
         }
 
 
-        Image(
-            painter = painterResource(id = com.blaze.core.ui.R.drawable.location_pin2),
-            contentDescription = "Parking",
-            modifier = Modifier
-                .size(26.dp)
-                .align(Alignment.Center)
-                .offset(y = if (cameraPositionState.isMoving) (-25).dp else (-10).dp)
-        )
+//        if (viewModel.selectLocationFromMap.value){
 
-        Spacer(
-            modifier = Modifier
-                .offset(y = (5).dp)
-                .height(3.dp)
-                .width(15.dp)
-                .background(Color.Gray, RoundedCornerShape(2.dp))
-                .align(Alignment.Center)
-        )
+            Image(
+                painter = painterResource(id = com.blaze.core.ui.R.drawable.location_pin2),
+                contentDescription = "Parking",
+                modifier = Modifier
+                    .size(26.dp)
+                    .align(Alignment.Center)
+                    .offset(y = if (cameraPositionState.isMoving) (-25).dp else (-10).dp)
+            )
+
+            Spacer(
+                modifier = Modifier
+                    .offset(y = (5).dp)
+                    .height(3.dp)
+                    .width(15.dp)
+                    .background(Color.Gray, RoundedCornerShape(2.dp))
+                    .align(Alignment.Center)
+            )
+//        }
+
     }
 }
 

@@ -2,20 +2,27 @@ package com.blaze.feature.dashboard.screen.dashboard
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -25,8 +32,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -44,16 +49,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -62,15 +76,23 @@ import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.DefaultShape
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
-import com.blaze.core.ui.components.TopBar
 import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.ui.components.pressClick
-import com.blaze.core.ui.defaultBackground
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.requestLocationEnable
 import com.blaze.feature.dashboard.screen.bottomsheet.BottomSheetContent
 import kotlinx.coroutines.delay
+
+@Composable
+@Preview
+fun DashboardScreenPreview() {
+    val navController = rememberNavController()
+    val coreVM = hiltViewModel<CoreViewModel>()
+    val viewModel = hiltViewModel<DashboardViewModel>()
+    DashboardScreen(navController, coreVM, viewModel)
+}
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -82,27 +104,24 @@ fun DashboardScreen(
     val scope = rememberCoroutineScope()
     val activateBottomSheet = remember { mutableStateOf(false) }
 
+    val isKeyboardShowing = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
     LaunchedEffect(key1 = coreVM.isGpsEnabled.value) {
         if (!coreVM.isGpsEnabled.value) {
-            requestLocationEnable(activity, onLocationPresent = {
-                coreVM.mapLocation.value = coreVM.currentLocation.value
-            })
-            delay(10000)
+            requestLocationEnable(activity) // launch GPS dialog
         }
     }
 
-//
-//    LaunchedEffect(key1 = Unit) {
-//        if (!coreVM.isGpsEnabled.value) {
-//            requestLocationEnable(activity)
-//        } else {
-//            if (viewModel.onFirstLoad.value) {
-//                coreVM.mapLocation.value = coreVM.currentLocation.value
-//                viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
-//            }
-//        }
-//    }
+
+    LaunchedEffect(key1 = Unit) {
+        if (coreVM.isGpsEnabled.value) {
+            if (viewModel.onFirstLoad.value) {
+                delay(3000)
+                coreVM.mapLocation.value = coreVM.currentLocation.value
+                viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
+            }
+        }
+    }
 
 
     BackHandler {
@@ -124,30 +143,49 @@ fun DashboardScreen(
             Box(
                 Modifier
                     .padding()
-                    .fillMaxWidth()
-                    .fillMaxHeight()
+                    .fillMaxSize()
             ) {
 
-                MapContent(Modifier, viewModel, coreVM, onMarkerClick = {
+                MapContent(Modifier.pointerInput(Unit) {
+
+                }, viewModel, coreVM, onMarkerClick = {
                     activateBottomSheet.value = true
                 })
 
-                TopBar(text = coreVM.searchText.value,
-                    headerIcon = R.drawable.logo_square,
-                    trailingIcon = R.drawable.baseline_search_24,
-                    headerOnClick = {
-                        navController.navigate(DashboardRoute.SideNavigationScreen.route)
-                    },
-                    textOnClick = {
-                        navController.navigate(DashboardRoute.SearchScreen.route)
-                    })
+                Image(painter = painterResource(R.drawable.logo_square),
+                    contentDescription = null,
+                    Modifier
+                        .padding(18.dp)
+                        .size(50.dp)
+                        .bounceClick {
+                            navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                        }
+                        .clip(CircleShape))
 
+//                TopBar(text = coreVM.searchText.value,
+//                    headerIcon = R.drawable.logo_square,
+//                    trailingIcon = R.drawable.baseline_search_24,
+//                    headerOnClick = {
+//                        navController.navigate(DashboardRoute.SideNavigationScreen.route)
+//                    },
+//                    textOnClick = {
+//                        navController.navigate(DashboardRoute.SearchScreen.route)
+//                    })
+                val offset by animateDpAsState(
+                    if (isKeyboardShowing) (-250).dp else 0.dp,
+                    animationSpec = tween(durationMillis = 300), label = ""
+                )
                 Column(
                     Modifier
                         .align(Alignment.BottomEnd)
                         .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
                         .wrapContentHeight()
                         .background(Color.Transparent)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+
+                            }
+                        }.offset(x= 0.dp,y = offset )
                 ) {
                     Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
                         tint = MaterialTheme.colorScheme.onBackground,
@@ -157,7 +195,7 @@ fun DashboardScreen(
                                 logi("mapLocation to currentLocation")
                                 if (coreVM.isGpsEnabled.value) {
                                     coreVM.mapLocation.value = coreVM.currentLocation.value
-                                    coreVM.userLocationSelected.value = true
+                                    viewModel.userLocationSelected.value = true
                                 } else {
                                     requestLocationEnable(activity)
                                 }
@@ -172,29 +210,67 @@ fun DashboardScreen(
                             .fillMaxWidth()
                             .height(300.dp)
                             .background(
-                                MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)
+                                MaterialTheme.colorScheme.background,
+                                RoundedCornerShape(16.dp)
                             )
                             .padding(16.dp)
                     ) {
                         Row(
+                            Modifier.padding(bottom = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Text(
+                                text = "Select Location",
+                                modifier = Modifier.weight(1f),
+                                color = MaterialTheme.colorScheme.onBackground,
+                                textAlign = TextAlign.Start,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+
+                            if (!viewModel.selectLocationFromMap.value) Text(
+                                text = "Select From Map",
+                                modifier = Modifier
+                                    .bounceClick {
+                                        viewModel.selectLocationFromMap.value = true
+                                    }
+                                    .weight(1f),
+                                color = MaterialTheme.colorScheme.onBackground,
+                                textAlign = TextAlign.End,
+                                fontSize = 12.sp
+                            )
+                        }
+
+                        Row(
                             modifier = Modifier
-                                .padding(16.dp)
-                                .defaultBackground()
-                                .border(1.dp, MaterialTheme.colorScheme.onSurface, DefaultShape)
+                                .background(
+                                    MaterialTheme.colorScheme.surfaceVariant,
+                                    RoundedCornerShape(10.dp)
+                                )
+                                .border(
+                                    1.dp,
+                                    MaterialTheme.colorScheme.onSurface,
+                                    RoundedCornerShape(10.dp)
+                                )
                                 .fillMaxWidth()
                                 .height(50.dp)
-                                .padding(10.dp),
+                                .padding(5.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
                             BasicTextField(
                                 value = coreVM.searchText.value,
                                 onValueChange = { text ->
-                                    coreVM.searchText.value = text
-                                    viewModel.searchPlaces(text)
+                                    if (!viewModel.selectLocationFromMap.value) {
+                                        coreVM.searchText.value = text
+                                        viewModel.searchPlaces(text)
+                                    }
                                 },
                                 singleLine = true,
-                                modifier = Modifier.weight(1f),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .padding(start = 10.dp),
                                 textStyle = TextStyle(
                                     color = MaterialTheme.colorScheme.onBackground,
                                 ),
@@ -206,17 +282,36 @@ fun DashboardScreen(
                                 )
                             )
                             Spacer(Modifier.width(12.dp))
-                            Icon(
-                                painter = painterResource(R.drawable.baseline_close_24),
-                                contentDescription = "notification",
+
+                            val iconPadding =
+                                if (viewModel.selectLocationFromMap.value) PaddingValues(
+                                    start = 14.dp, end = 14.dp
+                                ) else PaddingValues(0.dp)
+
+                            Icon(painter = painterResource(if (viewModel.selectLocationFromMap.value) R.drawable.arrow_right_24 else R.drawable.baseline_close_24),
+                                contentDescription = "search button",
                                 Modifier
                                     .fillMaxHeight()
                                     .bounceClick {
-                                        coreVM.searchText.value = ""
-                                        viewModel.locationAutofill.clear()
-                                        coreVM.userLocationSelected.value = false
-                                    },
-                            )
+                                        if (viewModel.selectLocationFromMap.value) {
+                                            viewModel.selectLocationFromMap.value = false
+                                            //todo getMarker Api Calls
+                                        } else {
+                                            coreVM.searchText.value = ""
+                                            viewModel.locationAutofill.clear()
+                                            viewModel.userLocationSelected.value = false
+                                        }
+                                    }
+
+                                    .background(
+                                        color = if (viewModel.selectLocationFromMap.value) MaterialTheme.colorScheme.primary else Color.Transparent,
+                                        shape = if (viewModel.selectLocationFromMap.value) RoundedCornerShape(
+                                            12.dp
+                                        ) else RectangleShape
+                                    )
+                                    .padding(iconPadding),
+                                tint = if (viewModel.selectLocationFromMap.value) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.onBackground)
+
                             Spacer(Modifier.width(12.dp))
                         }
 
@@ -235,16 +330,16 @@ fun DashboardScreen(
                                                 viewModel.getCoordinates(it) { latLng ->
                                                     logi("SearchScreen: lat: ${latLng.latitude}  lng: ${latLng.longitude}")
                                                     coreVM.mapLocation.value = latLng
-                                                    coreVM.userLocationSelected.value = true
+                                                    viewModel.userLocationSelected.value = true
                                                     viewModel.locationAutofill.clear()
                                                 }
                                             }
                                             .padding(10.dp),
                                         verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(
-                                            Icons.Default.Refresh,
+                                        Image(
+                                            painterResource(id = R.drawable.location_pin3),
                                             contentDescription = null,
-                                            Modifier.size(30.dp)
+                                            Modifier.size(15.dp)
                                         )
                                         Spacer(modifier = Modifier.width(10.dp))
                                         Text(
@@ -257,15 +352,19 @@ fun DashboardScreen(
                                 }
                             }
                         } else {
-                            if (!coreVM.userLocationSelected.value){
+                            if (!viewModel.userLocationSelected.value) {
                                 Text(
                                     "Explore",
                                     color = MaterialTheme.colorScheme.onBackground,
-                                    fontWeight = FontWeight.Bold
+                                    fontWeight = FontWeight.Bold,
+                                    modifier = Modifier.padding(top = 5.dp),
+                                    fontSize = 14.sp
                                 )
-                                Spacer(modifier = Modifier.height(10.dp))
+
                                 Row(
-                                    Modifier.fillMaxWidth(),
+                                    Modifier
+                                        .padding(top = 10.dp)
+                                        .fillMaxWidth(),
                                 ) {
                                     VicheleItem(img = R.drawable.scooty_img, title = "Scooter") {
                                         coreVM.toast("scooter")
@@ -280,18 +379,27 @@ fun DashboardScreen(
                                     }
                                 }
 
-                            }else{
-                                Column(Modifier.fillMaxSize()) {
-                                    Spacer(modifier = Modifier.weight(1f))
-                                    Text(text = "Search Filter", modifier = Modifier.pressClick {
-                                        coreVM.toast("filter search by preference")
-                                    }.align(Alignment.End),
+                            } else {
+                                if (!viewModel.selectLocationFromMap.value) {
+                                    Column(Modifier.fillMaxSize()) {
+                                        Spacer(modifier = Modifier.weight(1f))
+                                        Text(text = "Search Filter",
+                                            modifier = Modifier
+                                                .pressClick {
+                                                    coreVM.toast("filter search by preference")
+                                                }
+                                                .align(Alignment.End),
 //                                        .padding(bottom = 10.dp)
-                                        fontSize = 12.sp
-                                    )
-                                    Button(text = "Search & Book Instantly", modifier = Modifier.fillMaxWidth()) {
-                                        
+                                            fontSize = 12.sp)
+                                        Button(
+                                            text = "Search & Book Instantly",
+                                            modifier = Modifier.fillMaxWidth()
+                                        ) {
+
+                                        }
                                     }
+                                } else {
+                                    //thinking what to do
                                 }
                             }
 
