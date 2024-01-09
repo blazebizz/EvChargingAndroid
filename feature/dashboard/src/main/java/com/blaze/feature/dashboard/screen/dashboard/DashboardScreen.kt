@@ -47,7 +47,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -56,7 +55,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -78,6 +76,7 @@ import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.utils.navigation.AccountRoute
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.requestLocationEnable
@@ -94,7 +93,7 @@ fun DashboardScreenPreview() {
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
     navController: NavController, coreVM: CoreViewModel, viewModel: DashboardViewModel
@@ -185,7 +184,8 @@ fun DashboardScreen(
                             detectTapGestures {
 
                             }
-                        }.offset(x= 0.dp,y = offset )
+                        }
+                        .offset(x = 0.dp, y = offset)
                 ) {
                     Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
                         tint = MaterialTheme.colorScheme.onBackground,
@@ -386,7 +386,9 @@ fun DashboardScreen(
                                         Text(text = "Search Filter",
                                             modifier = Modifier
                                                 .pressClick {
-                                                    coreVM.toast("filter search by preference")
+                                                    navController.navigate(
+                                                        AccountRoute.VehicleScreen.route
+                                                    )
                                                 }
                                                 .align(Alignment.End),
 //                                        .padding(bottom = 10.dp)

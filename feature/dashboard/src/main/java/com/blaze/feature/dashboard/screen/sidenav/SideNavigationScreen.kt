@@ -52,9 +52,7 @@ fun SideNavigationScreenPreview(){
 
 @Composable
 fun SideNavigationScreen(
-    navController: NavController,
-    viewModel: SideNavigationScreenViewModel,
-    coreUi: CoreViewModel
+    navController: NavController, viewModel: SideNavigationScreenViewModel, coreUi: CoreViewModel
 ) {
     val context = LocalContext.current
     BackHandler {
@@ -79,13 +77,17 @@ fun SideNavigationScreen(
                     .clip(CircleShape)
             )
             Column {
-                Text(text = coreUi.currentUserName.value, fontSize = 26.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = coreUi.currentUserName.value,
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Bold
+                )
                 Text(text = coreUi.currentUserNumber.value)
             }
             Spacer(modifier = Modifier.weight(1f))
-          Icon(Icons.Default.Close, contentDescription = null,modifier=Modifier.pressClick {
-              navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
-          })
+            Icon(Icons.Default.Close, contentDescription = null, modifier = Modifier.pressClick {
+                navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
+            })
         }
 
         Row(
@@ -108,7 +110,8 @@ fun SideNavigationScreen(
                     .padding(5.dp)
                     .defaultBackground()
                     .fillMaxHeight()
-                    .weight(1f), contentAlignment = Center
+                    .weight(1f),
+                contentAlignment = Center
             ) {
 
             }
@@ -134,7 +137,7 @@ fun SideNavigationScreen(
         SideNavigationItem(
             image = R.drawable.hourglass_end_24,
             title = "Safety",
-            des= "Your safety precursion & Emergency contact details",
+            des = "Your safety precursion & Emergency contact details",
         ) {
             navController.navigateCleanNavScreen(AccountRoute.SafetyScreen.route)
         }
@@ -143,7 +146,8 @@ fun SideNavigationScreen(
             image = R.drawable.garage_car_24,
             title = "My Vehicle",
             des = "Save your vehicle details for better experience"
-            ) {
+        ) {
+            navController.navigateCleanNavScreen(AccountRoute.VehicleScreen.route)
 
         }
 //        SideNavigationItem(
@@ -155,7 +159,7 @@ fun SideNavigationScreen(
 //        }
 
 
-  SideNavigationItem(
+        SideNavigationItem(
             image = R.drawable.hourglass_end_24,
             title = "My Booking",
         ) {

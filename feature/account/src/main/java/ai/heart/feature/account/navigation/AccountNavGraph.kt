@@ -6,6 +6,8 @@ import ai.heart.feature.account.screen.feedback.FeedbackScreen
 import ai.heart.feature.account.screen.feedback.FeedbackViewModel
 import ai.heart.feature.account.screen.safety.SafetyScreen
 import ai.heart.feature.account.screen.safety.SafetyScreenViewModel
+import ai.heart.feature.account.screen.vehicle.VehicleScreen
+import ai.heart.feature.account.screen.vehicle.VehicleViewModel
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -28,5 +30,9 @@ fun NavGraphBuilder.accountNavGraph(navController: NavController, coreVM: CoreVi
     composable(route = AccountRoute.FeedbackScreen.route) {
         val viewModel = hiltViewModel<FeedbackViewModel>()
         FeedbackScreen(navController, viewModel, coreVM)
+    }
+    composable(route = AccountRoute.VehicleScreen.route) {
+        val viewModel = hiltViewModel<VehicleViewModel>()
+        VehicleScreen(navController, viewModel, coreVM)
     }
 }
