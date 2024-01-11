@@ -2,6 +2,8 @@ package ai.heart.feature.account.navigation
 
 import ai.heart.feature.account.screen.add_contact.AddContactScreen
 import ai.heart.feature.account.screen.add_contact.AddContactViewModel
+import ai.heart.feature.account.screen.booking_history.BookingHistoryScreen
+import ai.heart.feature.account.screen.booking_history.BookingHistoryViewModel
 import ai.heart.feature.account.screen.feedback.FeedbackScreen
 import ai.heart.feature.account.screen.feedback.FeedbackViewModel
 import ai.heart.feature.account.screen.safety.SafetyScreen
@@ -34,5 +36,10 @@ fun NavGraphBuilder.accountNavGraph(navController: NavController, coreVM: CoreVi
     composable(route = AccountRoute.VehicleScreen.route) {
         val viewModel = hiltViewModel<VehicleViewModel>()
         VehicleScreen(navController, viewModel, coreVM)
+    }
+
+    composable(route = AccountRoute.BookingHistoryScreen.route) {
+        val viewModel = hiltViewModel<BookingHistoryViewModel>()
+        BookingHistoryScreen(navController, viewModel, coreVM)
     }
 }

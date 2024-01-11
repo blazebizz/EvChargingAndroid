@@ -166,12 +166,12 @@ fun SideNavigationScreen(
 
         }
 
-        SideNavigationItem(
-            image = R.drawable.dashboard_24,
-            title = "Charging History",
-        ) {
-
-        }
+//        SideNavigationItem(
+//            image = R.drawable.dashboard_24,
+//            title = "Charging History",
+//        ) {
+//
+//        }
 
 
         SideNavigationItem(
@@ -196,12 +196,12 @@ fun SideNavigationScreen(
 
         }
 
-        SideNavigationItem(
-            image = R.drawable.sparkles_24,
-            title = "Feedback",
-        ) {
-            navController.navigateCleanNavScreen(AccountRoute.FeedbackScreen.route)
-        }
+//        SideNavigationItem(
+//            image = R.drawable.sparkles_24,
+//            title = "Feedback",
+//        ) {
+//            navController.navigateCleanNavScreen(AccountRoute.FeedbackScreen.route)
+//        }
 
         SideNavigationItem(
             image = R.drawable.sparkles_24,

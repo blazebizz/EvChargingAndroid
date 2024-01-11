@@ -30,4 +30,5 @@ sealed class AccountRoute(val route: String) {
     object FeedbackScreen : NavigationRoute(route = "FeedbackScreen")
     object AddContactScreen : NavigationRoute(route = "AddContactScreen")
     object VehicleScreen : NavigationRoute(route = "VehicleScreen")
+    object BookingHistoryScreen : NavigationRoute(route = "BookingHistoryScreen")
 }
