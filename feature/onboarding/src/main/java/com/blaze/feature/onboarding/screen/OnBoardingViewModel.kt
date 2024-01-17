@@ -34,8 +34,8 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     val progress5 = mutableFloatStateOf(0f)
 
     //page1
-    val selected2Wheeler = mutableStateOf(false)
-    val selected4Wheeler = mutableStateOf(false)
+//    val selected2Wheeler = mutableStateOf(false)
+//    val selected4Wheeler = mutableStateOf(false)
     val tcChecked = mutableStateOf(false)
 
     //page2
@@ -44,6 +44,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     val addressL1 = mutableStateOf("")
     val addressL2 = mutableStateOf("")
     val state = mutableStateOf("")
+    val city = mutableStateOf("")
     val pincode = mutableStateOf("")
 
     //page3
@@ -66,15 +67,15 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
     val accConfirmNumber = mutableStateOf("")
     val ifscCode = mutableStateOf("")
 
-    //page6
+/*    //page6
     val pkImage1ByteArray = mutableStateOf<ByteArray?>(null)
     val pkImage2ByteArray = mutableStateOf<ByteArray?>(null)
     val pkImage3ByteArray = mutableStateOf<ByteArray?>(null)
-    val pkImage4ByteArray = mutableStateOf<ByteArray?>(null)
+    val pkImage4ByteArray = mutableStateOf<ByteArray?>(null)*/
 
     val fetchedOnBoardUserData = mutableStateOf<FetchPartnerOnBoardDataResponse?>(null)
 
-    fun fetchOnBoardUserData(
+/*    fun fetchOnBoardUserData(
 //        userId: String,
                              loading: MutableState<Boolean>) {
         loading.value = true
@@ -118,7 +119,7 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 
             }
         }
-    }
+    }*/
 
     private val uploadDocList =
         listOf("aadhaarFront", "aadhaarBack", "pan", "electricBill", "other")
@@ -185,18 +186,19 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
         onFailure: (String) -> Unit = {},
         loading: MutableState<Boolean>
     ) {
-        ioScope.launch {
-            loading.value = true
-            repo.onBoard(body).handleFlow(onLoading = {
-                loading.value = it
-            }, onFailure = { msg, _, _ ->
-                onFailure(msg)
-            }, onSuccess = {
-                mainScope.launch {
-                    onSuccess()
-                }
-            })
-        }
+//        ioScope.launch {
+//            loading.value = true
+//            repo.onBoard(body).handleFlow(onLoading = {
+//                loading.value = it
+//            }, onFailure = { msg, _, _ ->
+//                onFailure(msg)
+//            }, onSuccess = {
+//                mainScope.launch {
+//                    onSuccess()
+//                }
+//            })
+//        }
+        onSuccess()
     }
 
     fun uploadParkingImages(
@@ -268,6 +270,8 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
                 null
             }
         }
+
+        //uploading to firebase
         if (imageUri != null) {
             repo.uploadImage(userId, uploadDocList[currentIndex.value], imageUri, onFailure = {
                 onFailure(it.toString())
@@ -314,48 +318,48 @@ class OnBoardingViewModel @Inject constructor(private val repo: OnBoardingRepo) 
 //        userId: String,
         loading: MutableState<Boolean>
     ) {
-        val imageUri = when (currentIndex.intValue) {
-            0 -> pkImage1ByteArray.value
-            1 -> pkImage2ByteArray.value
-            2 -> pkImage3ByteArray.value
-            3 -> pkImage4ByteArray.value
-            else -> {
-                null
-            }
-        }
-        if (imageUri != null) {
-            repo.uploadImage(userId, "parkingImage${currentIndex.intValue}", imageUri, onFailure = {
-                onFailure(it.toString())
-            }, onSuccess = {
-                mutableList.add(it)
-
-                if (currentIndex.intValue == 3) {
-                    Toast.makeText(
-                        context, "${mutableList.size} image list", Toast.LENGTH_SHORT
-                    ).show()
-                    val body = PartnerOnBoardRequest(
-                        userId = userId, onboardData = OnboardData(
-                            parkingImage = mutableList
-                        )
-                    )
-                    onBoardUser(body, onSuccess, onFailure, loading)
-                    return@uploadImage
-                }
-
-                currentIndex.intValue = currentIndex.intValue + 1
-                uploadPark(
-                    context,
-                    uploadDocList,
-                    currentIndex,
-                    mutableList,
-                    onSuccess,
-                    onFailure,
-//                    userId,
-                    loading
-                )
-
-            })
-        }
+//        val imageUri = when (currentIndex.intValue) {
+//            0 -> pkImage1ByteArray.value
+//            1 -> pkImage2ByteArray.value
+//            2 -> pkImage3ByteArray.value
+//            3 -> pkImage4ByteArray.value
+//            else -> {
+//                null
+//            }
+//        }
+//        if (imageUri != null) {
+//            repo.uploadImage(userId, "parkingImage${currentIndex.intValue}", imageUri, onFailure = {
+//                onFailure(it.toString())
+//            }, onSuccess = {
+//                mutableList.add(it)
+//
+//                if (currentIndex.intValue == 3) {
+//                    Toast.makeText(
+//                        context, "${mutableList.size} image list", Toast.LENGTH_SHORT
+//                    ).show()
+//                    val body = PartnerOnBoardRequest(
+//                        userId = userId, onboardData = OnboardData(
+//                            parkingImage = mutableList
+//                        )
+//                    )
+//                    onBoardUser(body, onSuccess, onFailure, loading)
+//                    return@uploadImage
+//                }
+//
+//                currentIndex.intValue = currentIndex.intValue + 1
+//                uploadPark(
+//                    context,
+//                    uploadDocList,
+//                    currentIndex,
+//                    mutableList,
+//                    onSuccess,
+//                    onFailure,
+////                    userId,
+//                    loading
+//                )
+//
+//            })
+//        }
 
     }
 }

@@ -1,7 +1,6 @@
 package com.blaze.data.startup.di
 
-import com.blaze.core.utils.util.BASE_URL_V1
-import com.blaze.core.utils.util.BASE_URL_V2
+import com.blaze.core.utils.BuildConfig.BASE_URL
 import com.blaze.data.startup.apiservice.StartUpApiService
 import dagger.Module
 import dagger.Provides
@@ -21,7 +20,7 @@ object StartUpRetrofitBuilder {
     @Singleton
     fun provideStartRetrofit (okHttpClient: OkHttpClient): StartUpApiService {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL_V2)
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
             .client(okHttpClient)

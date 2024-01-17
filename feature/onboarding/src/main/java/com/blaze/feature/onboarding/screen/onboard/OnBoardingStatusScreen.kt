@@ -47,42 +47,46 @@ fun OnBoardingStatusScreen(
         mutableIntStateOf(0)
     }
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchOnBoardUserData(
-//            USER_ID,
-            coreVm.loading)
+//        viewModel.fetchOnBoardUserData(
+////            USER_ID,
+//            coreVm.loading)
     }
 
     LaunchedEffect(key1 = viewModel.fetchedOnBoardUserData.value?.data) {
-        if (viewModel.fetchedOnBoardUserData.value?.data?.isEmpty() == true) {
-            boardedUserStatus = 0
-            return@LaunchedEffect
-        }
+        //for test
+        boardedUserStatus = 0
 
-        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
-                if (it?.status.equals("APPROVE")) {
-                    boardedUserStatus = 1
-                    return@LaunchedEffect
-                }
-            }
-        }
 
-        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
-                if (it?.status.equals("PENDING")) {
-                    boardedUserStatus = 2
-                    return@LaunchedEffect
-                }
-            }
-        }
-        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
-            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
-                if (it?.status.equals("REJECT")) {
-                    boardedUserStatus = 3
-                    return@LaunchedEffect
-                }
-            }
-        }
+//        if (viewModel.fetchedOnBoardUserData.value?.data?.isEmpty() == true) {
+//            boardedUserStatus = 0
+//            return@LaunchedEffect
+//        }
+//
+//        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+//            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
+//                if (it?.status.equals("APPROVE")) {
+//                    boardedUserStatus = 1
+//                    return@LaunchedEffect
+//                }
+//            }
+//        }
+//
+//        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+//            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
+//                if (it?.status.equals("PENDING")) {
+//                    boardedUserStatus = 2
+//                    return@LaunchedEffect
+//                }
+//            }
+//        }
+//        if (viewModel.fetchedOnBoardUserData.value?.data?.isNotEmpty() == true) {
+//            viewModel.fetchedOnBoardUserData.value?.data?.forEach {
+//                if (it?.status.equals("REJECT")) {
+//                    boardedUserStatus = 3
+//                    return@LaunchedEffect
+//                }
+//            }
+//        }
     }
 
     when (boardedUserStatus) {

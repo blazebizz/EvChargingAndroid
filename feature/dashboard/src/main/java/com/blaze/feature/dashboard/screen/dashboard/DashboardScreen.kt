@@ -3,6 +3,7 @@ package com.blaze.feature.dashboard.screen.dashboard
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -45,9 +46,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -100,7 +103,6 @@ fun DashboardScreen(
 ) {
     val activity = LocalContext.current as Activity
     val modalSheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     val activateBottomSheet = remember { mutableStateOf(false) }
 
     val isKeyboardShowing = WindowInsets.ime.getBottom(LocalDensity.current) > 0
@@ -111,7 +113,6 @@ fun DashboardScreen(
         }
     }
 
-
     LaunchedEffect(key1 = Unit) {
         if (coreVM.isGpsEnabled.value) {
             if (viewModel.onFirstLoad.value) {
@@ -121,7 +122,6 @@ fun DashboardScreen(
             }
         }
     }
-
 
     BackHandler {
         activity.finishAffinity()
@@ -151,15 +151,108 @@ fun DashboardScreen(
                     activateBottomSheet.value = true
                 })
 
-                Image(painter = painterResource(R.drawable.logo_square),
-                    contentDescription = null,
+                Row(
                     Modifier
+                        .fillMaxWidth()
                         .padding(18.dp)
-                        .size(50.dp)
-                        .bounceClick {
-                            navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                ) {
+                    Image(painter = painterResource(R.drawable.logo_square),
+                        contentDescription = null,
+                        Modifier
+                            .bounceClick {
+                                navController.navigate(DashboardRoute.SideNavigationScreen.route)
+                            }
+                            .padding(end = 10.dp)
+                            .size(50.dp)
+                            .clip(CircleShape))
+
+                    Box(Modifier.fillMaxWidth()) {
+                        Box(
+                            Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    MaterialTheme.colorScheme.background.copy(alpha = 0.65f),
+                                    DefaultShape
+                                )
+//                                .blur(
+//                                    16.dp,
+//                                    edgeTreatment = BlurredEdgeTreatment(shape = DefaultShape)
+//                                )
+
+                                .height(110.dp)
+                        )
+                        Column(
+                            Modifier
+                                .fillMaxWidth()
+                                .border(2.dp, MaterialTheme.colorScheme.background, DefaultShape)
+                                .height(110.dp)
+                                .padding(horizontal = 12.dp, vertical = 8.dp)
+                        ) {
+                            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                                Column {
+                                    Text(text = "You have a Booking", fontSize = 18.sp, fontWeight = FontWeight.Black)
+                                    Text(text = "Rajesh Charging Spot", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
+                                }
+
+                                Text(text = "11:30 AM", fontSize = 18.sp,
+                                    fontWeight = FontWeight.Black,
+                                    textAlign = TextAlign.End,
+                                    modifier = Modifier.weight(1f))
+                            }
+                            Spacer(modifier = Modifier.weight(1f))
+                            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                Row(
+                                    Modifier
+                                        .bounceClick {
+
+                                        }
+                                        .background(
+                                            MaterialTheme.colorScheme.primary,
+                                            RoundedCornerShape(5.dp)
+                                        )
+                                        .padding(5.dp),
+                                    verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        painterResource(id = R.drawable.location),
+                                        contentDescription = "",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = "Navigate",
+                                    )
+                                }
+
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Row(
+                                    Modifier
+                                        .bounceClick {
+
+                                        }
+                                        .background(
+                                            MaterialTheme.colorScheme.primary,
+                                            RoundedCornerShape(5.dp)
+                                        )
+                                        .padding(5.dp),
+                                    verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        painterResource(id = R.drawable.location),
+                                        contentDescription = "",
+                                        tint = MaterialTheme.colorScheme.primary,
+                                        modifier = Modifier.size(18.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(10.dp))
+                                    Text(
+                                        text = "Check In",
+                                    )
+                                }
+                            }
                         }
-                        .clip(CircleShape))
+
+                    }
+                }
+
 
 //                TopBar(text = coreVM.searchText.value,
 //                    headerIcon = R.drawable.logo_square,
@@ -172,46 +265,115 @@ fun DashboardScreen(
 //                    })
                 val offset by animateDpAsState(
                     if (isKeyboardShowing) (-250).dp else 0.dp,
-                    animationSpec = tween(durationMillis = 300), label = ""
+                    animationSpec = tween(durationMillis = 300),
+                    label = ""
                 )
-                Column(
-                    Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
-                        .wrapContentHeight()
-                        .background(Color.Transparent)
-                        .pointerInput(Unit) {
-                            detectTapGestures {
+                var searchStationState by remember { mutableStateOf(false) }
+                var searchStationCode by remember { mutableStateOf("") }
 
-                            }
+                val searchStation by animateFloatAsState(
+                    if (searchStationState) 0.5f else 0.2f, label = "", animationSpec = tween(100)
+                )
+
+                Column(Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(start = 16.dp, end = 16.dp, bottom = 16.dp)
+                    .wrapContentHeight()
+                    .background(Color.Transparent)
+                    .pointerInput(Unit) {
+                        detectTapGestures {
+
                         }
-                        .offset(x = 0.dp, y = offset)
-                ) {
-                    Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
-                        tint = MaterialTheme.colorScheme.onBackground,
-                        contentDescription = null,
+                    }
+                    .offset(x = 0.dp, y = offset)) {
+                    Row(
                         modifier = Modifier
-                            .bounceClick {
-                                logi("mapLocation to currentLocation")
-                                if (coreVM.isGpsEnabled.value) {
-                                    coreVM.mapLocation.value = coreVM.currentLocation.value
-                                    viewModel.userLocationSelected.value = true
-                                } else {
-                                    requestLocationEnable(activity)
-                                }
-                            }
                             .align(Alignment.End)
                             .padding(bottom = 16.dp)
-                            .background(MaterialTheme.colorScheme.background, CircleShape)
-                            .padding(12.dp))
+                    ) {
+
+
+                        Box(
+                            Modifier
+                                .background(
+                                    MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)
+                                )
+                                .padding(12.dp)
+
+                        ) {
+                            if (!searchStationState) {
+                                Icon(painter = painterResource(id = R.drawable.baseline_charging_station_24),
+                                    tint = MaterialTheme.colorScheme.onBackground,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .bounceClick {
+                                            searchStationState = true
+                                        }
+                                        .size(25.dp))
+                            } else {
+                                Row(
+                                    Modifier.fillMaxWidth(searchStation),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    BasicTextField(
+                                        value = searchStationCode,
+                                        onValueChange = { code ->
+                                            if (code.length <= 7) searchStationCode =
+                                                code.uppercase()
+                                        },
+                                        modifier = Modifier
+                                            .weight(1f)
+                                            .height(25.dp)
+                                            .padding(end = 16.dp),
+                                        textStyle = TextStyle(
+                                            color = MaterialTheme.colorScheme.onBackground,
+                                            textAlign = TextAlign.End
+                                        ),
+                                        cursorBrush = Brush.horizontalGradient(
+                                            colors = listOf(
+                                                MaterialTheme.colorScheme.onBackground,
+                                                MaterialTheme.colorScheme.secondary
+                                            )
+                                        )
+                                    )
+                                    Icon(painter = painterResource(id = R.drawable.baseline_search_24),
+                                        tint = MaterialTheme.colorScheme.onBackground,
+                                        contentDescription = null,
+                                        modifier = Modifier
+                                            .bounceClick {
+                                                searchStationState = false
+                                            }
+                                            .size(25.dp))
+                                }
+                            }
+                        }
+
+
+                        Icon(painter = painterResource(id = R.drawable.baseline_gps_fixed_24),
+                            tint = MaterialTheme.colorScheme.onBackground,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .bounceClick {
+                                    logi("mapLocation to currentLocation")
+                                    if (coreVM.isGpsEnabled.value) {
+                                        coreVM.mapLocation.value = coreVM.currentLocation.value
+                                        viewModel.userLocationSelected.value = true
+                                    } else {
+                                        requestLocationEnable(activity)
+                                    }
+                                }
+                                .padding(start = 16.dp)
+                                .background(MaterialTheme.colorScheme.background, CircleShape)
+                                .padding(12.dp)
+                                .size(25.dp))
+                    }
 
                     Column(
                         Modifier
                             .fillMaxWidth()
                             .height(300.dp)
                             .background(
-                                MaterialTheme.colorScheme.background,
-                                RoundedCornerShape(16.dp)
+                                MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)
                             )
                             .padding(16.dp)
                     ) {
@@ -229,8 +391,7 @@ fun DashboardScreen(
                                 fontWeight = FontWeight.SemiBold
                             )
 
-                            if (!viewModel.selectLocationFromMap.value) Text(
-                                text = "Select From Map",
+                            if (!viewModel.selectLocationFromMap.value) Text(text = "Select From Map",
                                 modifier = Modifier
                                     .bounceClick {
                                         viewModel.selectLocationFromMap.value = true
@@ -238,8 +399,7 @@ fun DashboardScreen(
                                     .weight(1f),
                                 color = MaterialTheme.colorScheme.onBackground,
                                 textAlign = TextAlign.End,
-                                fontSize = 12.sp
-                            )
+                                fontSize = 12.sp)
                         }
 
                         Row(
@@ -295,7 +455,7 @@ fun DashboardScreen(
                                     .bounceClick {
                                         if (viewModel.selectLocationFromMap.value) {
                                             viewModel.selectLocationFromMap.value = false
-                                            //todo getMarker Api Calls
+                                            // getMarker Api Calls
                                         } else {
                                             coreVM.searchText.value = ""
                                             viewModel.locationAutofill.clear()

@@ -20,7 +20,7 @@ import com.blaze.core.utils.util.stateList
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun InfoScreen(viewModel: OnBoardingViewModel) {
     val spinnerExpand = remember { mutableStateOf(false) }
 
     val scrollState = rememberScrollState()
@@ -43,7 +43,8 @@ fun InfoScreen(subNavController: NavHostController, viewModel: OnBoardingViewMod
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.mobile,
             label = "Mobile Number",
-            keyboardType = KeyboardType.Phone
+            keyboardType = KeyboardType.Phone,
+            maxChar = 10
         )
         Spacer(modifier = Modifier.height(5.dp))
 

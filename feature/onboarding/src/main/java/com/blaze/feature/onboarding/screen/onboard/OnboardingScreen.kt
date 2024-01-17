@@ -183,14 +183,14 @@ fun OnBoardingScreen(
                 color = MaterialTheme.colorScheme.onBackground
             )
             RoundedTextIndicator("5")
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .weight(4f)
-                    .semantics(mergeDescendants = true) {},
-                progress = ap5,
-                color = MaterialTheme.colorScheme.onBackground
-            )
-            RoundedTextIndicator("6")
+//            LinearProgressIndicator(
+//                modifier = Modifier
+//                    .weight(4f)
+//                    .semantics(mergeDescendants = true) {},
+//                progress = ap5,
+//                color = MaterialTheme.colorScheme.onBackground
+//            )
+//            RoundedTextIndicator("6")
             Spacer(modifier = Modifier.weight(1f))
         }
 
@@ -303,9 +303,9 @@ fun nextFunction(
         OnBoardingSubScreen.Page4.name -> {
             //upload doc
             if (checkPage4(viewModel, onFailure)) {
-                step4(context, viewModel, coreUi, onFailure) {
+//                step4(context, viewModel, coreUi, onFailure) {
                     toPage5(viewModel, onBoardingNavController)
-                }
+//                }
             }
         }
 
@@ -319,37 +319,64 @@ fun nextFunction(
                         ) == true
                     ) {
                         //nav to next page
-                        toPage6(viewModel, onBoardingNavController)
+//                        toPage6(viewModel, onBoardingNavController)
+                        mainScope.launch {
+                            Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                            navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
+                                popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
+                                    inclusive = true
+                                }
+                            }
+                        }
                     } else {
+
                         step5(viewModel, coreUi, onFailure) {
-                            toPage6(
-                                viewModel, onBoardingNavController
-                            )
+//                            toPage6(
+//                                viewModel, onBoardingNavController
+//                            )
+
+                            mainScope.launch {
+                                Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                                navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
+                                    popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
+
                         }
                     }
                 } else {
                     step5(viewModel, coreUi, onFailure) {
-                        toPage6(viewModel, onBoardingNavController)
-                    }
-                }
-            }
-        }
-
-        OnBoardingSubScreen.Page6.name -> {
-            if (checkPage6(viewModel, onFailure)) {
-                step6(context, viewModel, onFailure, coreUi) {
-                    mainScope.launch {
-                        Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
-                        navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
-                            popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
-                                inclusive = true
+//                        toPage6(viewModel, onBoardingNavController)
+                        mainScope.launch {
+                            Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+                            navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
+                                popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
+                                    inclusive = true
+                                }
                             }
                         }
-
                     }
                 }
             }
         }
+
+//        OnBoardingSubScreen.Page6.name -> {
+//            if (checkPage6(viewModel, onFailure)) {
+//                step6(context, viewModel, onFailure, coreUi) {
+//                    mainScope.launch {
+//                        Toast.makeText(context, "done", Toast.LENGTH_SHORT).show()
+//                        navController.navigate(OnBoardingRoute.BoardingCompleteScreen.route) {
+//                            popUpTo(OnBoardingRoute.OnBoardingScreen.route) {
+//                                inclusive = true
+//                            }
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
     }
 }
 
@@ -391,12 +418,12 @@ fun previousFunction(
             }
         }
 
-        OnBoardingSubScreen.Page6.name -> {
-            viewModel.progress5.floatValue = 0f
-            subNavController.navigate(OnBoardingSubScreen.Page5.name) {
-                popUpTo(OnBoardingSubScreen.Page6.name) { inclusive = true }
-            }
-        }
+//        OnBoardingSubScreen.Page6.name -> {
+//            viewModel.progress5.floatValue = 0f
+//            subNavController.navigate(OnBoardingSubScreen.Page5.name) {
+//                popUpTo(OnBoardingSubScreen.Page6.name) { inclusive = true }
+//            }
+//        }
 
     }
 }
@@ -406,7 +433,7 @@ fun RoundedTextIndicator(text: String) {
     Text(
         text = text,
         modifier = Modifier
-            .size(25.dp)
+            .size(30.dp)
             .background(MaterialTheme.colorScheme.background, shape = CircleShape)
             .border(
                 2.dp, MaterialTheme.colorScheme.onBackground, CircleShape
@@ -438,12 +465,12 @@ fun toPage5(viewModel: OnBoardingViewModel, navController: NavHostController) {
     }
 }
 
-fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
-    viewModel.progress5.floatValue = 1f
-    navController.navigate(OnBoardingSubScreen.Page6.name) {
-        popUpTo(OnBoardingSubScreen.Page5.name) { inclusive = true }
-    }
-}
+//fun toPage6(viewModel: OnBoardingViewModel, navController: NavHostController) {
+//    viewModel.progress5.floatValue = 1f
+//    navController.navigate(OnBoardingSubScreen.Page6.name) {
+//        popUpTo(OnBoardingSubScreen.Page5.name) { inclusive = true }
+//    }
+//}
 
 
 fun step12(
@@ -456,13 +483,13 @@ fun step12(
         userId = USER_ID, onboardData = OnboardData(
             basicDetails = BasicDetails(
                 pincode = viewModel.pincode.value,
-                twoWheeler = viewModel.selected2Wheeler.value,
+//                twoWheeler = viewModel.selected2Wheeler.value,
                 address2 = viewModel.addressL2.value,
                 city = viewModel.state.value,
                 address1 = viewModel.addressL1.value,
                 name = viewModel.fullName.value,
                 mobile = viewModel.mobile.value,
-                fourWheeler = viewModel.selected4Wheeler.value,
+//                fourWheeler = viewModel.selected4Wheeler.value,
                 state = viewModel.state.value,
                 acceptedTC = viewModel.tcChecked.value
             )
@@ -512,8 +539,7 @@ fun step5(
     function: () -> Unit
 ) {
     val data = PartnerOnBoardRequest(
-        userId = USER_ID,
-        onboardData = OnboardData(
+        userId = USER_ID, onboardData = OnboardData(
             bankDetails = BankDetails(
                 bankValue = viewModel.bankName.value,
                 accNo = viewModel.accNumber.value,
@@ -541,10 +567,10 @@ fun step6(
 }
 
 fun checkPage1(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
-    if (!viewModel.selected2Wheeler.value && !viewModel.selected4Wheeler.value) {
-        onFailure("Please Select the type of vehicle service you want to provide")
-        return false
-    }
+//    if (!viewModel.selected2Wheeler.value && !viewModel.selected4Wheeler.value) {
+//        onFailure("Please Select the type of vehicle service you want to provide")
+//        return false
+//    }
 
     if (!viewModel.tcChecked.value) {
         onFailure("Please accept the Terms and Conditions of our service.")
@@ -656,22 +682,22 @@ fun checkPage5(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boo
 }
 
 fun checkPage6(viewModel: OnBoardingViewModel, onFailure: (String) -> Unit): Boolean {
-    if (viewModel.pkImage1ByteArray.value == null) {
-        onFailure("Please Select 4 Image")
-        return false
-    }
-    if (viewModel.pkImage2ByteArray.value == null) {
-        onFailure("Please Select 4 Image")
-        return false
-    }
-    if (viewModel.pkImage3ByteArray.value == null) {
-        onFailure("Please Select 4 Image")
-        return false
-    }
-    if (viewModel.pkImage4ByteArray.value == null) {
-        onFailure("Please Select 4 Image")
-        return false
-    }
+//    if (viewModel.pkImage1ByteArray.value == null) {
+//        onFailure("Please Select 4 Image")
+//        return false
+//    }
+//    if (viewModel.pkImage2ByteArray.value == null) {
+//        onFailure("Please Select 4 Image")
+//        return false
+//    }
+//    if (viewModel.pkImage3ByteArray.value == null) {
+//        onFailure("Please Select 4 Image")
+//        return false
+//    }
+//    if (viewModel.pkImage4ByteArray.value == null) {
+//        onFailure("Please Select 4 Image")
+//        return false
+//    }
     return true
 }
 

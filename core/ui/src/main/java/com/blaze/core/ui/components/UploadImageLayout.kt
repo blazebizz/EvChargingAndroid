@@ -1,6 +1,7 @@
 package com.blaze.core.ui.components
 
 //import androidx.compose.foundation.Image
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -50,26 +51,27 @@ fun UploadImageLayout(title: String, byteArray: MutableState<ByteArray?>, onClic
         ) {
             if (byteArray.value != null) {
 
-//                Image(
-//                    bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .clip(RoundedCornerShape(10.dp)),
-//                    contentScale = ContentScale.Crop,
-//
-//                    )
+                Image(
+                    bitmap = byteArray.value!!.toBitmap().asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .clip(RoundedCornerShape(10.dp)),
+                    contentScale = ContentScale.Crop,
 
-            }
-            Column(
-                modifier = Modifier.align(Alignment.Center),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
-                    contentDescription = null
-                )
-                Text(text = title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    )
+
+            }else{
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
+                        contentDescription = null
+                    )
+                    Text(text = title, modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                }
             }
         }
     }

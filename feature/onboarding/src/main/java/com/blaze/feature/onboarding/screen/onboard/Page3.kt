@@ -18,7 +18,7 @@ import com.blaze.core.ui.components.OutlinedTextField
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun UploadDocumentScreen(viewModel: OnBoardingViewModel) {
 
     val scrollState = rememberScrollState()
     Column(
@@ -39,6 +39,7 @@ fun UploadDocumentScreen(subNavController: NavHostController, viewModel: OnBoard
             modifier = Modifier.fillMaxWidth(),
             value = viewModel.panNumber,
             label = "Pan Number",
+            allCap = true
         )
         OutlinedTextField(
             modifier = Modifier.fillMaxWidth(),

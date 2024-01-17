@@ -19,16 +19,19 @@ fun OutlinedTextField(
     label: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Done,
-    maxChar: Int = 0
+    maxChar: Int = 0,
+    allCap: Boolean = false
 ) {
-    androidx.compose.material3.OutlinedTextField(modifier = modifier,
+    androidx.compose.material3.OutlinedTextField(
+        modifier = modifier,
         value = value.value,
         onValueChange = {
             if (!readOnly) if (maxChar == (0)) {
-                value.value = it
+                value.value = if (allCap) it.uppercase() else it
+
             } else {
                 if (it.length < maxChar + 1) {
-                    value.value = it
+                    value.value = if (allCap) it.uppercase() else it
                 }
             }
         },
@@ -53,9 +56,10 @@ fun OutlinedTextField(
 fun OutlinedTextField(
     modifier: Modifier = Modifier,
     value: String,
-    label:String
+    label: String
 ) {
-    androidx.compose.material3.OutlinedTextField(modifier = modifier,
+    androidx.compose.material3.OutlinedTextField(
+        modifier = modifier,
         value = value,
         onValueChange = {},
         label = { Text(text = label) },

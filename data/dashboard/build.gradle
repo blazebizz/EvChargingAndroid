@@ -58,4 +58,13 @@ dependencies {
     implementation libs.maps.place
     implementation libs.maps.play.service
 
+    //ktor
+    implementation libs.ktor.client.core
+    implementation libs.ktor.client.android
+    implementation libs.ktor.client.okhttp
+    implementation libs.ktor.client.content.negotiation
+    implementation libs.ktor.client.logging.jvm
+    implementation libs.ktor.client.cio
+    implementation libs.ktor.serialization.kotlinx.json
+
 }

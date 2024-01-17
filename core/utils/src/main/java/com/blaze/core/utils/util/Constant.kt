@@ -2,8 +2,7 @@ package com.blaze.core.utils.util
 
 import android.util.Log
 
-const val BASE_URL_V1 = "https://ev-charginh-point-backend.onrender.com/"
-const val BASE_URL_V2 = "https://evcharging-v1.onrender.com/"
+
 
 var USER_ID = "000005"
 
@@ -13,6 +12,8 @@ fun globalError(place:String): String
     Log.e("GLOBAL_ERROR", "GLOBAL_ERROR: $place", )
     return "Something went wrong, Please try again"
 }
+const val PREFERENCES_NAME:String ="PREFERENCES_NAME"
+const val ACCESS_TOKEN:String ="ACCESS_TOKEN"
 
 val bankList = listOf(
 

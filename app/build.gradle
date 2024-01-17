@@ -36,8 +36,10 @@ android {
                             .newDataInputStream()
             )
         }
+        manifestPlaceholders = [googleMapsApiKey: "${properties.getProperty('MAPS_API_KEY')}"]
 
         buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
+        buildConfigField("String", "PREFERENCES_NAME", properties.getProperty("PREFERENCES_NAME"))
 
     }
 
@@ -46,6 +48,8 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -75,6 +79,7 @@ dependencies {
     implementation project(":feature:dashboard")
     implementation project(":feature:onboarding")
     implementation project(":feature:account")
+    implementation project(":feature:station_setup")
 
     implementation libs.core.ktx
     implementation libs.appcompat

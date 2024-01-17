@@ -26,14 +26,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-
+            buildConfigField("boolean","IS_RELEASE","true")
+            buildConfigField("String","BASE_URL","\"https://evcharging-v1.onrender.com/\"")
         }
-
-        debug {
+        debug{
             minifyEnabled false
-
-
+            buildConfigField("boolean","IS_RELEASE","false")
+            buildConfigField("String","BASE_URL","\"https://evcharging-v1.onrender.com/\"")
         }
     }
     compileOptions {
@@ -101,4 +100,17 @@ dependencies {
     implementation libs.converter.gson
     implementation libs.converter.moshi
     implementation libs.converter.scalars
+
+    //ktor
+    implementation libs.ktor.client.core
+    implementation libs.ktor.client.android
+    implementation libs.ktor.client.okhttp
+    implementation libs.ktor.client.content.negotiation
+    implementation libs.ktor.client.logging.jvm
+    implementation libs.ktor.client.cio
+    implementation libs.ktor.serialization.kotlinx.json
+
+    //data preferences
+    implementation libs.datastore.preferences
+
 }

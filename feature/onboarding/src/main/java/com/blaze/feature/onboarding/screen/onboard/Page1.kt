@@ -37,10 +37,10 @@ import com.blaze.core.utils.util.bankList
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun VehicleSelectionScreen( viewModel: OnBoardingViewModel) {
 
     Column(Modifier.fillMaxSize().padding(16.dp)) {
-        Row(
+      /*  Row(
             Modifier
                 .fillMaxWidth()
                 .height(200.dp)
@@ -109,7 +109,7 @@ fun VehicleSelectionScreen(subNavController: NavHostController, viewModel: OnBoa
                     )
                 )
             }
-        }
+        }*/
 
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Requirements and Instructions", fontWeight = FontWeight.Bold)

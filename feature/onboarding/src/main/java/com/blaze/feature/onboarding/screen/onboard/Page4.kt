@@ -10,13 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
 import com.blaze.core.ui.components.SelectImageDialog
 import com.blaze.core.ui.components.UploadImageLayout
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
-fun DocumentImageScreen(subNavController: NavHostController, viewModel: OnBoardingViewModel) {
+fun DocumentImageScreen(viewModel: OnBoardingViewModel) {
     val showDialog = rememberSaveable { mutableStateOf(false) }
 
     val currentSelected = remember { mutableStateOf(viewModel.aadharFrontByteArray) }
