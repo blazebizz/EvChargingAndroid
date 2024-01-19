@@ -8,13 +8,17 @@ plugins {
 
 android {
     namespace 'ai.heart.feature.station_setup'
-    compileSdk 34
+    compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        minSdk 24
+        minSdk ProjectConfig.minSdk
+        targetSdk ProjectConfig.targetSdk
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+        vectorDrawables {
+            useSupportLibrary true
+        }
     }
 
     buildTypes {
@@ -29,6 +33,18 @@ android {
     }
     kotlinOptions {
         jvmTarget = '17'
+    }
+    buildFeatures {
+        compose true
+        buildConfig true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion ProjectConfig.compilerExtensionVersion
+    }
+    packaging {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
     }
 }
 

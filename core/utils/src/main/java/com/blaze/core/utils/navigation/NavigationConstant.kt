@@ -7,28 +7,32 @@ sealed class NavigationRoute(val route: String) {
 }
 
 sealed class StartUpRoute(val route: String) {
-    object LoginScreen : NavigationRoute(route = "LoginScreen")
-    object SplashScreen : NavigationRoute(route = "SplashScreen")
-    object CreateUserScreen : NavigationRoute(route = "CreateUserScreen")
-    object MobileOtpScreen : NavigationRoute(route = "MobileOtpScreen")
+    object LoginScreen : StartUpRoute(route = "LoginScreen")
+    object SplashScreen : StartUpRoute(route = "SplashScreen")
+    object CreateUserScreen : StartUpRoute(route = "CreateUserScreen")
+    object MobileOtpScreen : StartUpRoute(route = "MobileOtpScreen")
 }
 
 sealed class OnBoardingRoute(val route: String) {
-    object OnBoardingScreen : NavigationRoute(route = "OnBoardingScreen")
-    object BoardingCompleteScreen : NavigationRoute(route = "BoardingCompleteScreen")
-    object BoardingStatusScreen : NavigationRoute(route = "BoardingStatusScreen")
+    object OnBoardingScreen : OnBoardingRoute(route = "OnBoardingScreen")
+    object BoardingCompleteScreen : OnBoardingRoute(route = "BoardingCompleteScreen")
+    object BoardingStatusScreen : OnBoardingRoute(route = "BoardingStatusScreen")
 }
 
 sealed class DashboardRoute(val route: String) {
-    object DashboardScreen : NavigationRoute(route = "DashboardScreen")
-    object SearchScreen : NavigationRoute(route = "SearchScreen")
-    object SideNavigationScreen : NavigationRoute(route = "SideNavigationScreen")
+    object DashboardScreen : DashboardRoute(route = "DashboardScreen")
+    object SearchScreen : DashboardRoute(route = "SearchScreen")
+    object SideNavigationScreen : DashboardRoute(route = "SideNavigationScreen")
 }
 
 sealed class AccountRoute(val route: String) {
-    object SafetyScreen : NavigationRoute(route = "SafetyScreen")
-    object FeedbackScreen : NavigationRoute(route = "FeedbackScreen")
-    object AddContactScreen : NavigationRoute(route = "AddContactScreen")
-    object VehicleScreen : NavigationRoute(route = "VehicleScreen")
-    object BookingHistoryScreen : NavigationRoute(route = "BookingHistoryScreen")
+    object SafetyScreen : AccountRoute(route = "SafetyScreen")
+    object FeedbackScreen : AccountRoute(route = "FeedbackScreen")
+    object AddContactScreen : AccountRoute(route = "AddContactScreen")
+    object VehicleScreen : AccountRoute(route = "VehicleScreen")
+    object BookingHistoryScreen : AccountRoute(route = "BookingHistoryScreen")
+}
+
+sealed class StationSetUpRoute(val route: String) {
+    object StationSetUpScreen : StationSetUpRoute(route = "StationSetUpScreen")
 }

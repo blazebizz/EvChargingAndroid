@@ -1,6 +1,7 @@
 package com.blaze.classicbeat.navigation
 
 import ai.heart.feature.account.navigation.accountNavGraph
+import ai.heart.feature.station_setup.navigation.stationSetUpNavGraph
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -24,5 +25,6 @@ fun SetupNavGraph(
         dashboardNavGraph(navController,coreVm)
         onBoardingNavGraph(navController,coreVm,onBoardingViewModel)
         accountNavGraph(navController,coreVm)
+        stationSetUpNavGraph(navController,coreVm)
     }
 }

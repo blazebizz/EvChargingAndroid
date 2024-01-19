@@ -40,6 +40,7 @@ import com.blaze.core.utils.navigation.AccountRoute
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.navigation.StartUpRoute
+import com.blaze.core.utils.navigation.StationSetUpRoute
 
 
 /*@Composable
@@ -180,6 +181,11 @@ fun SideNavigationScreen(
         ) {
 //            Toast.makeText(context, "$USER_ID", Toast.LENGTH_SHORT).show()
             navController.navigateCleanNavScreen(OnBoardingRoute.BoardingStatusScreen.route)
+        }
+        SideNavigationItem(
+            image = R.drawable.thumbtack_24, title = "Station Management",
+        ) {
+            navController.navigateCleanNavScreen(StationSetUpRoute.StationSetUpScreen.route)
         }
 
         SideNavigationItem(
