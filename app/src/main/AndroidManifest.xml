@@ -39,14 +39,9 @@
             </intent-filter>
         </activity>
 
-        <!--apikey-->
-        <!--        <meta-data
-                    android:name="com.google.android.geo.API_KEY"
-                    android:value="AIzaSyAd-v0qgs7woqGSc5Thlo66OOB1wBQROBo" />-->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${googleMapsApiKey}" />
-        <!--            android:value="AIzaSyDpDlb1VscVxh6JZFhgORFpS71b4MvDwoE" />-->
     </application>
 
 </manifest>
