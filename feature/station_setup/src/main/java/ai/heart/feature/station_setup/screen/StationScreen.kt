@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -45,7 +44,6 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -53,17 +51,48 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blaze.core.ui.R
+import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.bounceClick
 
 @Composable
 @Preview(showBackground = true)
-fun StationScreen(){
-    Column (Modifier.statusBarsPadding().fillMaxSize().padding(16.dp)){
+fun StationScreen() {
+
+    val list = SnapshotStateList<SlotData>()
+
+    list.addAll(
+        listOf(
+            SlotData(name = "one"),
+            SlotData(name = "two"),
+            SlotData(name = "three"),
+            SlotData(name = "four", remark = "C"),
+            SlotData(name = "five")
+        )
+    )
+
+    val tagList = listOf(
+        "Ola S1 pro chrager",
+        "No Charger Available",
+        "No Charger ",
+        "No",
+        "No Charger Available",
+        "No Charger Available",
+        "Ola S1 pro chrager",
+        "No Charger Available",
+        "No Charger ",
+        "No",
+        "No Charger Available",
+        "No Charger Available"
+    )
+
+    Column(
+        Modifier
+            .statusBarsPadding()
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Row(
-            Modifier
-                .padding(16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+            Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(Icons.Default.ArrowBack, contentDescription = null, modifier = Modifier.clickable {
 //                navController.popBackStack()
@@ -72,28 +101,86 @@ fun StationScreen(){
             Text(text = "Station Management", fontWeight = FontWeight.Bold, fontSize = 16.sp)
             Spacer(modifier = Modifier.weight(1f))
         }
-        Text(text = "Rajesh Charging Spot")
-        Text(text = "4.6 ⭐ ⭐ ⭐ ⭐ ⭐ (999)")
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+            Column {
+                Text(text = "Rajesh Charging Spot", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Spacer(modifier = Modifier.height(5.dp))
+                Text(text = "4.6 ⭐ ⭐ ⭐ ⭐ ⭐ (999)")
+            }
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(text = "OPEN", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                Text(text = "status", fontSize = 10.sp)
+            }
+
+
+        }
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Shree Vihar Chandrasekharpur, Bhubaneswer, Odisha 751017, India asdfadfadfsdfaesdf afrsdfaf")
 
 
-        Text(
-            text = "Choose a spot",
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 14.dp)
-        )
-        val list = SnapshotStateList<SlotData>()
+        //tag
 
-        list.addAll(
-            listOf(
-                SlotData(name = "one"),
-                SlotData(name = "two"),
-                SlotData(name = "three"),
-                SlotData(name = "four", remark = "C"),
-                SlotData(name = "four")
-            )
+
+//        val tagList = emptyList<String>()
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = "Opening/Closing Time",
+            fontWeight = FontWeight.Bold,
         )
+
+        Row(Modifier.fillMaxWidth()) {
+
+        }
+
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Text(text = "Charger you have", fontWeight = FontWeight.Bold)
+            Text(
+                text = "Add", modifier = Modifier
+                    .border(
+                        1.dp, MaterialTheme.colorScheme.onBackground, RoundedCornerShape(10.dp)
+                    )
+                    .padding(horizontal = 12.dp, vertical = 2.dp)
+            )
+
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+
+        LazyHorizontalStaggeredGrid(
+            rows = StaggeredGridCells.Adaptive(35.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 0.dp, max = 75.dp),
+            horizontalItemSpacing = 5.dp
+        ) {
+            items(tagList) {
+                Text(
+                    text = it,
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onBackground,
+                    modifier = Modifier
+                        .wrapContentSize()
+                        .background(
+                            MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(12.dp)
+                        )
+                        .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(12.dp))
+                        .padding(horizontal = 10.dp, vertical = 5.dp),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        Text(
+            text = "Spots", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 14.dp)
+        )
+
 
         var selectedSlot by remember { mutableStateOf<SlotData?>(null) }
 
@@ -190,16 +277,13 @@ fun StationScreen(){
                         }
                         .padding(2.dp)
                         .border(
-                            1.dp,
-                           MaterialTheme.colorScheme.primary ,
-                            RoundedCornerShape(5.dp)
+                            1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(5.dp)
                         )
                         .height(55.dp)
 //                        .blur(16.dp)
                     , verticalAlignment = Alignment.CenterVertically) {
                     Image(
-                       Icons.Default.Add,
-                        contentDescription = "",
+                        Icons.Default.Add, contentDescription = "",
 //                        tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .padding(start = 8.dp)
@@ -212,8 +296,14 @@ fun StationScreen(){
             }
         }
 
+        Spacer(modifier = Modifier.height(10.dp))
+
+        Button(text = "Save",modifier = Modifier.fillMaxWidth()) {
+            
+        }
     }
 }
+
 data class SlotData(
     val name: String = "", val remark: String = "B", var selected: Boolean = false
 )
