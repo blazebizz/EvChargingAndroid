@@ -49,7 +49,6 @@ class LocationRepository @Inject constructor(
         val intentFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
         context.registerReceiver(gpsStateReceiver, intentFilter)
         isLocationReceiverRegistered.value = true
-
     }
 
     fun unregisterGpsStateReceiver() {
@@ -64,7 +63,7 @@ class LocationRepository @Inject constructor(
     fun getCurrentLocation(
         latLng: MutableState<LatLng>
     ) {
-        CoroutineScope(Dispatchers.IO).launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             val priority = Priority.PRIORITY_BALANCED_POWER_ACCURACY//Priority.PRIORITY_HIGH_ACCURACY
             if (context.hasLocationPermission()) {
                 val result = locationClient.getCurrentLocation(

@@ -45,7 +45,6 @@ import com.blaze.core.ui.InitSubUiComponents
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.DashboardRoute
-import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
@@ -65,7 +64,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 //        FirebaseApp.initializeApp(this)
         // Initialize the SDK
-//        crashHandler()
+
+        if (BuildConfig.BUILD_TYPE != "debug") {
+            crashHandler()
+        }
         setContent {
             val coreViewModel = hiltViewModel<CoreViewModel>()
 

@@ -1,4 +1,12 @@
 
-Nkotlin:S1481B"*Remove this unused "scope" local variable.(Ö °Ÿÿÿÿÿÿ8Ûû¨şÈ1
-8kotlin:S1128"Remove this unused import.(Ëî>8Ûû¨şÈ1
-9kotlin:S1128"Remove this unused import.(£«§ú8Ûû¨şÈ1
+>kotlin:S125ÿ"Remove this commented out code.(Ã‘€€8”¹œÓ1
+>kotlin:S1128"Remove this unused import.(ê ıõûÿÿÿÿ8Ç ¡Ó1
+>kotlin:S1128-"Remove this unused import.(ˆ²ŞÎûÿÿÿÿ8Ç ¡Ó1
+9kotlin:S11284"Remove this unused import.(ª¼¶ê8…ºœÓ1
+8kotlin:S11285"Remove this unused import.(Åæ»8…ºœÓ1
+9kotlin:S1128D"Remove this unused import.(ğÜÂğ8È ¡Ó1
+9kotlin:S1128H"Remove this unused import.(À€ØÕ8È ¡Ó1
+9kotlin:S1128I"Remove this unused import.(ÒĞ’ö8È ¡Ó1
+9kotlin:S1128J"Remove this unused import.(§²˜8È ¡Ó1
+8kotlin:S1128K"Remove this unused import.(¬¸ø8É ¡Ó1
+wkotlin:S3776e"SRefactor this method to reduce its Cognitive Complexity from 124 to the 15 allowed.(úËğßùÿÿÿÿ8›ºœÓ1
