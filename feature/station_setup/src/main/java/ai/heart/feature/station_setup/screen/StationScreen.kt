@@ -1,5 +1,6 @@
 package ai.heart.feature.station_setup.screen
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
@@ -28,9 +30,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TimePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +50,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -52,14 +59,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
+import com.blaze.core.ui.components.TimePickDialog
+import com.blaze.core.ui.components.TimeViewer
 import com.blaze.core.ui.components.bounceClick
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview(showBackground = true)
 fun StationScreen() {
 
     val list = SnapshotStateList<SlotData>()
-
+    val context = LocalContext.current
     list.addAll(
         listOf(
             SlotData(name = "one"),
@@ -85,6 +95,13 @@ fun StationScreen() {
         "No Charger Available"
     )
 
+    val state = remember { mutableStateOf<TimePickerState?>(null) }
+
+    val openingTimeState = rememberTimePickerState()
+    val closingTimeState = rememberTimePickerState()
+
+    val showTimePicker = remember { mutableStateOf(false) }
+
     Column(
         Modifier
             .statusBarsPadding()
@@ -103,7 +120,11 @@ fun StationScreen() {
         }
         Spacer(modifier = Modifier.height(12.dp))
 
-        Row(modifier =Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Column {
                 Text(text = "Rajesh Charging Spot", fontWeight = FontWeight.Bold, fontSize = 16.sp)
                 Spacer(modifier = Modifier.height(5.dp))
@@ -115,25 +136,82 @@ fun StationScreen() {
                 Text(text = "status", fontSize = 10.sp)
             }
 
-
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "Shree Vihar Chandrasekharpur, Bhubaneswer, Odisha 751017, India asdfadfadfsdfaesdf afrsdfaf")
+        Row(Modifier, verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.Create, contentDescription = null, Modifier.size(30.dp))
+            Text(text = "Shree Vihar Chandrasekharpur, Bhubaneswer, Odisha 751017, India asdfadfadfsdfaesdf afrsddsvzdvsdfaf")
+        }
 
-
-        //tag
-
-
-//        val tagList = emptyList<String>()
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = "Opening/Closing Time",
             fontWeight = FontWeight.Bold,
         )
+        Spacer(modifier = Modifier.height(10.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
 
-        Row(Modifier.fillMaxWidth()) {
+            //
+     /*       Row(
+                Modifier
+                    .bounceClick {
+                        state.value = openingTimeState
+                        showTimePicker.value = true
+                    }
+                    .border(
+                        width = 2.dp,
+                        color = MaterialTheme.colorScheme.outline,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .height(50.dp)) {
+                Row(Modifier.padding(horizontal = 10.dp, vertical = 5.dp)) {
+                    Text(
+                        text = "${openingTimeState.hour}",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(text = " : ", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                    Text(
+                        text = "${openingTimeState.minute}",
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+                Column {
+                    Text(
+                        text = "AM",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            start = 10.dp, top = 3.dp, end = 10.dp
+                        )
+                    )
+                    Text(
+                        text = "PM",
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.padding(
+                            start = 10.dp, bottom = 3.dp, end = 10.dp
+                        )
+                    )
+                }
+            }*/
 
+            TimeViewer(){hour, minute, meridian ->
+                Toast.makeText(context, "$hour : $minute $meridian", Toast.LENGTH_SHORT).show()
+            }
+
+
+            Spacer(modifier = Modifier.weight(1f))
+            Text(text = "to")
+            Spacer(modifier = Modifier.weight(1f))
+
+            TimeViewer(){hour, minute, meridian ->
+                Toast.makeText(context, "$hour : $minute $meridian", Toast.LENGTH_SHORT).show()
+            }
         }
+
+
 
         Spacer(modifier = Modifier.height(10.dp))
         Row(
@@ -265,7 +343,6 @@ fun StationScreen() {
                             ), RoundedCornerShape(5.dp)
                         )
                         .height(55.dp)
-
                 )
 
 
@@ -298,8 +375,8 @@ fun StationScreen() {
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        Button(text = "Save",modifier = Modifier.fillMaxWidth()) {
-            
+        Button(text = "Save", modifier = Modifier.fillMaxWidth()) {
+
         }
     }
 }
@@ -307,3 +384,5 @@ fun StationScreen() {
 data class SlotData(
     val name: String = "", val remark: String = "B", var selected: Boolean = false
 )
+
+//#00rtsp00
