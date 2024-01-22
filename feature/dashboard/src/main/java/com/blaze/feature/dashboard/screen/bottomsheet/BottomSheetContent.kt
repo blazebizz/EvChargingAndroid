@@ -4,10 +4,6 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,8 +25,6 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -52,12 +46,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,6 +57,8 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
+import com.blaze.core.ui.components.NextSevenDayPicker
+import com.blaze.core.ui.components.TimeViewer
 import com.blaze.core.ui.components.bounceClick
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -179,7 +172,9 @@ fun SheetContent() {
             }
         }
 
+        //image row
 
+/*
 
         Row(
             Modifier
@@ -199,7 +194,7 @@ fun SheetContent() {
                     contentScale = ContentScale.FillHeight
                 )
             }
-        }
+        }*/
 
         Text(
             text = "Choose a spot",
@@ -292,106 +287,23 @@ fun SheetContent() {
         var minText by remember { mutableStateOf("0") }
         var amPmText by remember { mutableStateOf("AM") }
 
-        Row(Modifier.padding(top = 10.dp), verticalAlignment = Alignment.Bottom) {
-            Text(text = "Check In Time")
+        Text(
+            text = "When",
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(vertical = 14.dp)
+        )
 
-            BasicTextField(
-                enabled = false,
+        Column (horizontalAlignment = Alignment.CenterHorizontally){
+            TimeViewer(onTimeSelected = {hour, minute, meridian ->
 
-                value = hourText,
-                onValueChange = {
-                    hourText = it
-                },
-                modifier = Modifier
-                    .width(50.dp)
-                    .scrollable(
-                        orientation = Orientation.Vertical,
-                        state = rememberScrollableState { delta ->
-                            if (delta.toInt() % 5 == 0) {
-                                hourText = if (hourText.toInt() in 1..12) {
-                                    (hourText.toInt() - (delta / 5))
-                                        .toInt()
-                                        .toString()
-                                } else {
-                                    "0"
-                                }
-                            }
-                            delta
-                        },
-                    ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                maxLines = 1,
-                textStyle = TextStyle(
-                    fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.End
-                )
-            )
-            Text(
-                text = " : ",
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                textAlign = TextAlign.End
-            )
+            })
+            Spacer(Modifier.height(10.dp))
+            NextSevenDayPicker(){
 
-            BasicTextField(
-                enabled = false,
-
-                value = minText,
-                onValueChange = {
-                    minText = it
-                },
-                modifier = Modifier
-                    .width(50.dp)
-                    .scrollable(
-                        orientation = Orientation.Vertical,
-                        state = rememberScrollableState { delta ->
-                            if (delta.toInt() % 5 == 0) {
-                                minText = if (minText.toInt() in 1..12) {
-                                    (minText.toInt() - (delta / 5))
-                                        .toInt()
-                                        .toString()
-                                } else {
-                                    "0"
-                                }
-                            }
-                            delta
-                        },
-                    ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                maxLines = 1,
-                textStyle = TextStyle(
-                    fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Start
-                )
-            )
-
-
-
-            BasicTextField(
-                enabled = false,
-                value = amPmText,
-                onValueChange = {},
-                modifier = Modifier
-                    .width(50.dp)
-                    .scrollable(
-                        orientation = Orientation.Vertical,
-                        state = rememberScrollableState { delta ->
-                            if (delta.toInt() % 5 == 0) {
-                                if (delta < 0) {
-                                    amPmText = "AM"
-                                } else {
-                                    amPmText = "PM"
-                                }
-                            }
-                            delta
-                        },
-                    ),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                maxLines = 1,
-                textStyle = TextStyle(
-                    fontSize = 18.sp, fontWeight = FontWeight.Bold, textAlign = TextAlign.Start
-                )
-            )
+            }
 
         }
+
 
 
 
@@ -403,7 +315,8 @@ fun SheetContent() {
                 .bounceClick {
 
                 }
-                .padding(top = 10.dp))
+                .padding(top = 10.dp)
+                .fillMaxWidth())
 
         Button(
             text = "Book", modifier = Modifier

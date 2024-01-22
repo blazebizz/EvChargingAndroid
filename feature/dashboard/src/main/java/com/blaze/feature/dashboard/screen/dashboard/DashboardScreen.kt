@@ -103,7 +103,7 @@ fun DashboardScreen(
 ) {
     val activity = LocalContext.current as Activity
     val modalSheetState = rememberModalBottomSheetState()
-    val activateBottomSheet = remember { mutableStateOf(false) }
+    val activateBottomSheet = remember { mutableStateOf(true) }
 
     val isKeyboardShowing = WindowInsets.ime.getBottom(LocalDensity.current) > 0
 
@@ -114,12 +114,10 @@ fun DashboardScreen(
     }
 
     LaunchedEffect(key1 = Unit) {
-        if (coreVM.isGpsEnabled.value) {
-            if (viewModel.onFirstLoad.value) {
+        if (coreVM.isGpsEnabled.value && viewModel.onFirstLoad.value) {
                 delay(3000)
                 coreVM.mapLocation.value = coreVM.currentLocation.value
                 viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
-            }
         }
     }
 
@@ -244,7 +242,7 @@ fun DashboardScreen(
                                     )
                                     Spacer(modifier = Modifier.width(10.dp))
                                     Text(
-                                        text = "Check In",
+                                        text = "Charge",
                                     )
                                 }
                             }
@@ -564,7 +562,6 @@ fun DashboardScreen(
                                     //thinking what to do
                                 }
                             }
-
                         }
                     }
                 }
@@ -578,7 +575,6 @@ fun DashboardScreen(
             ) {
                 BottomSheetContent(activateBottomSheet, modalSheetState, coreVM, navController)
             }
-
         }
 
         //end region
@@ -586,55 +582,6 @@ fun DashboardScreen(
 }
 
 
-@Composable
-fun GpsDialog(state: MutableState<Boolean>, coreVM: CoreViewModel) {
-    if (state.value) Dialog(onDismissRequest = {
-
-    }) {
-
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .background(
-                    MaterialTheme.colorScheme.background, RoundedCornerShape(16.dp)
-                )
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            val errorLottie =
-                rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.location))
-            val progress by animateLottieCompositionAsState(
-                composition = errorLottie.value, restartOnPlay = true, iterations = Int.MAX_VALUE
-            )
-
-            LottieAnimation(
-                composition = errorLottie.value,
-                progress = progress,
-                modifier = Modifier.size(300.dp)
-            )
-
-            Text(text = "Please Enable GPS for better experience !")
-            Spacer(modifier = Modifier.height(12.dp))
-            Row(horizontalArrangement = Arrangement.SpaceEvenly) {
-
-                Spacer(modifier = Modifier.weight(1f))
-                Text(text = "OK", modifier = Modifier
-                    .clickable {
-//                        val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-//                        openLocationSettings.launch(intent)
-                        coreVM.openLocationSetting()
-                    }
-                    .padding(10.dp)
-                    .background(
-                        MaterialTheme.colorScheme.onBackground, RoundedCornerShape(16.dp)
-                    )
-                    .padding(15.dp, 10.dp), color = MaterialTheme.colorScheme.background)
-//                    Spacer(modifier = Modifier.weight(1f))
-
-            }
-        }
-    }
-}
 
 @Composable
 fun VicheleItem(img: Int, title: String, onClick: () -> Unit) {

@@ -1,2 +1,11 @@
 
-@kotlin:S1172'"(Remove these unused function parameters.(èù£
+@kotlin:S1172C"(Remove these unused function parameters.(èù£
+Wkotlin:S1172©"2Use "_" instead of these unused lambda parameters.(ôÃƒ±øÿÿÿÿ8éÔĞŠÓ1
+Ckotlin:S125“"Remove this commented out code.(ùÚ°ƒÿÿÿÿÿ8Ï…ùâÑ1
+>kotlin:S125±"Remove this commented out code.(–±Ù8¢•ù·Ò1
+Ckotlin:S125Ñ"Remove this commented out code.(†×–Îùÿÿÿÿ8‚ÕĞŠÓ1
+Mkotlin:S1481 "-Remove this unused "amPmText" local variable.(®ï 8€–ù·Ò1
+Lkotlin:S1481Ÿ",Remove this unused "minText" local variable.(¾ó‹£8ÉÇ“Ó1
+Mkotlin:S1481"-Remove this unused "hourText" local variable.(×Œºü8ÉÇ“Ó1
+^kotlin:S1481O":Remove this unused "horizontalScrollState" local variable.(»Ÿ³¯ûÿÿÿÿ8ô÷’ãÑ1
+ukotlin:S1192‡"UDefine a constant instead of duplicating this literal "No Charger Available" 6 times.(Û®Ë§8ß†ùâÑ1

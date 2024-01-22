@@ -36,6 +36,8 @@ android {
                             .newDataInputStream()
             )
         }
+
+        //to insert the variable in manifests file
         manifestPlaceholders = [googleMapsApiKey: "${properties.getProperty('MAPS_API_KEY')}"]
 
         buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
