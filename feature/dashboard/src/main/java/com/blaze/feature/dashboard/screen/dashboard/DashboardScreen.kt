@@ -576,7 +576,6 @@ fun DashboardScreen(
                 BottomSheetContent(activateBottomSheet, modalSheetState, coreVM, navController)
             }
         }
-
         //end region
     }
 }

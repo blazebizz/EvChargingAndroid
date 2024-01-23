@@ -1,11 +1,12 @@
 
-@kotlin:S1172C"(Remove these unused function parameters.(žèù£
-Wkotlin:S1172©"2Use "_" instead of these unused lambda parameters.(ôÃƒ±øÿÿÿÿ8éÔÐŠÓ1
-Ckotlin:S125“"Remove this commented out code.(ùÚ°ƒÿÿÿÿÿ8Ï…ùâÑ1
->kotlin:S125±"Remove this commented out code.(–±Ù8¢•ù·Ò1
-Ckotlin:S125Ñ"Remove this commented out code.(†×–Îùÿÿÿÿ8‚ÕÐŠÓ1
-Mkotlin:S1481 "-Remove this unused "amPmText" local variable.(®ï 8€–ù·Ò1
-Lkotlin:S1481Ÿ",Remove this unused "minText" local variable.(¾ó‹£8ÉÇ“Ó1
-Mkotlin:S1481ž"-Remove this unused "hourText" local variable.(×Œºü8ÉÇ“Ó1
-^kotlin:S1481O":Remove this unused "horizontalScrollState" local variable.(»Ÿ³¯ûÿÿÿÿ8ô÷’ãÑ1
-ukotlin:S1192‡"UDefine a constant instead of duplicating this literal "No Charger Available" 6 times.(Û®Ë§8ß†ùâÑ1
+Gkotlin:S1172D"(Remove these unused function parameters.(žèù£8ôÏÂ¦Ó1
+Wkotlin:S1172Ÿ"2Use "_" instead of these unused lambda parameters.(ôÃƒ±øÿÿÿÿ8õÏÂ¦Ó1
+Ckotlin:S125Œ"Remove this commented out code.(ùÚ°ƒÿÿÿÿÿ8þÏÂ¦Ó1
+>kotlin:S125ª"Remove this commented out code.(–±Ù8€ÐÂ¦Ó1
+Qkotlin:S1481–",Remove this unused "context" local variable.(˜®¾‚øÿÿÿÿ8¤ÐÂ¦Ó1
+^kotlin:S1481I":Remove this unused "horizontalScrollState" local variable.(»Ÿ³¯ûÿÿÿÿ8¤ÐÂ¦Ó1
+9kotlin:S1128"Remove this unused import.(´Ùí8ÛÐÂ¦Ó1
+>kotlin:S1128"Remove this unused import.(µ¢«Ïúÿÿÿÿ8ÛÐÂ¦Ó1
+9kotlin:S1128/"Remove this unused import.(ÍýÝô8ÛÐÂ¦Ó1
+9kotlin:S11285"Remove this unused import.(®©Ô”8ÛÐÂ¦Ó1
+ukotlin:S1192€"UDefine a constant instead of duplicating this literal "No Charger Available" 6 times.(Û®Ë§8ßÐÂ¦Ó1
