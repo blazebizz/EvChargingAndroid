@@ -81,7 +81,7 @@ fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreV
                                     coreVM.searchText.value = it.address
                                     viewModel.getCoordinates(it) {
                                         logi("SearchScreen: lat: ${it.latitude}  lng: ${it.longitude}")
-                                        coreVM.mapLocation.value = it
+                                        coreVM.setMapLocation(it)
                                         navController.popBackStack()
                                     }
                                 }

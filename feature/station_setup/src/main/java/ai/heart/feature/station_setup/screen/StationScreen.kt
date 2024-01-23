@@ -95,12 +95,6 @@ fun StationScreen() {
         "No Charger Available"
     )
 
-    val state = remember { mutableStateOf<TimePickerState?>(null) }
-
-    val openingTimeState = rememberTimePickerState()
-    val closingTimeState = rememberTimePickerState()
-
-    val showTimePicker = remember { mutableStateOf(false) }
 
     Column(
         Modifier

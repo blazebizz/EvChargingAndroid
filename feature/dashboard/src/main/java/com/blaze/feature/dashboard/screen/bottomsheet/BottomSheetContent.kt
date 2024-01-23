@@ -60,21 +60,15 @@ import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.NextSevenDayPicker
 import com.blaze.core.ui.components.TimeViewer
 import com.blaze.core.ui.components.bounceClick
+import com.blaze.core.utils.navigation.BookingRoute
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetContent(
     activateBottomSheet: MutableState<Boolean>,
     sheetState: SheetState,
-    coreVM: CoreViewModel,
-    navController: NavController
+    coreVM: CoreViewModel, navController: NavController
 ) {
-    SheetContent()
-}
-
-@Preview(showBackground = true)
-@Composable
-fun SheetContent() {
     val scrollState = rememberScrollState()
     val horizontalScrollState = rememberScrollState()
     Column(
@@ -91,13 +85,12 @@ fun SheetContent() {
 
 
         Row(Modifier.padding(top = 14.dp)) {
-            Row(
-                Modifier
-                    .bounceClick {
+            Row(Modifier
+                .bounceClick {
 
-                    }
-                    .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(5.dp))
-                    .padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
+                }
+                .border(1.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(5.dp))
+                .padding(5.dp), verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painterResource(id = R.drawable.location),
                     contentDescription = "",
@@ -283,9 +276,6 @@ fun SheetContent() {
 
 
         val context = LocalContext.current
-        var hourText by remember { mutableStateOf("0") }
-        var minText by remember { mutableStateOf("0") }
-        var amPmText by remember { mutableStateOf("AM") }
 
         Text(
             text = "When",
@@ -323,8 +313,7 @@ fun SheetContent() {
                 .padding(top = 8.dp)
                 .fillMaxWidth()
         ) {
-            Toast.makeText(context, "selected slot ${selectedSlot?.name}", Toast.LENGTH_SHORT)
-                .show()
+            navController.navigate(BookingRoute.ChargingScreen.route)
         }
     }
 }
@@ -333,217 +322,3 @@ data class SlotData(
     val name: String = "", val remark: String = "B", var selected: Boolean = false
 )
 
-
-//@Composable
-//fun SetDuration(
-//    hour: MutableState<String>,
-//    pMin: MutableState<String>,
-//    sMin: MutableState<String>
-//) {
-//    Column(modifier = Modifier) {
-//        Row(Modifier.fillMaxWidth()) {
-//            Spacer(modifier = Modifier.weight(2f))
-//            OutlinedTextField(
-//                value = pMin.value,
-//                modifier = Modifier
-//                    .weight(3f)
-//                    .background(color = MaterialTheme.colors.background)
-//                    .scrollable(orientation = Orientation.Vertical,
-//                        state = rememberScrollableState { delta ->
-//                            if (delta.toInt() % 5 == 0) {
-//                                if (pMin.value.toInt() >= 0) {
-//                                    pMin.value = (pMin.value.toInt() - (delta / 5))
-//                                        .toInt()
-//                                        .toString()
-//                                } else {
-//                                    pMin.value = "0"
-//                                }
-//                            }
-//
-//                            delta
-//                        }),
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colors.secondary,
-//                    fontSize = 70.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    textAlign = TextAlign.Center
-//                ),
-//                onValueChange = {
-//                    pMin.value = it
-//                },
-//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                maxLines = 1,
-//                colors = TextFieldDefaults.outlinedTextFieldColors(
-//                    focusedBorderColor = MaterialTheme.colors.secondary,
-//                    unfocusedBorderColor = MaterialTheme.colors.background
-//                ),
-//                singleLine = true,
-//            )
-////            TextField(value = pMin.value, onValueChange = {
-////                pMin.value = it
-////            },
-////                textStyle = TextStyle()
-////
-////            )
-//            Text(text = " / ", Modifier.align(CenterVertically), fontSize = 40.sp)
-//            OutlinedTextField(
-//                value = sMin.value,
-//                modifier = Modifier
-//                    .weight(3f)
-//                    .background(color = MaterialTheme.colors.background)
-//                    .scrollable(orientation = Orientation.Vertical,
-//                        state = rememberScrollableState { delta ->
-//                            if (delta.toInt() % 5 == 0) {
-//                                if (sMin.value.toInt() >= 0) {
-//                                    sMin.value = (sMin.value.toInt() - (delta / 5))
-//                                        .toInt()
-//                                        .toString()
-//                                } else {
-//                                    sMin.value = "0"
-//                                }
-//                            }
-//
-//                            delta
-//                        }),
-//                textStyle = TextStyle(
-//                    color = MaterialTheme.colors.primary,
-//                    fontSize = 70.sp,
-//                    fontWeight = FontWeight.Bold,
-//                    textAlign = TextAlign.Center
-//                ),
-//                onValueChange = {
-//                    sMin.value = it
-//                },
-//                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//                maxLines = 1,
-//                colors = TextFieldDefaults.outlinedTextFieldColors(
-//                    focusedBorderColor = MaterialTheme.colors.primary,
-//                    unfocusedBorderColor = MaterialTheme.colors.background
-//                ),
-//                singleLine = true,
-//            )
-//            Spacer(modifier = Modifier.weight(2f))
-//
-//        }
-//
-//        Row(
-//            Modifier
-//                .fillMaxWidth()
-//                .padding(0.dp, 0.dp, 0.dp, 8.dp)
-//        ) {
-//            Spacer(modifier = Modifier.weight(1f))
-//            Text(text = " min ", Modifier.align(CenterVertically), fontSize = 10.sp)
-//            Spacer(modifier = Modifier.weight(1f))
-//            Text(text = " min ", Modifier.align(CenterVertically), fontSize = 10.sp)
-//            Spacer(modifier = Modifier.weight(1f))
-//        }
-//
-//
-//        OutlinedTextField(
-//            value = hour.value,
-//            modifier = Modifier
-//                .align(Alignment.CenterHorizontally)
-//                .background(color = MaterialTheme.colors.background)
-//                .scrollable(orientation = Orientation.Vertical,
-//                    state = rememberScrollableState { delta ->
-//                        if (delta.toInt() % 5 == 0) {
-//                            if (hour.value.toInt() >= 0) {
-//                                hour.value = (hour.value.toInt() - (delta / 5))
-//                                    .toInt()
-//                                    .toString()
-//                            } else {
-//                                hour.value = "0"
-//                            }
-//                        }
-//
-//                        delta
-//                    }),
-//            textStyle = TextStyle(
-//                color = Color.Gray,
-//                fontSize = 70.sp,
-//                fontWeight = FontWeight.Bold,
-//                textAlign = TextAlign.Center
-//            ),
-//            onValueChange = {
-//                hour.value = it
-//            },
-//            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-//            maxLines = 1,
-//            colors = TextFieldDefaults.outlinedTextFieldColors(
-//                focusedBorderColor = Color.Gray,
-//                unfocusedBorderColor = MaterialTheme.colorScheme.background
-//            ),
-//            singleLine = true,
-//        )
-//        Text(text = " hour ", Modifier.align(Alignment.CenterHorizontally), fontSize = 10.sp)
-//    }
-//}
-@Composable
-fun TimeSlotLayout(modifier: Modifier = Modifier) {
-    Column(modifier) {
-
-        Row {
-            TimeSlotItem(1)
-            TimeSlotItem(2)
-            TimeSlotItem(3)
-            TimeSlotItem(4)
-            TimeSlotItem(5)
-            TimeSlotItem(6)
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Row {
-            TimeSlotItem(7)
-            TimeSlotItem(8)
-            TimeSlotItem(9)
-            TimeSlotItem(10)
-            TimeSlotItem(11)
-            TimeSlotItem(12)
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Row {
-            TimeSlotItem(13)
-            TimeSlotItem(14)
-            TimeSlotItem(15)
-            TimeSlotItem(16)
-            TimeSlotItem(17)
-            TimeSlotItem(18)
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Row {
-            TimeSlotItem(19)
-            TimeSlotItem(20)
-            TimeSlotItem(21)
-            TimeSlotItem(22)
-            TimeSlotItem(23)
-            TimeSlotItem(24)
-        }
-
-    }
-}
-
-@Composable
-fun TimeSlotItem(i: Int) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center
-    ) {
-        Box(
-            Modifier
-                .size(height = 23.dp, width = 20.dp)
-                .background(Color.LightGray)
-        )
-        Box(
-            Modifier
-                .size(35.dp)
-                .background(Color.LightGray, RoundedCornerShape(6.dp))
-                .border(1.dp, MaterialTheme.colorScheme.onSurface, RoundedCornerShape(6.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(text = "$i")
-        }
-        Box(
-            Modifier
-                .size(height = 23.dp, width = 20.dp)
-                .background(Color.LightGray)
-        )
-    }
-}

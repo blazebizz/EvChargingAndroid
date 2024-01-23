@@ -35,14 +35,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.blaze.core.ui.DefaultShape
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
 @Preview
 fun PreviewTimePickDialog() {
-    TimeViewer { hour, minute, meridian ->
+    TimeViewer { _, _, _ ->
 
     }
 }
@@ -70,13 +69,9 @@ fun TimeViewer(
                         meridian.value = "AM"
                     }
 
-                    12 -> {
-                        meridian.value = "PM"
-                    }
+                    12 -> meridian.value = "PM"
 
-                    else -> {
-                        meridian.value = "AM"
-                    }
+                    else -> meridian.value = "AM"
                 }
             }
         }
@@ -184,13 +179,9 @@ fun TimePickDialog(
                                         mr = "AM"
                                     }
 
-                                    12 -> {
-                                        mr = "PM"
-                                    }
+                                    12 -> mr = "PM"
 
-                                    else -> {
-                                        mr = "AM"
-                                    }
+                                    else -> mr = "AM"
                                 }
                             }
                         }
@@ -207,7 +198,7 @@ fun TimePickDialog(
 
 @Composable
 @Preview(showBackground = true)
-fun NextSevenDayPicker(modifier:Modifier = Modifier,onSelected: (date: DateInfo) -> Unit = {}) {
+fun NextSevenDayPicker(modifier: Modifier = Modifier, onSelected: (date: DateInfo) -> Unit = {}) {
     val selectedIndex = remember { mutableIntStateOf(0) }
     Row(modifier) {
         LazyRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -251,7 +242,6 @@ data class DateInfo(
 
 fun getSevenDays(): List<DateInfo> {
     val currentDate = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy", Locale.ENGLISH)
 
     val dateList = mutableListOf<DateInfo>()
 

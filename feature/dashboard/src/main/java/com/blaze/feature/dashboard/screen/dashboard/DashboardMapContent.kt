@@ -1,6 +1,5 @@
 package com.blaze.feature.dashboard.screen.dashboard
 
-import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.dp
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.mainScope
-import com.blaze.core.utils.util.requestLocationEnable
 import com.blaze.feature.dashboard.utils.MAP_ZOOM
 import com.blaze.feature.dashboard.utils.ParkingSpot
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -67,10 +65,10 @@ fun MapContent(
         }
 
 
-        LaunchedEffect(key1 = coreVM.mapLocation.value) {
-            logi("mapLocation changed: lat- ${coreVM.mapLocation.value.latitude}, lng- ${coreVM.mapLocation.value.longitude} ")
+        LaunchedEffect(key1 = coreVM.getMapLocation()) {
+            logi("mapLocation changed: lat- ${coreVM.getMapLocation().latitude}, lng- ${coreVM.getMapLocation().longitude} ")
             cameraPositionState.position =
-                CameraPosition.fromLatLngZoom(coreVM.mapLocation.value, MAP_ZOOM)
+                CameraPosition.fromLatLngZoom(coreVM.getMapLocation(), MAP_ZOOM)
         }
 
         LaunchedEffect(cameraPositionState.isMoving) {
@@ -80,14 +78,13 @@ fun MapContent(
 
                     if (viewModel.onFirstLoad.value) {
                         if (coreVM.isGpsEnabled.value) {
-                            coreVM.mapLocation.value = coreVM.currentLocation.value
+                            coreVM.setMapLocation(coreVM.currentLocation.value)
                         }
                         viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
-                    }else{
+                    } else {
                         coreVM.searchText.value = it
                         viewModel.userLocationSelected.value = true
                     }
-
 
 
                 }
@@ -139,23 +136,23 @@ fun MapContent(
 
 //        if (viewModel.selectLocationFromMap.value){
 
-            Image(
-                painter = painterResource(id = com.blaze.core.ui.R.drawable.location_pin2),
-                contentDescription = "Parking",
-                modifier = Modifier
-                    .size(26.dp)
-                    .align(Alignment.Center)
-                    .offset(y = if (cameraPositionState.isMoving) (-25).dp else (-10).dp)
-            )
+        Image(
+            painter = painterResource(id = com.blaze.core.ui.R.drawable.location_pin2),
+            contentDescription = "Parking",
+            modifier = Modifier
+                .size(26.dp)
+                .align(Alignment.Center)
+                .offset(y = if (cameraPositionState.isMoving) (-25).dp else (-10).dp)
+        )
 
-            Spacer(
-                modifier = Modifier
-                    .offset(y = (5).dp)
-                    .height(3.dp)
-                    .width(15.dp)
-                    .background(Color.Gray, RoundedCornerShape(2.dp))
-                    .align(Alignment.Center)
-            )
+        Spacer(
+            modifier = Modifier
+                .offset(y = (5).dp)
+                .height(3.dp)
+                .width(15.dp)
+                .background(Color.Gray, RoundedCornerShape(2.dp))
+                .align(Alignment.Center)
+        )
 //        }
 
     }

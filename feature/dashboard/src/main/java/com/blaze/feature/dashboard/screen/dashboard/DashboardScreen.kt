@@ -116,7 +116,7 @@ fun DashboardScreen(
     LaunchedEffect(key1 = Unit) {
         if (coreVM.isGpsEnabled.value && viewModel.onFirstLoad.value) {
                 delay(3000)
-                coreVM.mapLocation.value = coreVM.currentLocation.value
+                coreVM.setMapLocation(coreVM.currentLocation.value)
                 viewModel.onFirstLoad.value = !viewModel.onFirstLoad.value
         }
     }
@@ -354,7 +354,7 @@ fun DashboardScreen(
                                 .bounceClick {
                                     logi("mapLocation to currentLocation")
                                     if (coreVM.isGpsEnabled.value) {
-                                        coreVM.mapLocation.value = coreVM.currentLocation.value
+                                        coreVM.setMapLocation(coreVM.currentLocation.value)
                                         viewModel.userLocationSelected.value = true
                                     } else {
                                         requestLocationEnable(activity)
@@ -487,7 +487,7 @@ fun DashboardScreen(
                                                 coreVM.searchText.value = it.address
                                                 viewModel.getCoordinates(it) { latLng ->
                                                     logi("SearchScreen: lat: ${latLng.latitude}  lng: ${latLng.longitude}")
-                                                    coreVM.mapLocation.value = latLng
+                                                    coreVM.setMapLocation(latLng)
                                                     viewModel.userLocationSelected.value = true
                                                     viewModel.locationAutofill.clear()
                                                 }

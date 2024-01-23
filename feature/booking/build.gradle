@@ -1,48 +1,23 @@
 plugins {
-//    id 'com.android.application'
-//    id 'org.jetbrains.kotlin.android'
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'com.google.gms.google-services'
-
-    id 'com.google.devtools.ksp'
-    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 android {
-    namespace 'com.blaze.classicbeat'
+    namespace 'ai.heart.feature.booking'
     compileSdk ProjectConfig.compileSdk
 
     defaultConfig {
-        applicationId "com.blaze.classicbeat"
         minSdk ProjectConfig.minSdk
-        targetSdk ProjectConfig.targetSdk
-        versionCode ProjectConfig.versionCode
-        versionName ProjectConfig.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
         vectorDrawables {
             useSupportLibrary true
         }
-
-        //map properties
-        Properties properties = new Properties()
-        if (rootProject.file("local.properties").exists()) {
-            properties.load(
-                    rootProject
-                            .file("local.properties")
-                            .newDataInputStream()
-            )
-        }
-
-        //to insert the variable in manifests file
-        manifestPlaceholders = [googleMapsApiKey: "${properties.getProperty('MAPS_API_KEY')}"]
-
-        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
-        buildConfigField("String", "PREFERENCES_NAME", properties.getProperty("PREFERENCES_NAME"))
-
     }
 
     buildTypes {
@@ -50,8 +25,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
-
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
@@ -62,7 +35,6 @@ android {
     }
     buildFeatures {
         compose true
-        buildConfig true
     }
     composeOptions {
         kotlinCompilerExtensionVersion ProjectConfig.compilerExtensionVersion
@@ -77,12 +49,7 @@ android {
 dependencies {
     implementation project(":core:ui")
     implementation project(":core:utils")
-    implementation project(":feature:startup")
-    implementation project(":feature:dashboard")
-    implementation project(":feature:onboarding")
-    implementation project(":feature:account")
-    implementation project(":feature:station_setup")
-    implementation project(":feature:booking")
+    implementation project(":data:booking")
 
     implementation libs.core.ktx
     implementation libs.appcompat
@@ -94,15 +61,17 @@ dependencies {
     implementation libs.ui.graphics
     implementation libs.ui.tooling.preview
     implementation libs.material3
-    implementation platform(libs.compose.bom)
-//    implementation 'com.google.firebase:firebase-auth-ktx:22.1.2'
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.espresso.core
+    androidTestImplementation platform(libs.compose.bom)
+    androidTestImplementation libs.ui.test.junit4
+    debugImplementation libs.ui.tooling
+    debugImplementation libs.ui.test.manifest
+
 
     androidTestImplementation platform(libs.compose.bom)
     androidTestImplementation libs.ui.test.junit4
-    androidTestImplementation platform(libs.compose.bom)
     debugImplementation libs.ui.tooling
     debugImplementation libs.ui.test.manifest
 
@@ -113,24 +82,12 @@ dependencies {
     kapt libs.hilt.compiler
     implementation libs.hilt.navigation.compose
 
-    //permission
-    implementation libs.accompanist.permissions
+
+
+    implementation libs.systemuicontroller
 
     implementation libs.lazier
     implementation libs.work.runtime.ktx
-    implementation libs.lifecycle.runtime.ktx
 
-    implementation libs.systemuicontroller
-    implementation libs.firebase.core
-
-    implementation libs.maps.place
-
-    implementation libs.kotlinx.coroutines.core
-    implementation libs.kotlinx.coroutines.android
-    implementation libs.kotlinx.coroutines.play.services
-
-    //lotti
     implementation libs.lottie
-
-
 }

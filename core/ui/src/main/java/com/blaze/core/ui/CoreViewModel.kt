@@ -3,6 +3,8 @@ package com.blaze.core.ui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,9 +21,10 @@ class CoreViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    var currentLocation: MutableState<LatLng> = mutableStateOf(LatLng(23.0, 79.0))//44.837789, long- -0.57918
-    var mapLocation: MutableState<LatLng> = mutableStateOf(currentLocation.value)
+    var currentLocation: MutableState<LatLng> =
+        mutableStateOf(LatLng(23.0, 79.0))//44.837789, long- -0.57918
 
+    private val mapLocation: MutableState<LatLng> = mutableStateOf(currentLocation.value)
 
     val currentUserNumber: MutableState<String> = mutableStateOf("+91-XXXXXXXXXX")
     val currentUserName: MutableState<String> = mutableStateOf("Guest User")
@@ -30,9 +33,16 @@ class CoreViewModel @Inject constructor(
 
     val loading: MutableState<Boolean> = mutableStateOf(false)
     val isInternetAvailable: MutableState<Boolean> = mutableStateOf(true)
-    internal val snackbarValue: MutableState<Pair<Boolean, String>> =
-        mutableStateOf(Pair(false, ""))
+    internal val snackbarValue: MutableState<Pair<Boolean, String>> = mutableStateOf(Pair(false, ""))
     internal val toast: MutableState<String> = mutableStateOf("")
+
+    fun setMapLocation(latLng: LatLng) {
+        mapLocation.value = latLng
+    }
+
+    fun getMapLocation(): LatLng {
+        return mapLocation.value
+    }
 
     fun snackbar(message: String) {
         viewModelScope.launch {
@@ -57,7 +67,6 @@ class CoreViewModel @Inject constructor(
     fun unregisterGpsStateReceiver() = locationRepository.unregisterGpsStateReceiver()
 
     //getting only single location object
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentLocation(
         latLng: MutableState<LatLng>
     ) = locationRepository.getCurrentLocation(latLng)
