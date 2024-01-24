@@ -53,8 +53,6 @@ j
 :core/utils/src/main/java/com/blaze/core/utils/util/Util.kt,e\d\edbb8217a4d887b4b7439d3dc05880588a854e17
 O
 feature/onboarding/build.gradle,f\8\f8ba9524d47a347fb245babea1bd40fed54503ed
-t
-Dcore/ui/src/main/java/com/blaze/core/ui/components/TimePickDialog.kt,a\b\abd7b2efc9a00cb5654579f538e7f0707d63156c
 I
 gradle/libs.versions.toml,d\7\d7595319a0658be6f1ed500ad590d42e4b28bc4f
 A
@@ -77,3 +75,9 @@ w
 G.idea/sonarlint/issuestore/7/e/7ef8698ce54b717dffa4e59e21272dbe9bf41023,2\0\2024450bec0558930c8d96973250a9c22eceb632
 
 O.idea/shelf/Uncommitted_changes_before_Update_at_14-09-2023_08_22__Changes_.xml,a\9\a9b5540a756deeac03023aa16c1e91c2b8cbe493
+ˆ
+Xfeature/booking/src/main/java/ai/heart/feature/booking/screen/charging/ChargingScreen.kt,0\7\073796892dfd7a0eae543d8de9a11a4842544638
+’
+bfeature/dashboard/src/main/java/com/blaze/feature/dashboard/screen/sidenav/SideNavigationScreen.kt,e\4\e4204699091ce70aceaa719b7e9231cda0020a16
+l
+<core/ui/src/main/java/com/blaze/core/ui/components/Button.kt,c\0\c063f5c79ed387ade81e4259bc2976d34df5b087

@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -55,6 +56,7 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.velox.lazeir.utils.InternetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
+import com.blaze.core.ui.R
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -171,8 +173,6 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
         val onBoardingViewModel = hiltViewModel<OnBoardingViewModel>()
         val isInternetAvailable = coreViewModel.isInternetAvailable
 
-        val context = LocalContext.current
-
         InternetConnectivityListener(lifecycleScope = lifecycleScope,
             onAvailable = { isInternetAvailable.value = true },
             onUnAvailable = { isInternetAvailable.value = false },
@@ -206,7 +206,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
                             Text(text = "ZAPE", fontWeight = FontWeight.Black)
                             Spacer(modifier = Modifier.weight(1f))
                             Image(
-                                painter = painterResource(id = com.blaze.core.ui.R.drawable.logo_square),
+                                painter = painterResource(id = R.drawable.logo_square),
                                 contentDescription = null,
                                 modifier = Modifier
                                     .height(30.dp)
@@ -216,7 +216,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
 
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = "Internet Connection Lost,\nPlease Connect And Try Again!",
+                            text = stringResource(R.string.internet_connection),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
