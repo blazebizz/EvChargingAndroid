@@ -27,7 +27,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -100,7 +99,8 @@ fun ChargingScreen() {
                     .background(
                         MaterialTheme.colorScheme.onBackground,
                         RoundedCornerShape(4.dp)
-                    ).align(Alignment.CenterHorizontally)
+                    )
+                    .align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -152,8 +152,8 @@ fun ChargingScreen() {
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onBackground,
+                )
 
-                    )
                 Text(
                     text = "Duration",
                     fontSize = 14.sp,
@@ -171,7 +171,6 @@ fun ChargingScreen() {
                     )
             }
 
-
             Spacer(Modifier.weight(1f))
 
             Column(
@@ -180,9 +179,7 @@ fun ChargingScreen() {
                     .height(50.dp)
             ) {
                 Box(contentAlignment = Alignment.Center, modifier = Modifier
-                    .bounceClick {
-
-                    }
+                    .bounceClick {}
                     .fillMaxWidth()) {
                     Box(
                         Modifier
@@ -203,9 +200,8 @@ fun ChargingScreen() {
                         textAlign = TextAlign.Center,
                         fontSize = 24.sp,
                         fontWeight = FontWeight.ExtraBold,
-                        color = MaterialTheme.colorScheme.background,
-                        modifier = Modifier
-                            .fillMaxWidth()
+                        color = MaterialTheme.colorScheme.onBackground,
+                        modifier = Modifier.fillMaxWidth()
                     )
 
                 }
