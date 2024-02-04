@@ -4,29 +4,29 @@ import ai.heart.feature.account.navigation.accountNavGraph
 import ai.heart.feature.booking.navigation.bookingNavGraph
 import ai.heart.feature.station_setup.navigation.stationSetUpNavGraph
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.blaze.core.ui.CoreViewModel
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.feature.dashboard.navigation.dashboardNavGraph
 import com.blaze.feature.onboarding.navigation.onBoardingNavGraph
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 import com.blaze.feature.startup.navigation.startUpNavGraph
 
+
 @Composable
 fun SetupNavGraph(
     startDestination: String,
-    navController: NavHostController,
-    coreVm: CoreViewModel,
     onBoardingViewModel: OnBoardingViewModel
 ) {
     NavHost(
-        navController = navController, startDestination = startDestination
+        navController =  LocalNavigation.current, startDestination = startDestination
     ) {
-        startUpNavGraph(navController,coreVm)
-        dashboardNavGraph(navController,coreVm)
-        onBoardingNavGraph(navController,coreVm,onBoardingViewModel)
-        accountNavGraph(navController,coreVm)
-        stationSetUpNavGraph(navController,coreVm)
-        bookingNavGraph(navController,coreVm)
+        startUpNavGraph()
+        dashboardNavGraph()
+        onBoardingNavGraph(onBoardingViewModel)
+        accountNavGraph()
+        stationSetUpNavGraph()
+        bookingNavGraph()
     }
 }
+

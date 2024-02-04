@@ -23,13 +23,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 
 @Composable
 fun AddContactScreen(
-    navController: NavController,
+
     viewModel: AddContactViewModel,
-    coreVM: CoreViewModel
+
 ) {
+
+    val navController = LocalNavigation.current
+    val coreVm = LocalCore.current
     Column(
         Modifier
             .statusBarsPadding()

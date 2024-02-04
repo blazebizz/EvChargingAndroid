@@ -35,14 +35,19 @@ import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedTextField
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.util.USER_ID
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
 
 @Composable
 fun OnBoardingStatusScreen(
-    navController: NavController, viewModel: OnBoardingViewModel, coreVm: CoreViewModel
+   viewModel: OnBoardingViewModel
 ) {
+
+    val navController = LocalNavigation.current
+    val coreVm = LocalCore.current
     var boardedUserStatus by remember {
         mutableIntStateOf(0)
     }

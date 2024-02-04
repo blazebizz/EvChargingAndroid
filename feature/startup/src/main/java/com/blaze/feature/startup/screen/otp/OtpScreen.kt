@@ -38,10 +38,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColor
 import com.blaze.core.ui.components.OtpView
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.core.utils.util.ioScope
@@ -59,11 +60,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OtpScreen(
-    navController: NavController,
     toSentText: String,
     otpViewModel: OtpScreenViewModel,
-    coreVm: CoreViewModel,
 ) {
+
+    val navController = LocalNavigation.current
+    val coreVm = LocalCore.current
     val TAG = "OtpScreen"
     val activity = LocalContext.current as Activity
     val context = LocalContext.current

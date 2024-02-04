@@ -27,13 +27,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 
 @Composable
 fun FeedbackScreen(
-    navController: NavController,
     viewModel: FeedbackViewModel,
-    coreVM: CoreViewModel
+
 ) {
+    val navController = LocalNavigation.current
+    val coreVm = LocalCore.current
     Column(
         Modifier
             .statusBarsPadding()

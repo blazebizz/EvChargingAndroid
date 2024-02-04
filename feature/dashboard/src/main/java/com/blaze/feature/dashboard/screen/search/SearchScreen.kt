@@ -32,13 +32,18 @@ import com.blaze.core.ui.DefaultShape
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.TopBarEditable
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.util.logi
 import com.blaze.core.utils.util.mainScope
 import com.blaze.core.utils.util.tst
 import kotlinx.coroutines.launch
 
 @Composable
-fun SearchScreen(navController: NavController, viewModel: SearchViewModel, coreVM: CoreViewModel) {
+fun SearchScreen(viewModel: SearchViewModel) {
+
+    val navController = LocalNavigation.current
+    val coreVM = LocalCore.current
 
     Column(
         Modifier.fillMaxSize()

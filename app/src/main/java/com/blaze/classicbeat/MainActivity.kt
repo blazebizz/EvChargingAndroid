@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,8 +43,12 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.classicbeat.navigation.SetupNavGraph
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.InitSubUiComponents
+import com.blaze.core.ui.R
 import com.blaze.core.ui.components.location.LocationUpdatesEffect
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
+import com.blaze.core.utils.navigation.BookingRoute
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
@@ -56,7 +60,6 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
 import com.velox.lazeir.utils.InternetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
-import com.blaze.core.ui.R
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -182,14 +185,18 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
         Surface(
             modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
         ) {
-            val navGraphController = rememberNavController()
-            SetupNavGraph(
+
+            CompositionLocalProvider(
+                LocalNavigation provides rememberNavController(),
+                LocalCore provides coreViewModel
+            ) {
+                SetupNavGraph(
 //                startDestination = StartUpRoute.SplashScreen.route,
-                startDestination = DashboardRoute.DashboardScreen.route,
-                navController = navGraphController,
-                coreVm = coreViewModel,
-                onBoardingViewModel = onBoardingViewModel
-            )
+                startDestination =  BookingRoute.BookingStatusScreen.route,
+//                    startDestination = DashboardRoute.DashboardScreen.route,
+                    onBoardingViewModel = onBoardingViewModel
+                )
+            }
 
             //region internet connectivity dialog
             if (!coreViewModel.isInternetAvailable.value) {

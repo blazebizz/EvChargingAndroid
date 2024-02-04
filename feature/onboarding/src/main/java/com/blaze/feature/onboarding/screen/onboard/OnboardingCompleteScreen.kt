@@ -25,16 +25,18 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.OnBoardingRoute
 
 
 @Composable
 fun OnBoardingCompleteScreen(
-    navController: NavController,
-    viewModel: OnBoardingViewModel,
-    coreUi: CoreViewModel
+
 ) {
+
+    val navController = LocalNavigation.current
     CompleteScreen {
         navController.navigate(DashboardRoute.DashboardScreen.route) {
             popUpTo(OnBoardingRoute.BoardingCompleteScreen.route) {

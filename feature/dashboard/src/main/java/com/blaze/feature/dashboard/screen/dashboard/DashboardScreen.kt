@@ -79,6 +79,8 @@ import com.blaze.core.ui.R
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.bounceClick
 import com.blaze.core.ui.components.pressClick
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.AccountRoute
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.util.logi
@@ -89,18 +91,18 @@ import kotlinx.coroutines.delay
 @Composable
 @Preview
 fun DashboardScreenPreview() {
-    val navController = rememberNavController()
-    val coreVM = hiltViewModel<CoreViewModel>()
     val viewModel = hiltViewModel<DashboardViewModel>()
-    DashboardScreen(navController, coreVM, viewModel)
+    DashboardScreen(viewModel)
 }
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardScreen(
-    navController: NavController, coreVM: CoreViewModel, viewModel: DashboardViewModel
+  viewModel: DashboardViewModel
 ) {
+    val coreVM = LocalCore.current
+    val navController = LocalNavigation.current
     val activity = LocalContext.current as Activity
     val modalSheetState = rememberModalBottomSheetState()
     val activateBottomSheet = remember { mutableStateOf(true) }

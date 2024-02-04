@@ -26,15 +26,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColors
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.StartUpRoute
 
 
 @Composable
-fun LoginScreen(navController: NavController, coreUi: CoreViewModel) {
+fun LoginScreen() {
+    val navController = LocalNavigation.current
+    val coreUi = LocalCore.current
     val mobileNumber = remember { mutableStateOf("") }
     val stdCode = remember { mutableStateOf("+91") }
     Column(

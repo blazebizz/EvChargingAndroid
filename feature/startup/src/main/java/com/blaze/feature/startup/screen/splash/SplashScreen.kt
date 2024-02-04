@@ -17,10 +17,10 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavOptions
-import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.data.startup.model.req.GenerateTokenRequest
@@ -32,10 +32,10 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(
-    navController: NavController,
     viewModel: SplashScreenViewModel,
-    coreVm: CoreViewModel
 ) {
+    val coreVm = LocalCore.current
+    val navController = LocalNavigation.current
     //region status color
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color = MaterialTheme.colorScheme.primary)
@@ -113,7 +113,8 @@ fun SplashScreen(
         Row(
             Modifier
                 .padding(16.dp)
-                .fillMaxWidth()) {
+                .fillMaxWidth()
+        ) {
             Spacer(modifier = Modifier.weight(2f))
             if (viewModel.splashLoading.value) CircularProgressIndicator(
                 color = MaterialTheme.colorScheme.onBackground,

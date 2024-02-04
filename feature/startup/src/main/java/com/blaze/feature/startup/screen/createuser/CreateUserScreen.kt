@@ -29,19 +29,22 @@ import androidx.navigation.NavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.CustomButtonColors
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.DashboardRoute
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.data.startup.model.req.CreateUserRequest
 
 @Composable
 fun CreateUserScreen(
-    navController: NavController,
-    coreVm: CoreViewModel,
     viewModel: CreateUserViewModel,
     stdCode: String?,
     mobileNumber: String?,
     uid: String?
 ) {
+
+    val navController  = LocalNavigation.current
+    val coreVm = LocalCore.current
     val userName = rememberSaveable {
         mutableStateOf("")
     }

@@ -17,23 +17,23 @@ import com.blaze.feature.dashboard.screen.sidenav.SideNavigationScreenViewModel
 import com.google.android.libraries.places.api.Places
 
 
-fun NavGraphBuilder.dashboardNavGraph(navController: NavController, coreVM: CoreViewModel) {
+fun NavGraphBuilder.dashboardNavGraph() {
     composable(route = DashboardRoute.DashboardScreen.route) {
         val context = LocalContext.current
         Places.initialize(context, BuildConfig.MAPS_API_KEY)
         val dashboardViewModel = hiltViewModel<DashboardViewModel>()
         dashboardViewModel.placesClient = Places.createClient(context)
-        DashboardScreen(navController, coreVM,dashboardViewModel)
+        DashboardScreen(dashboardViewModel)
     }
     composable(route = DashboardRoute.SearchScreen.route) {
         val context = LocalContext.current
         Places.initialize(context, BuildConfig.MAPS_API_KEY)
         val viewModel= hiltViewModel<SearchViewModel>()
         viewModel.placesClient = Places.createClient(context)
-        SearchScreen(navController,viewModel,coreVM)
+        SearchScreen(viewModel)
     }
     composable(route = DashboardRoute.SideNavigationScreen.route) {
         val viewModel = hiltViewModel<SideNavigationScreenViewModel>()
-        SideNavigationScreen(navController,viewModel,coreVM)
+        SideNavigationScreen(viewModel)
     }
 }

@@ -1,12 +1,10 @@
 package com.blaze.feature.startup.navigation
 
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.utils.navigation.StartUpRoute
 import com.blaze.feature.startup.screen.createuser.CreateUserScreen
 import com.blaze.feature.startup.screen.createuser.CreateUserViewModel
@@ -17,14 +15,17 @@ import com.blaze.feature.startup.screen.splash.SplashScreen
 import com.blaze.feature.startup.screen.splash.SplashScreenViewModel
 
 
-fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreVm: CoreViewModel) {
+
+
+fun NavGraphBuilder.startUpNavGraph() {
+
     composable(route = StartUpRoute.SplashScreen.route) {
         val viewModel = hiltViewModel<SplashScreenViewModel>()
-        SplashScreen(navController,viewModel,coreVm)
+        SplashScreen(viewModel)
     }
 
     composable(route = StartUpRoute.LoginScreen.route) {
-        LoginScreen(navController,coreVm)
+        LoginScreen()
     }
 
     composable(route = "${StartUpRoute.MobileOtpScreen.route}/{toSentText}", arguments = listOf(
@@ -34,7 +35,7 @@ fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreVm: CoreVi
         val otpViewModel = hiltViewModel<OtpScreenViewModel>()
 
         val toSentText = it.arguments?.getString("toSentText")
-        toSentText?.let { it1 -> OtpScreen(navController, it1,otpViewModel,coreVm) }
+        toSentText?.let { it1 -> OtpScreen( it1,otpViewModel,) }
     }
 
     composable(route = "${StartUpRoute.CreateUserScreen.route}/{stdCode}/{mobileNumber}/{uid}",
@@ -47,6 +48,6 @@ fun NavGraphBuilder.startUpNavGraph(navController: NavController, coreVm: CoreVi
         val stdCode = it.arguments?.getString("stdCode")
         val mobileNumber = it.arguments?.getString("mobileNumber")
 
-        CreateUserScreen(navController,coreVm,viewModel,stdCode,mobileNumber,uid)
+        CreateUserScreen(viewModel,stdCode,mobileNumber,uid)
     }
 }

@@ -1,5 +1,7 @@
 package com.blaze.core.utils.navigation
 
+import androidx.compose.runtime.compositionLocalOf
+
 sealed class NavigationRoute(val route: String) {
     data object Auth : NavigationRoute(route = "Auth")
     data object OnBoarding : NavigationRoute(route = "OnBoarding")
@@ -39,4 +41,7 @@ sealed class StationSetUpRoute(val route: String) {
 
 sealed class BookingRoute(val route: String) {
     data object ChargingScreen : StationSetUpRoute(route = "ChargingScreen")
+    data object BookingStatusScreen : StationSetUpRoute(route = "BookingStatusScreen")
 }
+
+

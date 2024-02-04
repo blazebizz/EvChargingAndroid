@@ -34,16 +34,19 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.R
 import com.blaze.core.ui.components.bounceClick
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.ui.utils.navigateCleanNavScreen
 import com.blaze.core.utils.navigation.DashboardRoute
 
 
 @Composable
 fun VehicleScreen(
-    navController: NavController,
     viewModel: VehicleViewModel,
-    coreVM: CoreViewModel
 ) {
+
+    val navController = LocalNavigation.current
+    val coreVm = LocalCore.current
     Column(
         Modifier
             .statusBarsPadding()

@@ -24,18 +24,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.defaultBackground
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.AccountRoute
 
 
 @Composable
-fun SafetyScreen(
-    navController: NavController, coreVM: CoreViewModel, viewModel: SafetyScreenViewModel
-) {
+fun SafetyScreen(viewModel: SafetyScreenViewModel) {
 
 
+    val navController = LocalNavigation.current
     Column(
         Modifier
             .statusBarsPadding()

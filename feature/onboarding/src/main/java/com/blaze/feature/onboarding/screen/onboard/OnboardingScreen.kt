@@ -47,6 +47,8 @@ import androidx.navigation.compose.rememberNavController
 import com.blaze.core.ui.CoreViewModel
 import com.blaze.core.ui.components.Button
 import com.blaze.core.ui.components.OutlinedButton
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.utils.navigation.OnBoardingRoute
 import com.blaze.core.utils.util.USER_ID
 import com.blaze.core.utils.util.mainScope
@@ -63,8 +65,11 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun OnBoardingScreen(
-    navController: NavController, viewModel: OnBoardingViewModel, coreUi: CoreViewModel
+  viewModel: OnBoardingViewModel
 ) {
+
+    val navController = LocalNavigation.current
+    val coreUi = LocalCore.current
 
     val context = LocalContext.current
 

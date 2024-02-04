@@ -35,6 +35,8 @@ import com.blaze.core.ui.R
 import com.blaze.core.ui.components.SideNavigationItem
 import com.blaze.core.ui.components.pressClick
 import com.blaze.core.ui.defaultBackground
+import com.blaze.core.ui.navigation.LocalCore
+import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.ui.utils.navigateCleanNavScreen
 import com.blaze.core.utils.navigation.AccountRoute
 import com.blaze.core.utils.navigation.DashboardRoute
@@ -53,9 +55,11 @@ fun SideNavigationScreenPreview(){
 
 @Composable
 fun SideNavigationScreen(
-    navController: NavController, viewModel: SideNavigationScreenViewModel, coreUi: CoreViewModel
+ viewModel: SideNavigationScreenViewModel
 ) {
     val context = LocalContext.current
+    val navController = LocalNavigation.current
+    val coreUi = LocalCore.current
     BackHandler {
         navController.navigateCleanNavScreen(DashboardRoute.DashboardScreen.route)
 

@@ -18,9 +18,9 @@ import com.blaze.core.ui.components.ToolBar
 
 @Composable
 fun BookingHistoryScreen(
-    navController: NavController,
+
     viewModel: BookingHistoryViewModel,
-    coreVM: CoreViewModel,
+
 ) {
 
 
