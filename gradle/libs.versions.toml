@@ -92,7 +92,7 @@ systemuicontroller = { group = "com.google.accompanist", name = "accompanist-sys
 
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version= "4.0.0" }
 
-lazier = { group = "com.github.blazebizz", name = "lazier", version = "0.0.27-beta" }
+lazier = { group = "com.github.blazebizz", name = "lazier", version = "0.0.5-gamma" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 

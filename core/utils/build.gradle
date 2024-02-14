@@ -20,6 +20,23 @@ android {
             useSupportLibrary true
         }
 
+        //map properties
+        Properties properties = new Properties()
+        if (rootProject.file("local.properties").exists()) {
+            properties.load(
+                    rootProject
+                            .file("local.properties")
+                            .newDataInputStream()
+            )
+        }
+
+        //to insert the variable in manifests file
+        manifestPlaceholders = [googleMapsApiKey: "${properties.getProperty('MAPS_API_KEY')}"]
+
+        buildConfigField("String", "MAPS_API_KEY", properties.getProperty("MAPS_API_KEY"))
+        buildConfigField("String", "PREFERENCES_NAME", properties.getProperty("PREFERENCES_NAME"))
+
+
     }
 
     buildTypes {

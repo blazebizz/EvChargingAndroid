@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/data/booking" />
             <option value="$PROJECT_DIR$/data/dashboard" />
             <option value="$PROJECT_DIR$/data/onboarding" />
+            <option value="$PROJECT_DIR$/data/route" />
             <option value="$PROJECT_DIR$/data/startup" />
             <option value="$PROJECT_DIR$/data/station_setup" />
             <option value="$PROJECT_DIR$/feature" />
@@ -37,6 +38,7 @@
             <option value="$PROJECT_DIR$/feature/booking" />
             <option value="$PROJECT_DIR$/feature/dashboard" />
             <option value="$PROJECT_DIR$/feature/onboarding" />
+            <option value="$PROJECT_DIR$/feature/route" />
             <option value="$PROJECT_DIR$/feature/startup" />
             <option value="$PROJECT_DIR$/feature/station_setup" />
           </set>

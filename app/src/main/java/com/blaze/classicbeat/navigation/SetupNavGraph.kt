@@ -2,6 +2,7 @@ package com.blaze.classicbeat.navigation
 
 import ai.heart.feature.account.navigation.accountNavGraph
 import ai.heart.feature.booking.navigation.bookingNavGraph
+import ai.heart.feature.route.navigation.routeNavGraph
 import ai.heart.feature.station_setup.navigation.stationSetUpNavGraph
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -27,6 +28,7 @@ fun SetupNavGraph(
         accountNavGraph()
         stationSetUpNavGraph()
         bookingNavGraph()
+        routeNavGraph()
     }
 }
 

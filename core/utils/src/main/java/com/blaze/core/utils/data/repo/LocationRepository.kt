@@ -35,10 +35,6 @@ class LocationRepository @Inject constructor(
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     val gpsHardwareEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-
-
-
-
     fun openLocationSetting() {
         val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -58,7 +54,6 @@ class LocationRepository @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     fun getCurrentLocation(
         latLng: MutableState<LatLng>

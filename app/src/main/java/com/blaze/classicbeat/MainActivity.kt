@@ -49,7 +49,7 @@ import com.blaze.core.ui.navigation.LocalCore
 import com.blaze.core.ui.navigation.LocalNavigation
 import com.blaze.core.ui.ui.theme.ClassicBeatTheme
 import com.blaze.core.utils.navigation.BookingRoute
-import com.blaze.core.utils.navigation.DashboardRoute
+import com.blaze.core.utils.navigation.RouteRoute
 import com.blaze.core.utils.observer.DELAY_MILLIS
 import com.blaze.core.utils.util.RationaleState
 import com.blaze.feature.onboarding.screen.OnBoardingViewModel
@@ -58,7 +58,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.Priority
 import com.google.android.gms.maps.model.LatLng
-import com.velox.lazeir.utils.InternetConnectivityListener
+import com.velox.lazeir.utils.outlet.InternetConnectivityListener
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -192,7 +192,7 @@ fun MainActivityScreen(lifecycleScope: LifecycleCoroutineScope, coreViewModel: C
             ) {
                 SetupNavGraph(
 //                startDestination = StartUpRoute.SplashScreen.route,
-                startDestination =  BookingRoute.BookingStatusScreen.route,
+                    startDestination = RouteRoute.RouteScreen.route,
 //                    startDestination = DashboardRoute.DashboardScreen.route,
                     onBoardingViewModel = onBoardingViewModel
                 )

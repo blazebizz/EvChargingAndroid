@@ -11,7 +11,7 @@ import com.blaze.data.onboarding.model.res.PartnerOnBoardResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.velox.lazeir.utils.handler.NetworkResource
+import com.velox.lazeir.utils.handler.RetrofitResource
 import com.velox.lazeir.utils.outlet.handleNetworkResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -25,11 +25,11 @@ class OnBoardingRepoImpl @Inject constructor(
 
     override fun getAuth() = auth
 
-    override suspend fun fetchUserOnBoardData(body: FetchPartnerOnBoardDataRequest): Flow<NetworkResource<FetchPartnerOnBoardDataResponse>> {
+    override suspend fun fetchUserOnBoardData(body: FetchPartnerOnBoardDataRequest): Flow<RetrofitResource<FetchPartnerOnBoardDataResponse>> {
         return try {
             apiService.fetchUserOnBoardData(body).handleNetworkResponse()
         } catch (e: Exception) {
-            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+            flow { emit(RetrofitResource.Error(globalError(this::class.java.simpleName))) }
         }
 
     }
@@ -69,12 +69,12 @@ class OnBoardingRepoImpl @Inject constructor(
         }
     }
 
-    override suspend fun onBoard(body: PartnerOnBoardRequest): Flow<NetworkResource<PartnerOnBoardResponse>> {
+    override suspend fun onBoard(body: PartnerOnBoardRequest): Flow<RetrofitResource<PartnerOnBoardResponse>> {
 
         return try {
             apiService.onBoardUser(body).handleNetworkResponse()
         } catch (e: Exception) {
-            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+            flow { emit(RetrofitResource.Error(globalError(this::class.java.simpleName))) }
         }
     }
 

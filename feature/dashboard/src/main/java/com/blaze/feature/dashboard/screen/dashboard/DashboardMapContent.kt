@@ -130,6 +130,7 @@ fun MapContent(
                         BitmapDescriptorFactory.HUE_GREEN
                     )
                 )
+
             }
         }
 

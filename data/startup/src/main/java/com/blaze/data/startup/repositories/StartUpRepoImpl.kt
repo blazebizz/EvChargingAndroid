@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
-import com.velox.lazeir.utils.handler.NetworkResource
+import com.velox.lazeir.utils.handler.RetrofitResource
 import com.velox.lazeir.utils.outlet.handleNetworkResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -79,19 +79,19 @@ class StartUpRepoImpl @Inject constructor(
     }
     // [END resend_verification]
 
-   override suspend fun generateToken(body: GenerateTokenRequest): Flow<NetworkResource<GenerateTokenResponse>> {
+   override suspend fun generateToken(body: GenerateTokenRequest): Flow<RetrofitResource<GenerateTokenResponse>> {
        return try {
            apiService.generateToken(body).handleNetworkResponseInternal()
        }catch (e:Exception){
-           flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+           flow { emit(RetrofitResource.Error(globalError(this::class.java.simpleName))) }
        }
     }
 
-    override suspend fun createUser(body: CreateUserRequest): Flow<NetworkResource<CreateUserResponse>> {
+    override suspend fun createUser(body: CreateUserRequest): Flow<RetrofitResource<CreateUserResponse>> {
         return try {
             apiService.createUser(body).handleNetworkResponseInternal()
         }catch (e:Exception){
-            flow { emit(NetworkResource.Error(globalError(this::class.java.simpleName))) }
+            flow { emit(RetrofitResource.Error(globalError(this::class.java.simpleName))) }
         }
     }
 

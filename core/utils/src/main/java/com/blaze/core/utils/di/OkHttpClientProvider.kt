@@ -26,6 +26,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
@@ -54,20 +55,15 @@ object OkHttpClientProvider {
     //for ktor
     @Provides
     @Singleton
-    fun provideHttpClient(appDataStore: AppDataStore): HttpClient {
-        val accessToken: MutableStateFlow<String?> = MutableStateFlow(null)
-        CoroutineScope(Dispatchers.IO).launch {
-            appDataStore.getAccessToken().collect {
-                it?.let {
-                    accessToken.value = it
-                }
-            }
-        }
+    fun provideHttpClient(): HttpClient {
         return HttpClient(OkHttp) {
 
             install(ContentNegotiation) {
-                json(contentType = ContentType.Application.Json)
+                json(contentType = ContentType.Application.Json, json = Json{
+                    ignoreUnknownKeys = true
+                })
                 json(contentType = ContentType.Application.FormUrlEncoded)
+                json()
             }
             expectSuccess = true
             install(HttpTimeout) {
@@ -78,8 +74,9 @@ object OkHttpClientProvider {
             defaultRequest {
                 contentType(ContentType.Application.Json)
                 accept(ContentType.Application.Json)
-                header(key = "Authorization", value = accessToken.value ?: "NA")
-
+                Json {
+                    ignoreUnknownKeys = true
+                }
             }
             //ktor logger
             install(Logging) {

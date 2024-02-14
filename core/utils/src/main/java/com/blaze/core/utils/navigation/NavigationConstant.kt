@@ -45,3 +45,7 @@ sealed class BookingRoute(val route: String) {
 }
 
 
+sealed class RouteRoute(val route: String) {
+    data object RouteScreen : RouteRoute("RouteScreen")
+}
+

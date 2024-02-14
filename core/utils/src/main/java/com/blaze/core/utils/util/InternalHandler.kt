@@ -1,6 +1,6 @@
 package com.blaze.core.utils.util
 
-import com.velox.lazeir.utils.handler.NetworkResource
+import com.velox.lazeir.utils.handler.RetrofitResource
 import com.velox.lazeir.utils.outlet.handleFlow
 import com.velox.lazeir.utils.outlet.handleNetworkResponse
 import kotlinx.coroutines.CoroutineScope
@@ -18,38 +18,38 @@ import java.util.concurrent.TimeoutException
 
 
 
-fun <T> Response<T>.handleNetworkResponseInternal(): Flow<NetworkResource<T>> {
+fun <T> Response<T>.handleNetworkResponseInternal(): Flow<RetrofitResource<T>> {
     return flow {
-        emit(NetworkResource.Loading(isLoading = true))
+        emit(RetrofitResource.Loading(isLoading = true))
         try {
             if (this@handleNetworkResponseInternal.isSuccessful) {
-                emit(NetworkResource.Success(this@handleNetworkResponseInternal.body()))
+                emit(RetrofitResource.Success(this@handleNetworkResponseInternal.body()))
             } else {
                 val code = this@handleNetworkResponseInternal.code()
                 val errorBody = this@handleNetworkResponseInternal.errorBody()?.string()
                 try {
                     val jObjError = errorBody?.let { JSONObject(it) }
-                    emit(NetworkResource.Error("Network Error", jObjError, code))
+                    emit(RetrofitResource.Error("Network Error", jObjError, code))
                 } catch (e: Exception) {
-                    emit(NetworkResource.Error("UNKNOWN ERROR", code = code))
+                    emit(RetrofitResource.Error("UNKNOWN ERROR", code = code))
                 }
             }
         } catch (e: TimeoutException) {
-            e.message?.let { emit(NetworkResource.Error("Time Out")) }
+            e.message?.let { emit(RetrofitResource.Error("Time Out")) }
         } catch (e: SocketTimeoutException) {
-            e.message?.let { emit(NetworkResource.Error("Time Out")) }
+            e.message?.let { emit(RetrofitResource.Error("Time Out")) }
         } catch (e: IOException) {
-            e.message?.let { emit(NetworkResource.Error(it)) }
+            e.message?.let { emit(RetrofitResource.Error(it)) }
         } catch (e: IllegalStateException) {
-            e.message?.let { emit(NetworkResource.Error(it)) }
+            e.message?.let { emit(RetrofitResource.Error(it)) }
         } catch (e: NullPointerException) {
-            e.message?.let { emit(NetworkResource.Error(it)) }
+            e.message?.let { emit(RetrofitResource.Error(it)) }
         } catch (e: Exception) {
-            e.message?.let { emit(NetworkResource.Error(it)) }
+            e.message?.let { emit(RetrofitResource.Error(it)) }
         } finally {
-            emit(NetworkResource.Loading(isLoading = false))
+            emit(RetrofitResource.Loading(isLoading = false))
         }
-        emit(NetworkResource.Loading(isLoading = false))
+        emit(RetrofitResource.Loading(isLoading = false))
     }.flowOn(Dispatchers.IO)
 }
 
@@ -60,7 +60,7 @@ fun <T> Response<T>.handleNetworkResponseInternal(): Flow<NetworkResource<T>> {
  * Call within IO Scope
  * **/
 
-suspend fun <T> Flow<NetworkResource<T>>.handleFlowInt(
+suspend fun <T> Flow<RetrofitResource<T>>.handleFlowInt(
     onLoading: suspend (it: Boolean) -> Unit,
     onFailure: suspend (it: String, errorObject: JSONObject, code: Int) -> Unit,
     onSuccess: suspend (it: T) -> Unit
@@ -69,7 +69,7 @@ suspend fun <T> Flow<NetworkResource<T>>.handleFlowInt(
 }
 
 suspend fun <T> handleFlowInternal(
-    flow: Flow<NetworkResource<T>>,
+    flow: Flow<RetrofitResource<T>>,
     onLoading: suspend (it: Boolean) -> Unit,
     onFailure: suspend (it: String, errorObject: JSONObject, code: Int) -> Unit,
     onSuccess: suspend (it: T) -> Unit
@@ -77,19 +77,19 @@ suspend fun <T> handleFlowInternal(
     CoroutineScope(Dispatchers.IO).launch {
         flow.collectLatest {
             when (it) {
-                is NetworkResource.Error -> {
+                is RetrofitResource.Error -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         onFailure.invoke(it.message!!, it.errorObject!!, it.code!!)
                     }
                 }
 
-                is NetworkResource.Loading -> {
+                is RetrofitResource.Loading -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         onLoading.invoke(it.isLoading)
                     }
                 }
 
-                is NetworkResource.Success -> {
+                is RetrofitResource.Success -> {
                     CoroutineScope(Dispatchers.Main).launch {
                         onSuccess.invoke(it.data!!)
                     }
