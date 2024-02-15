@@ -22,11 +22,11 @@ class RouteRepoImpl @Inject constructor(private val client: HttpClient) : RouteR
 //                parameter("destination", "${destination.first},${destination.second}")
 //                parameter("key", BuildConfig.BASE_URL)
 
-                parameter("origin", "20.348983,85.807013")
-                parameter("destination", "$20.336403, 85.827476")
+                parameter("origin", "20.324006, 85.809360")
+                parameter("destination", "20.336403, 85.827476")
 //                parameter("key", "crysgsL34UN7rJNo_V5BbQDiId0=")
-//                parameter("key", "AIzaSyCCT7SLvQGnaDKk70P_eeS1BXmgQFMtp5g")
-                parameter("key", BuildConfig.MAPS_API_KEY)
+                parameter("key", "AIzaSyDmfD3bg8q9YPNLY2wQNJxm0xWQObdnvjk")
+//                parameter("key", BuildConfig.MAPS_API_KEY)
             }
         }
 
